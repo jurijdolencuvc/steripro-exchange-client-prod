@@ -1,6 +1,4 @@
 import { deviceConstants } from "../constants/DeviceConstants";
-import { travelInfoConstants } from "../constants/TravelInfoConstants";
-import { transferInfoConstants } from "../constants/TransferInfoConstants";
 
 var prodCpy = {};
 

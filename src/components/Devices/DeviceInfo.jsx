@@ -54,7 +54,7 @@ const tableIcons = {
   ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
-const TravelBasicInfo = forwardRef((props, ref) => {
+const DeviceInfo = forwardRef((props, ref) => {
   const { deviceState, dispatch } = useContext(DeviceContext);
   
 	const [role, setRole] = useState(false);
@@ -209,4 +209,4 @@ const TravelBasicInfo = forwardRef((props, ref) => {
   );
 });
 
-export default TravelBasicInfo;
+export default DeviceInfo;

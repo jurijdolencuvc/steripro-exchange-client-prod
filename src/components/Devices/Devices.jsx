@@ -8,7 +8,7 @@ import Axios from "axios";
 
 var url = "https://api.exchange.uvcsolutions.com/"
 //var url = "http://localhost:3000/"
-const TravelInformation = () => {
+const Devices = () => {
 
     const { deviceState, dispatch } = useContext(DeviceContext);
 
@@ -59,4 +59,4 @@ const TravelInformation = () => {
     );
 };
 
-export default TravelInformation;
+export default Devices;

@@ -1,7 +1,7 @@
 
 import { React, useEffect } from "react";
 
-import TravelInformation from "../components/Devices/Devices";
+import Devices from "../components/Devices/Devices";
 import DeviceContextProvider from "../contexts/DeviceContext";
 
 import EditDeviceModal from "../components/modals/EditDeviceModal";
@@ -49,7 +49,7 @@ const HomePage = () => {
 		<div>
 			<DeviceContextProvider>
 				<ModalDevice />
-				<TravelInformation />
+				<Devices />
 
 				<EditDeviceModal />
 			</DeviceContextProvider>
