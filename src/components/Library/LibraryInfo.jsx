@@ -27,7 +27,6 @@ import { MdOutlineDashboard } from 'react-icons/md';
 import { BiCollection } from 'react-icons/bi';
 import { AiOutlineUserAdd, AiOutlineMail } from 'react-icons/ai';
 import ViewColumn from '@material-ui/icons/ViewColumn';
-import { VscLibrary } from 'react-icons/vsc';
 
 import { MdEdit } from 'react-icons/md';
 import { authHeader } from "../../helpers/auth-header";
@@ -55,7 +54,7 @@ const tableIcons = {
   ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
-const DeviceInfo = forwardRef((props, ref) => {
+const LibraryInfo = forwardRef((props, ref) => {
   const { deviceState, dispatch } = useContext(DeviceContext);
   
 	const [role, setRole] = useState(false);
@@ -115,10 +114,8 @@ const DeviceInfo = forwardRef((props, ref) => {
 		</div>
 
 		<nav class="">
-		  <div class="nav_list"> <a href="#" class="nav_link active"> <i class='bx bx-grid-alt nav_icon'> <MdOutlineDashboard /></i> <span class="nav_name">Devices</span> </a> 
-      <a href="/#/exchangeDocuments" class="nav_link"> <i class='bx bx-user nav_icon'><BiCollection/></i> <span class="nav_name">Exchange documents</span> </a>  </div>
-      <a href="/#/exchangeLibraries" style={{ marginTop: "20px" }} class="nav_link"> <i class='bx bx-log-out nav_icon'><VscLibrary /></i> <span class="nav_name ">Library</span> </a>
-     
+		  <div class="nav_list"> <a href="#" class="nav_link active"> <i class='bx bx-grid-alt nav_icon'> <MdOutlineDashboard /></i> <span class="nav_name">Devices</span> </a> <a href="/#/exchangeDocuments" class="nav_link"> <i class='bx bx-user nav_icon'><BiCollection/></i> <span class="nav_name">Exchange documents</span> </a>  </div>
+      
       {!props.role && <a href="/#/contact" style={{ marginTop: "20px" }} class="nav_link"> <i class='bx bx-log-out nav_icon'><AiOutlineMail /></i> <span class="nav_name ">Support</span> </a>}
       {props.role && <a href="/#/sendRegistrationMail" style={{marginTop : "20px"}} class="nav_link"> <i class='bx bx-log-out nav_icon'><AiOutlineUserAdd/></i> <span class="nav_name">Enroll</span> </a>}
 		  <a onClick={handleLogout} style={{marginTop : "20px"}} class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">SignOut</span> </a>
@@ -130,8 +127,26 @@ const DeviceInfo = forwardRef((props, ref) => {
 
           
        {role &&   <MaterialTable stickyHeader
-           style={{tableLayout: 'fixed', marginLeft: 38, marginRight: 38, width:"80%"}}
+           style={{tableLayout: 'fixed', marginLeft: 38, marginRight: 38, width:"100%"}}
             icons={tableIcons}
+            columns={[
+              { title: "Motherboard ID", field: "serialNumber" },
+              { title: "Device name", field: "name" },
+              { title: "Tablet IMEI", field: "tabletIdentifier" },
+              { title: "Customer", field: "customerName", type: 'string' },
+              { title: "Deploy date", field: "deployDate", type: 'date' },
+              { title: "Category", field: "category"},
+              { title: "Last regular service date", field: "lastRegularServiceDate", type: 'date' },
+              { title: "Next service", field: "countdown" },
+              { title: "Notification email", field: "notificationEmails", type: 'string' },
+
+            ]}
+           
+            options={{
+              actionsColumnIndex: -1,
+              headerStyle: { position: 'sticky', top: 0 },
+              maxBodyHeight: 500,
+            }}
             actions={[
               {
                 icon: () => <MdEdit/>,
@@ -141,25 +156,6 @@ const DeviceInfo = forwardRef((props, ref) => {
             
 
             ]}
-            columns={[
-              { title: "Motherboard ID", field: "serialNumber" },
-              { title: "Device name", field: "name" },
-              { title: "Tablet IMEI", field: "tabletIdentifier" },
-              { title: "Customer", field: "customerName", type: 'string' },
-              { title: "Deploy date", field: "deployDate", type: 'date' },
-              { title: "Last regular service date", field: "lastRegularServiceDate", type: 'date' },
-              { title: "Next service", field: "countdown" },
-              { title: "Notification email", field: "notificationEmails", type: 'string' },
-
-            ]}
-           
-            options={{
-              
-              actionsColumnIndex: 0,
-              headerStyle: { position: 'sticky', top: 0 },
-              maxBodyHeight: 450,
-            }}
-         
             localization={{
               header: {
                 actions: 'Edit',
@@ -214,4 +210,4 @@ const DeviceInfo = forwardRef((props, ref) => {
   );
 });
 
-export default DeviceInfo;
+export default LibraryInfo;

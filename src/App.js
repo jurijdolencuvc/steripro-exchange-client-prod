@@ -7,6 +7,7 @@ import PageNotFound from "./pages/PageNotFound.jsx";
 import { ProtectedRoute } from "./router/ProtectedRouter.jsx";
 import UnauthorizedPage from "./pages/UnauthorizedPage.jsx";
 import ExchangeDocumentsPage from "./pages/ExchangeDocumentsPage.jsx";
+import ExchangeLibraryPage from "./pages/ExchangeLibraryPage.jsx";
 import ResetPasswordPage from "./pages/ResetPasswordPage.jsx";
 import SupportPage from "./pages/SupportPage.jsx";
 
@@ -25,6 +26,7 @@ function App() {
 				<Route path="/contact" component={SupportPage} />
 
 				<Route exact path="/exchangeDocuments" component={ExchangeDocumentsPage} />
+				<Route exact path="/exchangeLibraries" component={ExchangeLibraryPage} />
 				<Route exact path="/resetPassword/:email/:token" component={ResetPasswordPage} />
 
 

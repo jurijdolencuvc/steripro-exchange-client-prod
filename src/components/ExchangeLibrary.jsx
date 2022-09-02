@@ -1,14 +1,14 @@
 import React, { useEffect, useState, useImperativeHandle, forwardRef, useContext } from "react";
 import MaterialTable from "material-table";
-import { DocumentsContext } from "../contexts/DocumentsContext";
+import { LibraryContext } from "../contexts/LibraryContext";
 import GetAppIcon from '@material-ui/icons/GetApp';
 
 import { userService } from "../services/UserService";
 import { MdEdit } from 'react-icons/md';
-import { documentService, documentsService } from "../services/DocumentService";
+import { libraryService, documentsService } from "../services/LibraryService";
 import BackupIcon from '@material-ui/icons/Backup';
 import IconButton from "@material-ui/core/IconButton";
-import { documentsConstants } from "../constants/DocumentsConstants";
+import { libraryConstants } from "../constants/LibraryConstants";
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import Check from '@material-ui/icons/Check';
@@ -25,10 +25,10 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 
+import { VscLibrary } from 'react-icons/vsc';
 import { authHeader } from "../helpers/auth-header";
 import Axios from "axios";
 
-import { VscLibrary } from 'react-icons/vsc';
 import { MdOutlineDashboard } from 'react-icons/md';
 import { BiCollection } from 'react-icons/bi';
 import { AiOutlineUserAdd, AiOutlineMail } from 'react-icons/ai';
@@ -56,15 +56,15 @@ const tableIcons = {
   ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
-const ExchangeDocuments = forwardRef((props, ref) => {
-  const { documentsState, dispatch } = useContext(DocumentsContext);
+const ExchangeLibrary = forwardRef((props, ref) => {
+  const { libraryState, dispatch } = useContext(LibraryContext);
 
 	const [role, setRole] = useState(false);
   const someFetchActionCreator = () => {
 
     const getDocumentsInfoHandler = async () => {
-      await documentService.getDocuments(dispatch);
-      await documentService.getCategories(dispatch);
+      await libraryService.getDocumentsLibrary(dispatch);
+      await libraryService.getCategoriesLibrary(dispatch);
 
     };
     getDocumentsInfoHandler();
@@ -104,31 +104,32 @@ const ExchangeDocuments = forwardRef((props, ref) => {
 
 
   const handleShowModal = () => {
-    dispatch({ type: documentsConstants.SHOW_ADD_DOCUMENT_MODAL });
+    dispatch({ type: libraryConstants.SHOW_ADD_LIBRARY_MODAL });
   };
 
   const showEditDocument = (e, data) => {
-    dispatch({ type: documentsConstants.SHOW_EDIT_DOCUMENT_MODAL, data });
+    dispatch({ type: libraryConstants.SHOW_EDIT_LIBRARY_MODAL, data });
   };
 
   const fileClicked = (e, oneFile, name) => {
     console.log(oneFile + " " + name)
-    documentService.getFile(oneFile, name, dispatch);
+    libraryService.getFileLibrary(oneFile, name, dispatch);
   }
 
 
 
   const deleteDocument = (e, oneFile) => {
-
-   dispatch({ type: documentsConstants.DOCUMENTS_REQUEST_REMOVE_REQUEST, oneFile: oneFile });
+    
+    dispatch({ type: libraryConstants.LIBRARY_REQUEST_REMOVE_REQUEST, oneFile: oneFile });
   }
 
   return (
     <div >
       <div >
 
-      <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", marginTop: "30px", marginLeft:"288px"}}><h1>Exchange documents</h1>
-          <button style={{ float: "right", marginBottom: "30px", marginRight:"38px" }} type="button" onClick={handleShowModal} class="btn btn-primary btn-lg">+ Add new document</button></div>  <div class="wrapper">
+      <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", marginTop: "30px", marginLeft:"288px"}}><h1>Knowledge library</h1>
+          <button style={{ float: "right", marginBottom: "30px", marginRight:"38px" }} type="button" onClick={handleShowModal} class="btn btn-primary btn-lg">+ Add new library</button></div>
+          <div class="wrapper">
             <nav id="sidebar">
               <div class="sidebar-header">
                 <div class="image-div">
@@ -137,10 +138,9 @@ const ExchangeDocuments = forwardRef((props, ref) => {
               </div>
 
               <nav class="">
-                <div class="nav_list"> <a href="#" class="nav_link"> <i class='bx bx-grid-alt nav_icon'> <MdOutlineDashboard /></i> <span class="nav_name">Devices</span> </a> <a href="/#/exchangeDocuments" class="nav_link active"> <i class='bx bx-user nav_icon'><BiCollection /></i> <span class="nav_name">Exchange documents</span> </a>  </div>
-               
-      <a href="/#/exchangeLibraries" style={{ marginTop: "20px" }} class="nav_link"> <i class='bx bx-log-out nav_icon'><VscLibrary /></i> <span class="nav_name ">Library</span> </a>
-               {role && <a href="/#/sendRegistrationMail" style={{ marginTop: "20px" }} class="nav_link"> <i class='bx bx-log-out nav_icon'><AiOutlineUserAdd /></i> <span class="nav_name ">Enroll</span> </a>}
+                <div class="nav_list"> <a href="#" class="nav_link"> <i class='bx bx-grid-alt nav_icon'> <MdOutlineDashboard /></i> <span class="nav_name">Devices</span> </a> <a href="/#/exchangeDocuments" class="nav_link "> <i class='bx bx-user nav_icon'><BiCollection /></i> <span class="nav_name">Exchange documents</span> </a>  </div>
+                <a href="/#/exchangeLibraries" style={{ marginTop: "20px" }} class="nav_link active"> <i class='bx bx-log-out nav_icon'><VscLibrary /></i> <span class="nav_name ">Library</span> </a>
+            {role && <a href="/#/sendRegistrationMail" style={{ marginTop: "20px" }} class="nav_link "> <i class='bx bx-log-out nav_icon'><AiOutlineUserAdd /></i> <span class="nav_name ">Enroll</span> </a>}
                {!role && <a href="/#/contact" style={{ marginTop: "20px" }} class="nav_link"> <i class='bx bx-log-out nav_icon'><AiOutlineMail /></i> <span class="nav_name ">Support</span> </a>}
                 <a onClick={handleLogout} style={{ marginTop: "20px" }} class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">SignOut</span> </a>
               </nav>
@@ -159,8 +159,8 @@ const ExchangeDocuments = forwardRef((props, ref) => {
               style={{tableLayout: 'fixed', marginLeft: 38, marginRight: 38, width:"100%" }}
               icons={tableIcons}
               columns={[
-                { title: "Document title", field: "documentTitle", },
-                { title: "Document description", field: "documentDescription", },
+                { title: "Title", field: "documentTitle", },
+                { title: "Description", field: "documentDescription", },
                 { title: "Category", field: "category.title"},
                 { title: "Read", field: "read" },
 
@@ -169,17 +169,17 @@ const ExchangeDocuments = forwardRef((props, ref) => {
               actions={[
                 {
                   icon: () => <GetAppIcon />,
-                  title: 'Download document',
+                  title: 'Download',
                   onClick: (event, rowData) => fileClicked(event, rowData._id, rowData.document)
                 },
                 {
                   icon: () => <MdEdit />,
-                  title: 'Edit document',
+                  title: 'Edit',
                   onClick: (event, rowData) => showEditDocument(event, rowData)
                 },
                 {
                   icon: () => <DeleteOutline />,
-                  title: 'Delete document',
+                  title: 'Delete',
                   onClick: (event, rowData) => deleteDocument(event, rowData._id)
                 },
 
@@ -193,12 +193,12 @@ const ExchangeDocuments = forwardRef((props, ref) => {
 
               localization={{
                 header: {
-                  actions: 'Download / edit / delete document',
+                  actions: 'Download / edit / delete ',
                 },
 
               }}
 
-              data={documentsState.listFiles.documents}
+              data={libraryState.listFiles.libraries}
 
               title=""
 
@@ -209,18 +209,16 @@ const ExchangeDocuments = forwardRef((props, ref) => {
               style={{ tableLayout: 'fixed', marginLeft: 38, marginRight: 38, width:"100%"  }}
               icons={tableIcons}
               columns={[
-                { title: "Document ID", field: "_id", },
-                { title: "Document title", field: "documentTitle", },
-                { title: "Document description", field: "documentDescription", },
+                { title: "Title", field: "documentTitle", },
+                { title: "Description", field: "documentDescription", },
                 { title: "Read", field: "read" },
-                { title: "Last access", field: "lastAccess", type: 'string' },
 
               ]}
              
               actions={[
                 {
                   icon: () => <GetAppIcon />,
-                  title: 'Download document',
+                  title: 'Download',
                   onClick: (event, rowData) => fileClicked(event, rowData._id, rowData.document)
                 },
               
@@ -240,7 +238,7 @@ const ExchangeDocuments = forwardRef((props, ref) => {
 
               }}
 
-              data={documentsState.listFiles.documents}
+              data={libraryState.listFiles.libraries}
 
               title=""
 
@@ -252,4 +250,4 @@ const ExchangeDocuments = forwardRef((props, ref) => {
   );
 });
 
-export default ExchangeDocuments;
+export default ExchangeLibrary;

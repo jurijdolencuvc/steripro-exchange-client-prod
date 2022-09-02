@@ -1,4 +1,4 @@
-import { modalConstants } from "../constants/ModalConstants";
+
 import { documentsConstants } from "../constants/DocumentsConstants";
 
 var prodCpy = {};
@@ -21,7 +21,23 @@ export const documentsReducer = (state, action) => {
 				},
 			};
 
-
+			case documentsConstants.DOCUMENTS_REQUEST_REMOVE_REQUEST:
+				return {
+					...state,
+					modalRequest: {
+						showModal: true,
+						file: action.oneFile
+					},
+				};
+	
+			case documentsConstants.HIDE_REQUEST_MODAL:
+				return {
+					...state,
+					modalRequest: {
+						showModal: false,
+						file: null
+					},
+				};
 
 		case documentsConstants.HIDE_ADD_DOCUMENT_MODAL:
 			return {
@@ -48,6 +64,7 @@ export const documentsReducer = (state, action) => {
 					prodCpy.updateData.data.document.document = action.data.document;
 					prodCpy.updateData.data.document.read = action.data.read;
 					prodCpy.updateData.data.document.companyId = action.data.companyId;
+					prodCpy.updateData.data.document.category = action.data.category;
 				
 				
 					console.log(prodCpy.updateData.data.document)
@@ -154,6 +171,29 @@ export const documentsReducer = (state, action) => {
 						},
 	
 	
+						showModal: false,
+					},
+				};
+
+				
+			case documentsConstants.CATEGORIES_GET_SUCCESS:
+
+				return {
+					...state,
+					listCategories: {
+						showError: false,
+						errorMessage: "",
+						categories: action.data.results,
+						showModal: false,
+					},
+				};
+			case documentsConstants.CATEGORIES_GET_FAILURE:
+				return {
+					...state,
+					listCategories: {
+						showError: false,
+						errorMessage: "",
+						categories: [],
 						showModal: false,
 					},
 				};

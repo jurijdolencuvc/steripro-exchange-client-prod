@@ -7,7 +7,10 @@ export const documentService = {
 	getDocuments,
 	getFile,
 	deleteDocument,
-	editDocument
+	editDocument,
+	getCategories,
+	getCategoriesLibrary,
+	getDocumentsLibrary
 };
 
 var url = "https://api.exchange.uvcsolutions.com/"
@@ -144,6 +147,7 @@ async function getDocuments(dispatch) {
 	await Axios.get(`${url}api/all_documents`, { headers: { Authorization: token }}, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 200) {
+				console.log(res.data)
 				dispatch(success(res.data));
 			} else {
 				dispatch(failure("Error while fetching data"));
@@ -162,6 +166,101 @@ async function getDocuments(dispatch) {
 	}
 	function failure(message) {
 		return { type: documentsConstants.DOCUMENTS_GET_FAILURE, errorMessage: message };
+	}
+}
+
+
+
+async function getDocumentsLibrary(dispatch) {
+	dispatch(request());
+
+	var token = authHeader()
+	
+	await Axios.get(`${url}api/all_library`, { headers: { Authorization: token }}, { validateStatus: () => true })
+		.then((res) => {
+			if (res.status === 200) {
+				console.log(res.data)
+				dispatch(success(res.data));
+			} else {
+				dispatch(failure("Error while fetching data"));
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+			dispatch(failure("Error"));
+		});
+
+	function request() {
+		return { type: documentsConstants.LIBRARY_GET_REQUEST };
+	}
+	function success(data) {
+		return { type: documentsConstants.LIBRARY_GET_SUCCESS, data: data };
+	}
+	function failure(message) {
+		return { type: documentsConstants.LIBRARY_GET_FAILURE, errorMessage: message };
+	}
+}
+
+
+
+
+async function getCategories(dispatch) {
+	dispatch(request());
+
+	var token = authHeader()
+	
+	await Axios.get(`${url}api/getCategories`, { headers: { Authorization: token }}, { validateStatus: () => true })
+		.then((res) => {
+			if (res.status === 200) {
+				dispatch(success(res.data));
+			} else {
+				dispatch(failure("Error while getting categories"));
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+			dispatch(failure("Error"));
+		});
+
+	function request() {
+		return { type: documentsConstants.CATEGORIES_GET_REQUEST };
+	}
+	function success(data) {
+		return { type: documentsConstants.CATEGORIES_GET_SUCCESS, data: data };
+	}
+	function failure(message) {
+		return { type: documentsConstants.CATEGORIES_GET_FAILURE, errorMessage: message };
+	}
+}
+
+
+
+async function getCategoriesLibrary(dispatch) {
+	dispatch(request());
+
+	var token = authHeader()
+	
+	await Axios.get(`${url}api/getCategoriesLibrary`, { headers: { Authorization: token }}, { validateStatus: () => true })
+		.then((res) => {
+			if (res.status === 200) {
+				dispatch(success(res.data));
+			} else {
+				dispatch(failure("Error while getting categories"));
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+			dispatch(failure("Error"));
+		});
+
+	function request() {
+		return { type: documentsConstants.CATEGORIES_LIBRARY_GET_REQUEST };
+	}
+	function success(data) {
+		return { type: documentsConstants.CATEGORIES_LIBRARY_GET_SUCCESS, data: data };
+	}
+	function failure(message) {
+		return { type: documentsConstants.CATEGORIES_LIBRARY_GET_FAILURE, errorMessage: message };
 	}
 }
 

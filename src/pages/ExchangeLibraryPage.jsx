@@ -1,15 +1,14 @@
 
 import { React, useEffect } from "react";
 
-import ExchangeDocuments from "../components/ExchangeDocuments";
-import DocumentsContextProvider from "../contexts/DocumentsContext";
+import ExchangeLibrary from "../components/ExchangeLibrary";
+import LibraryContextProvider from "../contexts/LibraryContext";
 
-import DocumentsModal from "../components/modals/DocumentsModal";
-import AddNewDocumentForm from "../components/AddNewDocumentForm";
-import EditDocumentModal from "../components/modals/EditDocumentModal";
-import Modal from "../components/modals/Modal";
-
-import RequestDeleteDocumentModal from "../components/modals/RequestDeleteDocumentModal";
+import LibraryModal from "../components/modals/LibraryModal";
+import AddNewLibraryForm from "../components/AddNewLibraryForm";
+import EditLibraryModal from "../components/modals/EditLibraryModal";
+import ModalLib from "../components/modals/ModalLib";
+import RequestDeleteModal from "../components/modals/RequestDeleteModal";
 import { authHeader } from "../helpers/auth-header";
 import Axios from "axios";
 
@@ -46,13 +45,14 @@ const HomePage = () => {
 
 	return (
 		<div>
-			<DocumentsContextProvider>
-				<DocumentsModal/>
-				<EditDocumentModal/>
-				<Modal/>
-				<RequestDeleteDocumentModal/>
-				<ExchangeDocuments/>
-			</DocumentsContextProvider>
+			<LibraryContextProvider>
+				<LibraryModal/>
+				<EditLibraryModal/>
+				<ModalLib/>
+				<RequestDeleteModal/>
+				<ExchangeLibrary/>
+				
+			</LibraryContextProvider>
 		</div>
 	);
 };

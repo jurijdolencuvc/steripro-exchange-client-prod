@@ -2,28 +2,29 @@ import { useContext } from "react";
 import {  Modal } from "react-bootstrap";
 import { documentsConstants } from "../../constants/DocumentsConstants";
 import { DocumentsContext } from "../../contexts/DocumentsContext";
-import AddNewDocumentForm from "../AddNewDocumentForm";
+import RequestRemoveDocument from "./RequestRemoveDocument";
 
-const DocumentsModal = () => {
+const RequestDeleteDocumentModal = () => {
 
 	const { documentsState, dispatch } = useContext(DocumentsContext);
 
 	const handleModalClose = () => {
-		dispatch({ type: documentsConstants.HIDE_ADD_DOCUMENT_MODAL });
+		dispatch({ type: documentsConstants.HIDE_REQUEST_MODAL });
 	};
 
 	return (
 		<Modal 
-		show={documentsState.listFiles.showModal} aria-labelledby="contained-modal-title-vcenter" class="modal-dialog modal-lg" centered onHide={handleModalClose}   size="lg">
+		show={documentsState.modalRequest.showModal} aria-labelledby="contained-modal-title-vcenter" class="modal-dialog modal-lg" centered onHide={handleModalClose}   size="md">
 			
 			<Modal.Header closeButton>
 				<Modal.Title id="contained-modal-title-vcenter">
-					<big>Add new document</big>
+					<big>?</big>
 				</Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
-				<AddNewDocumentForm
-				categories = {documentsState.listCategories.categories}/>
+				<RequestRemoveDocument
+				documentsState = {documentsState}
+				dispatch = {dispatch}/>
 			</Modal.Body>
 			<Modal.Footer>
 			</Modal.Footer>
@@ -32,4 +33,4 @@ const DocumentsModal = () => {
 	);
 };
 
-export default DocumentsModal;
+export default RequestDeleteDocumentModal;

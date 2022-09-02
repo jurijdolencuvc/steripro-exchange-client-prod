@@ -7,11 +7,12 @@ import Axios from "axios";
 
 var url = "https://api.exchange.uvcsolutions.com/"
 //var url = "http://localhost:3000/"
-const Devices = () => {
+const Items = () => {
 
     const { deviceState, dispatch } = useContext(DeviceContext);
 
 	const [role, setRole] = useState(false);
+ 
 
     useEffect(() => {
     
@@ -46,7 +47,7 @@ const Devices = () => {
                 <div style={{ display: "flex", flexDirection: "row", marginLeft: "300px", marginTop: "30px", marginBottom: "30px" }}><h1>Devices</h1></div>
                 <DeviceInfo
                     role = {role}
-                  
+                   
                     ref={childRef}
                     dispatch={dispatch}
                 />
@@ -55,4 +56,4 @@ const Devices = () => {
     );
 };
 
-export default Devices;
+export default Items;

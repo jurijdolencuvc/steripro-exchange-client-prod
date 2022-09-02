@@ -1,16 +1,16 @@
 
 import React, { useContext, useEffect, useState } from "react";
 import Paper from "@material-ui/core/Paper";
-import { documentService } from "../services/DocumentService";
-import { DocumentsContext } from "../contexts/DocumentsContext";
+import { libraryService } from "../services/LibraryService";
+import { LibraryContext } from "../contexts/LibraryContext";
 
-const AddNewDocumentForm = (props) => {
+const AddNewLibraryForm = (props) => {
 	const [documentTitle, setDocumentTitle] = useState("");
 	const [documentDescription, setDocumentDescription] = useState("");
 	const [category, setCategory] = useState("");
 	const [file, setFile] = useState(null);
 	const [errMessage, setErrMessage] = useState("");
-	const { documentState, dispatch } = useContext(DocumentsContext);
+	const { libraryState, dispatch } = useContext(LibraryContext);
 
 
 	useEffect(() => {
@@ -71,7 +71,7 @@ const AddNewDocumentForm = (props) => {
 
 
 
-			documentService.addDocument(formData, dispatch);
+			libraryService.addLibrary(formData, dispatch);
 		}
 	};
 
@@ -96,13 +96,13 @@ const AddNewDocumentForm = (props) => {
 									<td width="600rem"  >
 										<div className="control-group">
 											<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
-												<label><b>Document Title</b></label>
+												<label><b>Title</b></label>
 												<div class="row" >
 													<div class="form-group col-lg-10">
 														<input
 
 															className={"form-control"}
-															placeholder="Document Title"
+															placeholder="Title"
 															aria-describedby="basic-addon1"
 															id="name"
 															type="text"
@@ -117,13 +117,13 @@ const AddNewDocumentForm = (props) => {
 										</div>
 										<div className="control-group">
 											<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
-												<label><b>Document Description</b></label>
+												<label><b>Description</b></label>
 												<div class="row" >
 													<div class="form-group col-lg-10">
 														<input
 
 															className={"form-control"}
-															placeholder="Document Description"
+															placeholder="Description"
 															aria-describedby="basic-addon1"
 															id="name"
 															type="text"
@@ -173,7 +173,7 @@ const AddNewDocumentForm = (props) => {
 												id="sendMessageButton"
 												type="button"
 											>
-												Add document
+												Add
 											</button>
 										</div>
 
@@ -197,4 +197,4 @@ const AddNewDocumentForm = (props) => {
 	);
 };
 
-export default AddNewDocumentForm;
+export default AddNewLibraryForm;

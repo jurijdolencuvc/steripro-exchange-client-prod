@@ -1,22 +1,22 @@
 import React, { createContext, useReducer } from "react";
-import { documentsReducer } from "../reducers/DocumentsReducer";
+import { libraryReducer } from "../reducers/LibraryReducer";
 
-export const DocumentsContext = createContext();
+export const LibraryContext = createContext();
 
-const DocumentsContextProvider = (props) => {
+const LibraryContextProvider = (props) => {
 
-	const [documentsState, dispatch] = useReducer(documentsReducer, {
+	const [libraryState, dispatch] = useReducer(libraryReducer, {
 
-		listDocuments: {
+		listLibrary: {
 			showError: false,
 			errorMessage: "",
-			documentsInfo: [],
+			libraryInfo: [],
 		},
 
 		listFiles: {
 			showError: false,
 			errorMessage: "",
-			documents: [],
+			libraries: [],
 			showModal: false,
 		},
 
@@ -38,12 +38,13 @@ const DocumentsContextProvider = (props) => {
 			file: null
 		},
 		
+		
 		updateData: {
 			showModal: false,
 			showErrorMessage: false,
 			errorMessage: "",
 			data: {
-				document: {
+				library: {
 					id: "",
 					documentTitle: "",
 					documentDescription: "",
@@ -59,7 +60,7 @@ const DocumentsContextProvider = (props) => {
 		},
 	});
 
-	return <DocumentsContext.Provider value={{ documentsState, dispatch }}>{props.children}</DocumentsContext.Provider>;
+	return <LibraryContext.Provider value={{ libraryState, dispatch }}>{props.children}</LibraryContext.Provider>;
 };
 
-export default DocumentsContextProvider;
+export default LibraryContextProvider;
