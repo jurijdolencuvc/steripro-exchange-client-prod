@@ -13,8 +13,8 @@ import { authHeader } from "../helpers/auth-header";
 import Axios from "axios";
 
 
-//var url = "https://api.exchange.uvcsolutions.com/"
-var url = "http://localhost:3000/"
+var url = "https://api.exchange.uvcsolutions.com/"
+//var url = "http://localhost:3000/"
 
 const HomePage = () => {
 	useEffect(() => {
