@@ -109,6 +109,8 @@ function editDocument( data, dispatch) {
 
 async function deleteDocument(documentId,dispatch) {
 
+	console.log("del")
+	console.log(documentId)
 	dispatch(request());
 
 	var token = authHeader()

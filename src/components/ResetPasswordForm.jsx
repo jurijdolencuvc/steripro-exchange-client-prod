@@ -22,7 +22,7 @@ const ResetPasswordForm = () => {
 
 	const handleChange = e => {
 		setLang(e.target.value);
-		let loc = "https://www.exchange.uvcsolutions.com/#/resetPassword/" + email + "/" + token;
+		let loc = "http://localhost:3001/#/resetPassword/" + email + "/" + token;
 		console.log(window.location.href)
 		window.location.replace(loc + "?lng=" + e.target.value);
 		window.location.reload()

@@ -26,7 +26,7 @@ const LoginForm = () => {
   };
   const handleChange = e => {
     setLang(e.target.value);
-    let loc = "https://www.exchange.uvcsolutions.com/#/login/";
+    let loc = "http://localhost:3001/#/login/";
     window.location.replace(loc + "?lng=" + e.target.value);
     window.location.reload()
   }

@@ -17,6 +17,7 @@ const EditDocumentModal = () => {
 
     useEffect(() => {
     
+		console.log(documentsState.updateData)
         i18next.changeLanguage(lang, (err, t) => {
             if (err) return console.log('something went wrong loading', err);
             t('key'); // -> same as i18next.t

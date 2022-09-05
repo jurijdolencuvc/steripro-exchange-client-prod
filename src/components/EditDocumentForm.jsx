@@ -1,8 +1,8 @@
 
-import { useContext, useState, useEffect,useRef, React } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Paper from "@material-ui/core/Paper";
 import { documentService } from "../services/DocumentService";
-import DocumentsContextProvider from "../contexts/DocumentsContext";
+import DocumentContextProvider from "../contexts/DocumentsContext";
 import i18next from 'i18next';
 import { useTranslation } from 'react-i18next'
 const EditDocumentForm = (props) => {
@@ -10,13 +10,21 @@ const EditDocumentForm = (props) => {
 	//const { documentState, dispatch } = useContext(DocumentsContext);
 	
     let transferData = props.documentsState.updateData.data.document;
+	const { t } = useTranslation();
+	const [lang, setLang] = useState(`${localStorage.getItem("language")}`);
 	const [documentTitle, setDocumentTitle] = useState(transferData.documentTitle);
 	const [documentDescription, setDocumentDescription] = useState(transferData.documentDescription);
 	const [id, setId] = useState(transferData.id);
-	const { t } = useTranslation(); 
-	const [lang, setLang] = useState(`${localStorage.getItem("language")}`);
+
+	useEffect(() => {
 
 
+		i18next.changeLanguage(lang, (err, t) => {
+		  if (err) return console.log('something went wrong loading', err);
+		  t('key'); // -> same as i18next.t
+		});
+		
+	  }, [props.dispatch]);
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
@@ -28,19 +36,17 @@ const EditDocumentForm = (props) => {
 			documentDescription: documentDescription
 		}
 		
+		// Details of the uploaded file 
+
+		// Request made to the backend api 
+		// Send formData object 
+		//axios.post("api/uploadfile", formData); 
+
 
 	
 		documentService.editDocument(data, props.dispatch);
 	};
 
-	useEffect(() => {
-    
-        i18next.changeLanguage(lang, (err, t) => {
-            if (err) return console.log('something went wrong loading', err);
-            t('key'); // -> same as i18next.t
-          });
-        
-      }, [props.dispatch]);
 
 	return (
 		<React.Fragment>
@@ -48,7 +54,7 @@ const EditDocumentForm = (props) => {
 			<div>
 				<Paper square>
 
-<DocumentsContextProvider>
+<DocumentContextProvider>
 					<div className="container"  >
 
 
@@ -62,13 +68,13 @@ const EditDocumentForm = (props) => {
 									<td width="600rem"  >
 										<div className="control-group">
 											<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
-												<label><b>{t('documentTitle')}</b></label>
+												<label><b>{t("title")}</b></label>
 												<div class="row" >
 													<div class="form-group col-lg-10">
 														<input
 
 															className={"form-control"}
-															placeholder={t('documentTitle')}
+															placeholder={t("title")}
 															aria-describedby="basic-addon1"
 															id="name"
 															type="text"
@@ -83,13 +89,13 @@ const EditDocumentForm = (props) => {
 										</div>
 										<div className="control-group">
 											<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
-												<label><b>{t('documentDescription')}</b></label>
+												<label><b>{t("description")}</b></label>
 												<div class="row" >
 													<div class="form-group col-lg-10">
 														<input
 
 															className={"form-control"}
-															placeholder={t('documentDescription')}
+															placeholder={t("decription")}
 															aria-describedby="basic-addon1"
 															id="name"
 															type="text"
@@ -113,7 +119,7 @@ const EditDocumentForm = (props) => {
 												id="sendMessageButton"
 												type="button"
 											>
-												{t('update')}
+												{t("update")}
 											</button>
 										</div>
 
@@ -129,7 +135,7 @@ const EditDocumentForm = (props) => {
 
 					</div>
 
-					</DocumentsContextProvider>
+					</DocumentContextProvider>
 
 				</Paper>
 			</div>

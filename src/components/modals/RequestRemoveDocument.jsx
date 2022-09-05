@@ -1,5 +1,5 @@
 
-import { useContext, useState, useEffect,useRef, React } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Paper from "@material-ui/core/Paper";
 import { documentService } from "../../services/DocumentService";
 import { DocumentsContext } from "../../contexts/DocumentsContext";
@@ -9,9 +9,9 @@ import i18next from 'i18next';
 import { useTranslation } from 'react-i18next'
 const RequestRemoveDocument = (props) => {
 	
-	const { documentsState, dispatch } = useContext(DocumentsContext);
+	const { documentState, dispatch } = useContext(DocumentsContext);
 
-	const { t } = useTranslation(); 
+	const { t } = useTranslation();
 	const [lang, setLang] = useState(`${localStorage.getItem("language")}`);
 
 	const handleSubmitNo = (e) => {
@@ -20,7 +20,15 @@ const RequestRemoveDocument = (props) => {
 		dispatch({ type: documentsConstants.HIDE_REQUEST_MODAL });
 	};
 
-	
+	useEffect(() => {
+
+
+		i18next.changeLanguage(lang, (err, t) => {
+		  if (err) return console.log('something went wrong loading', err);
+		  t('key'); // -> same as i18next.t
+		});
+		
+	  }, [dispatch]);
 	const handleSubmitYes = (e) => {
 		documentService.deleteDocument(props.documentsState.modalRequest.file, dispatch);
 		
@@ -38,11 +46,11 @@ const RequestRemoveDocument = (props) => {
 
 							<form id="contactForm" >
 
-								<table style={{ marginLeft: "4rem", marginBottom: "4rem"}}>
+								<table style={{ marginLeft: "4rem", marginBottom: "4rem" }}>
 									<td width="500rem"  >
 										<div className="control-group">
 											<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
-												<label><b>{t('areYouSure')}</b></label>
+												<label><b>{t("areYouSure")}</b></label>
 												
 											</div>
 										</div>
@@ -60,7 +68,7 @@ const RequestRemoveDocument = (props) => {
 												id="button1"
 												type="button"
 											>
-												{t('yes')}
+												{t("yes")}
 											</button>
 										</div>
 
@@ -74,7 +82,7 @@ const RequestRemoveDocument = (props) => {
 												id="button2"
 												type="button"
 											>
-												{t('no')}
+												{t("no")}
 											</button>
 										</div>
 										</div>
