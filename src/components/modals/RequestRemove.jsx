@@ -5,11 +5,14 @@ import { libraryService } from "../../services/LibraryService";
 import { LibraryContext } from "../../contexts/LibraryContext";
 import { libraryConstants } from "../../constants/LibraryConstants";
 
+import i18next from 'i18next';
+import { useTranslation } from 'react-i18next'
 const RequestRemove = (props) => {
 	
 	const { libraryState, dispatch } = useContext(LibraryContext);
 
-	
+	const { t } = useTranslation();
+	const [lang, setLang] = useState(`${localStorage.getItem("language")}`);
 
 	const handleSubmitNo = (e) => {
 		e.preventDefault();
@@ -17,7 +20,15 @@ const RequestRemove = (props) => {
 		dispatch({ type: libraryConstants.HIDE_REQUEST_MODAL });
 	};
 
-	
+	useEffect(() => {
+
+
+		i18next.changeLanguage(lang, (err, t) => {
+		  if (err) return console.log('something went wrong loading', err);
+		  t('key'); // -> same as i18next.t
+		});
+		
+	  }, [dispatch]);
 	const handleSubmitYes = (e) => {
 		libraryService.deleteLibrary(props.libraryState.modalRequest.file, dispatch);
 		
@@ -39,7 +50,7 @@ const RequestRemove = (props) => {
 									<td width="500rem"  >
 										<div className="control-group">
 											<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
-												<label><b>Are you sure you want to delete this item?</b></label>
+												<label><b>{t("areYouSure")}</b></label>
 												
 											</div>
 										</div>
@@ -57,7 +68,7 @@ const RequestRemove = (props) => {
 												id="button1"
 												type="button"
 											>
-												Yes
+												{t("yes")}
 											</button>
 										</div>
 
@@ -71,7 +82,7 @@ const RequestRemove = (props) => {
 												id="button2"
 												type="button"
 											>
-												No
+												{t("no")}
 											</button>
 										</div>
 										</div>

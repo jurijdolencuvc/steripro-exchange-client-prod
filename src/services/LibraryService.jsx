@@ -1,6 +1,6 @@
 import Axios from "axios";
 import { libraryConstants } from "../constants/LibraryConstants";
-
+import { constants } from "../consts/consts";
 import { authHeader } from "../helpers/auth-header";
 export const libraryService = {
 	addLibrary,
@@ -8,8 +8,47 @@ export const libraryService = {
 	deleteLibrary,
 	editLibrary,
 	getCategoriesLibrary,
-	getDocumentsLibrary
+	getDocumentsLibrary,
+	getDistributors
 };
+
+
+
+async function getDistributors(dispatch) {
+	dispatch(request());
+
+	var token = authHeader()
+	
+	await Axios.get(`${url}api/getDistributors`, { headers: { Authorization: token }}, { validateStatus: () => true })
+		.then((res) => {
+			if (res.status === 200) {
+				console.log(res.data)
+				dispatch(success(res.data));
+			} else {
+				
+				var error = constants("Error while fetching data")
+				dispatch(failure(error));
+			}
+		})
+		.catch((err) => {
+			
+			var error = constants("Unknown error, please try again later.")
+				dispatch(failure(error));
+		});
+
+	function request() {
+		return { type: libraryConstants.DISTRIBUTORS_GET_REQUEST };
+	}
+	function success(data) {
+		return { type: libraryConstants.DISTRIBUTORS_GET_SUCCESS, data: data };
+	}
+	function failure(message) {
+		
+		var message = constants(message)
+		return { type: libraryConstants.DISTRIBUTORS_GET_FAILURE, errorMessage: message };
+	}
+}
+
 
 var url = "https://api.exchange.uvcsolutions.com/"
 //var url = "http://localhost:3000/"
@@ -39,19 +78,20 @@ function addLibrary( formData, dispatch) {
 			}
 		})
 		.catch((err) => {
-			dispatch(failure("error"));
-			console.log(err)
-		})
+			
+			var error = constants("Unknown error, please try again later.")
+				dispatch(failure(error));
+			})
 
 	function request() {
 		return { type: libraryConstants.LIBRARY_SUBMIT_REQUEST };
 	}
 	function success() {
-		console.log("ckkcuk")
+		
 		return { type: libraryConstants.LIBRARY_SUBMIT_SUCCESS };
 	}
 	function failure(error) {
-		console.log(error)
+		var error = constants(error)
 		return { type: libraryConstants.LIBRARY_SUBMIT_FAILURE, error };
 	}
 }
@@ -83,7 +123,8 @@ function editLibrary( data, dispatch) {
 			}
 		})
 		.catch((err) => {
-			console.log(err)
+			var error = constants("Unknown error, please try again later.")
+			dispatch(failure(error));
 		})
 
 		function request() {
@@ -93,6 +134,7 @@ function editLibrary( data, dispatch) {
 			return { type: libraryConstants.LIBRARY_SET_SUCCESS, data: data };
 		}
 		function failure(message) {
+			var message = constants(message)
 			return { type: libraryConstants.LIBRARY_SET_FAILURE, errorMessage: message };
 		}
 }
@@ -115,8 +157,9 @@ async function deleteLibrary(documentId,dispatch) {
 			}
 		})
 		.catch((err) => {
-			dispatch(failure("Error"));
-			console.log(err);
+			var error = constants("Unknown error, please try again later.")
+				dispatch(failure(error));
+			
 		});
 
 		function request() {
@@ -128,7 +171,7 @@ async function deleteLibrary(documentId,dispatch) {
 
 		}
 		function failure(message) {
-		
+			var message = constants(message)
 			return { type: libraryConstants.LIBRARY_REMOVE_FAILURE, errorMessage : message };
 		}
 };
@@ -149,8 +192,8 @@ async function getDocumentsLibrary(dispatch) {
 			}
 		})
 		.catch((err) => {
-			console.log(err);
-			dispatch(failure("Error"));
+			var error = constants("Unknown error, please try again later.")
+				dispatch(failure(error));
 		});
 
 	function request() {
@@ -160,6 +203,7 @@ async function getDocumentsLibrary(dispatch) {
 		return { type: libraryConstants.LIBRARY_GET_SUCCESS, data: data };
 	}
 	function failure(message) {
+		var message = constants(message)
 		return { type: libraryConstants.LIBRARY_GET_FAILURE, errorMessage: message };
 	}
 }
@@ -180,9 +224,9 @@ async function getCategoriesLibrary(dispatch) {
 				dispatch(failure("Error while getting categories"));
 			}
 		})
-		.catch((err) => {
-			console.log(err);
-			dispatch(failure("Error"));
+		.catch((err) => {	
+			var error = constants("Unknown error, please try again later.")
+		dispatch(failure(error));
 		});
 
 	function request() {
@@ -192,6 +236,7 @@ async function getCategoriesLibrary(dispatch) {
 		return { type: libraryConstants.CATEGORIES_LIBRARY_GET_SUCCESS, data: data };
 	}
 	function failure(message) {
+		var message = constants(message)
 		return { type: libraryConstants.CATEGORIES_LIBRARY_GET_FAILURE, errorMessage: message };
 	}
 }

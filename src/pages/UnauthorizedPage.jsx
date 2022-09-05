@@ -1,5 +1,5 @@
 import React from "react";
-
+import i18next from "i18next";
 const UnauthorizedPage = () => {
 	return (
 		<React.Fragment>
@@ -13,10 +13,10 @@ const UnauthorizedPage = () => {
 				</div>
 				<div className="text-center mt-5" style={{ fontSize: "3em" }}>
 					Oops... <br />
-					Unauthorized
+					{i18next.t("unauthorized")},
 				</div>
 				<div className="text-center mt-5" style={{ fontSize: "1em" }}>
-					Try loging in <a href="#/login">here</a> <br />
+				{i18next.t("tryLoggingIn")} <a href="#/login">{i18next.t("here")} </a> <br />
 					
 					
 				</div>

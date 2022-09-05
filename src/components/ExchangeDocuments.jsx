@@ -2,7 +2,8 @@ import React, { useEffect, useState, useImperativeHandle, forwardRef, useContext
 import MaterialTable from "material-table";
 import { DocumentsContext } from "../contexts/DocumentsContext";
 import GetAppIcon from '@material-ui/icons/GetApp';
-
+import i18next from 'i18next';
+import { useTranslation } from 'react-i18next'
 import { userService } from "../services/UserService";
 import { MdEdit } from 'react-icons/md';
 import { documentService, documentsService } from "../services/DocumentService";
@@ -58,13 +59,16 @@ const tableIcons = {
 };
 const ExchangeDocuments = forwardRef((props, ref) => {
   const { documentsState, dispatch } = useContext(DocumentsContext);
-
-	const [role, setRole] = useState(false);
+  const { t } = useTranslation();
+  const [lang, setLang] = useState(`${localStorage.getItem("language")}`);
+  const [role, setRole] = useState(false);
   const someFetchActionCreator = () => {
+
 
     const getDocumentsInfoHandler = async () => {
       await documentService.getDocuments(dispatch);
       await documentService.getCategories(dispatch);
+      await documentService.getDistributors(dispatch);
 
     };
     getDocumentsInfoHandler();
@@ -73,30 +77,35 @@ const ExchangeDocuments = forwardRef((props, ref) => {
   const handleLogout = (event) => {
 
     userService.logout();
-   //dataService.getDecisionAsExel(travelReqID, dispatch);
- }
+    //dataService.getDecisionAsExel(travelReqID, dispatch);
+  }
 
   useEffect(() => {
-   
-    var token = authHeader()
-		if (token == "null") {
-			window.location = "#/unauthorized";
-		} else {
 
-			Axios.get(`${url}api/getRole`, { headers: { Authorization: token } }, { validateStatus: () => true },
-			)
-				.then((res) => {
-					if (res.status === 201) {
-						if ("Admin" == res.data) {
+
+    i18next.changeLanguage(lang, (err, t) => {
+      if (err) return console.log('something went wrong loading', err);
+      t('key'); // -> same as i18next.t
+    });
+    var token = authHeader()
+    if (token == "null") {
+      window.location = "#/unauthorized";
+    } else {
+
+      Axios.get(`${url}api/getRole`, { headers: { Authorization: token } }, { validateStatus: () => true },
+      )
+        .then((res) => {
+          if (res.status === 201) {
+            if ("Admin" == res.data) {
 
               setRole(true)
-						}
-					} 
-				})
-				.catch((err) => {
-					
-				})
-		}
+            }
+          }
+        })
+        .catch((err) => {
+
+        })
+    }
     someFetchActionCreator()
   }, [dispatch]);
 
@@ -120,7 +129,7 @@ const ExchangeDocuments = forwardRef((props, ref) => {
 
   const deleteDocument = (e, oneFile) => {
 
-   dispatch({ type: documentsConstants.DOCUMENTS_REQUEST_REMOVE_REQUEST, oneFile: oneFile });
+    dispatch({ type: documentsConstants.DOCUMENTS_REQUEST_REMOVE_REQUEST, oneFile: oneFile });
   }
 
   return (
@@ -128,63 +137,65 @@ const ExchangeDocuments = forwardRef((props, ref) => {
       <div >
 
       <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", marginTop: "30px", marginLeft:"288px"}}><h1>Exchange documents</h1>
-          <button style={{ float: "right", marginBottom: "30px", marginRight:"38px" }} type="button" onClick={handleShowModal} class="btn btn-primary btn-lg">+ Add new document</button></div>  <div class="wrapper">
-            <nav id="sidebar">
-              <div class="sidebar-header">
-                <div class="image-div">
-                  <img src={process.env.PUBLIC_URL + 'assets/img/logo.png'} alt="SteriPro" style={{ maxWidth: "150px", width: "100%" }}></img>
-                </div>
+          <button style={{ float: "right", marginBottom: 30, marginRight: "38px" }} type="button" onClick={handleShowModal} class="btn btn-primary btn-lg">{t('add')}</button></div>  <div class="wrapper">
+          <nav id="sidebar">
+            <div class="sidebar-header">
+              <div class="image-div">
+                <img src={process.env.PUBLIC_URL + 'assets/img/logo.png'} alt="SteriPro" style={{ maxWidth: "150px", width: "100%" }}></img>
               </div>
-
-              <nav class="">
-                <div class="nav_list"> <a href="#" class="nav_link"> <i class='bx bx-grid-alt nav_icon'> <MdOutlineDashboard /></i> <span class="nav_name">Devices</span> </a> <a href="/#/exchangeDocuments" class="nav_link active"> <i class='bx bx-user nav_icon'><BiCollection /></i> <span class="nav_name">Exchange documents</span> </a>  </div>
-               
-      <a href="/#/exchangeLibraries" style={{ marginTop: "20px" }} class="nav_link"> <i class='bx bx-log-out nav_icon'><VscLibrary /></i> <span class="nav_name ">Library</span> </a>
-               {role && <a href="/#/sendRegistrationMail" style={{ marginTop: "20px" }} class="nav_link"> <i class='bx bx-log-out nav_icon'><AiOutlineUserAdd /></i> <span class="nav_name ">Enroll</span> </a>}
-               {!role && <a href="/#/contact" style={{ marginTop: "20px" }} class="nav_link"> <i class='bx bx-log-out nav_icon'><AiOutlineMail /></i> <span class="nav_name ">Support</span> </a>}
-                <a onClick={handleLogout} style={{ marginTop: "20px" }} class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">SignOut</span> </a>
-              </nav>
-
-            </nav>
-          
-
-            <div style={{ marginLeft: "250px" }}>
-
-
             </div>
 
-{role &&
+            <nav class="">
+              <div class="nav_list"> <a href="#" class="nav_link"> <i class='bx bx-grid-alt nav_icon'> <MdOutlineDashboard /></i> <span class="nav_name">{t('devices')}</span> </a>
+                <a href="/#/exchangeDocuments" class="nav_link active"> <i class='bx bx-user nav_icon'><BiCollection /></i> <span class="nav_name">{t('exchange_documents')}</span> </a>  </div>
+              <a href="/#/exchangeLibraries" style={{ marginTop: "20px" }} class="nav_link"> <i class='bx bx-log-out nav_icon'><VscLibrary /></i> <span class="nav_name ">{t('library')}</span> </a>
+
+              {!role && <a href="/#/contact" style={{ marginTop: "20px" }} class="nav_link"> <i class='bx bx-log-out nav_icon'><AiOutlineMail /></i> <span class="nav_name ">{t('support')}</span> </a>}
+              {role && <a href="/#/sendRegistrationMail" style={{ marginTop: "20px" }} class="nav_link"> <i class='bx bx-log-out nav_icon'><AiOutlineUserAdd /></i> <span class="nav_name">{t('enroll')}</span> </a>}
+              <a onClick={handleLogout} style={{ marginTop: "20px" }} class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">{t('signout')}</span> </a>
+            </nav>
+
+
+          </nav>
+
+
+          <div style={{ marginLeft: "250px" }}>
+
+
+          </div>
+
+          {role &&
 
             <MaterialTable stickyHeader
-              style={{tableLayout: 'fixed', marginLeft: 38, marginRight: 38, width:"100%" }}
+              style={{ tableLayout: 'fixed', marginLeft: 38, marginRight: 38, width: "100%" }}
               icons={tableIcons}
               columns={[
-                { title: "Document title", field: "documentTitle", },
-                { title: "Document description", field: "documentDescription", },
-                { title: "Category", field: "category.title"},
-                { title: "Read", field: "read" },
+                { title: t("documentTitle"), field: "documentTitle", },
+                { title: t("documentDescription"), field: "documentDescription", },
+                { title: t("category"), field: "category.title" },
+                { title: t("read"), field: "read" },
 
               ]}
-             
+
               actions={[
                 {
                   icon: () => <GetAppIcon />,
-                  title: 'Download document',
+                  title: t("downloadDocument"),
                   onClick: (event, rowData) => fileClicked(event, rowData._id, rowData.document)
                 },
                 {
                   icon: () => <MdEdit />,
-                  title: 'Edit document',
+                  title: t("editDocument"),
                   onClick: (event, rowData) => showEditDocument(event, rowData)
                 },
                 {
                   icon: () => <DeleteOutline />,
-                  title: 'Delete document',
+                  title: t("deleteDocument"),
                   onClick: (event, rowData) => deleteDocument(event, rowData._id)
                 },
 
               ]}
-            
+
               options={{
                 actionsColumnIndex: -1,
                 headerStyle: { position: 'sticky', top: 0 },
@@ -193,7 +204,7 @@ const ExchangeDocuments = forwardRef((props, ref) => {
 
               localization={{
                 header: {
-                  actions: 'Download / edit / delete document',
+                  actions: t("downloadEditDeleteDocument"),
                 },
 
               }}
@@ -203,39 +214,40 @@ const ExchangeDocuments = forwardRef((props, ref) => {
               title=""
 
             />
-}
-{!role &&
-<MaterialTable stickyHeader
-              style={{ tableLayout: 'fixed', marginLeft: 38, marginRight: 38, width:"100%"  }}
+          }
+          {!role &&
+            <MaterialTable stickyHeader
+              style={{ tableLayout: 'fixed', marginLeft: 38, marginRight: 38, width: "100%" }}
               icons={tableIcons}
               columns={[
-                { title: "Document ID", field: "_id", },
-                { title: "Document title", field: "documentTitle", },
-                { title: "Document description", field: "documentDescription", },
-                { title: "Read", field: "read" },
-                { title: "Last access", field: "lastAccess", type: 'string' },
+                { title: t("documentTitle"), field: "documentTitle", },
+                { title: t("documentDescription"), field: "documentDescription", },
+                { title: t("category"), field: "category.title" },
+                { title: t("read"), field: "read" },
+
 
               ]}
-             
+
               actions={[
                 {
                   icon: () => <GetAppIcon />,
-                  title: 'Download document',
+                  title: t("downloadDocument"),
                   onClick: (event, rowData) => fileClicked(event, rowData._id, rowData.document)
                 },
-              
+
 
               ]}
-            
+
               options={{
                 actionsColumnIndex: -1,
                 headerStyle: { position: 'sticky', top: 0 },
-                maxBodyHeight: 500,
+                maxBodyHeight: 450,
+              
               }}
 
               localization={{
                 header: {
-                  actions: 'Download / edit / delete document',
+                  actions: t("downloadEditDeleteDocument"),
                 },
 
               }}
@@ -245,9 +257,9 @@ const ExchangeDocuments = forwardRef((props, ref) => {
               title=""
 
             />
-}
+          }
         </div>
-      </div>
+    </div>
     </div>
   );
 });

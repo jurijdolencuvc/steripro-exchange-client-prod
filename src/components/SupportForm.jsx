@@ -6,10 +6,17 @@ import Select from "react-dropdown-select";
 import { MdOutlineDashboard } from 'react-icons/md';
 import { BiCollection } from 'react-icons/bi';
 
+import i18next from 'i18next';
+import { useTranslation } from 'react-i18next'
 import { VscLibrary } from 'react-icons/vsc';
 import { AiOutlineUserAdd, AiOutlineMail } from 'react-icons/ai';
 //const Forn({prop1, prop2, ...rest}) => {} HOOKOVI
 const SupportForm = () => {
+
+	
+	const { t } = useTranslation();
+	const [lang, setLang] = useState(`${localStorage.getItem("language")}`);
+
 	const { userState, dispatch } = useContext(UserContext);
 
 
@@ -19,6 +26,15 @@ const SupportForm = () => {
 	const [message, setMessage] = useState("");
 
 
+	useEffect(() => {
+
+
+		i18next.changeLanguage(lang, (err, t) => {
+		  if (err) return console.log('something went wrong loading', err);
+		  t('key'); // -> same as i18next.t
+		});
+		
+	  }, [dispatch]);
 	const handleLogout = (event) => {
 
 		userService.logout();
@@ -49,14 +65,14 @@ const SupportForm = () => {
 
 			return (
 				<div>
-					<h2 style={{ marginTop: "20px" }}>File Details:</h2>
-					<p>File Name: {file.name}</p>
-					<p>File Type: {file.type}</p>
-					<p>
-						Last Modified:{" "}
-						{file.lastModifiedDate.toDateString()}
-					</p>
-				</div>
+				<h2 style={{ marginTop: "20px" }}>{t("fileDetails")}</h2>
+				<p>{t("fileName")}: {file.name}</p>
+				<p>{t("fileType")}: {file.type}</p>
+				<p>
+				{t("lastModified")}:{" "}
+					{file.lastModifiedDate.toDateString()}
+				</p>
+			</div>
 			);
 		}
 	};
@@ -66,7 +82,7 @@ const SupportForm = () => {
 
 		if (message == "") {
 
-			setErrMessage("Please fill message fields")
+			setErrMessage(t("fillAllFields"))
 		} else {
 			const formData = new FormData();
 
@@ -102,12 +118,14 @@ const SupportForm = () => {
 							</div>
 
 							<nav class="">
-								<div class="nav_list"> <a href="#" class="nav_link"> <i class='bx bx-grid-alt nav_icon'> <MdOutlineDashboard /></i> <span class="nav_name">Devices</span> </a> <a href="/#/exchangeDocuments" class="nav_link"> <i class='bx bx-user nav_icon'><BiCollection /></i> <span class="nav_name">Exchange documents</span> </a>  </div>
-								<a href="/#/exchangeLibraries" style={{ marginTop: "20px" }} class="nav_link"> <i class='bx bx-log-out nav_icon'><VscLibrary /></i> <span class="nav_name ">Library</span> </a>
-         
-								<a href="/#/contact" style={{ marginTop: "20px" }} class="nav_link active"> <i class='bx bx-log-out nav_icon'><AiOutlineMail /></i> <span class="nav_name ">Support</span> </a>
-								<a onClick={handleLogout} style={{ marginTop: "20px" }} class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">SignOut</span> </a>
-							</nav>
+              <div class="nav_list"> <a href="#" class="nav_link"> <i class='bx bx-grid-alt nav_icon'> <MdOutlineDashboard /></i> <span class="nav_name">{t('devices')}</span> </a>
+                <a href="/#/exchangeDocuments" class="nav_link "> <i class='bx bx-user nav_icon'><BiCollection /></i> <span class="nav_name">{t('exchange_documents')}</span> </a>  </div>
+              <a href="/#/exchangeLibraries" style={{ marginTop: "20px" }} class="nav_link"> <i class='bx bx-log-out nav_icon'><VscLibrary /></i> <span class="nav_name ">{t('library')}</span> </a>
+
+			  <a href="/#/contact" style={{ marginTop: "20px" }} class="nav_link active"> <i class='bx bx-log-out nav_icon'><AiOutlineMail /></i> <span class="nav_name ">{t('support')}</span> </a>
+             <a onClick={handleLogout} style={{ marginTop: "20px" }} class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">{t('signout')}</span> </a>
+            </nav>
+						
 
 						</nav>
 					</div>
@@ -118,10 +136,10 @@ const SupportForm = () => {
 							<form method="post" onSubmit={handleSubmit} style={{ width: "100%", marginRight: "88px" }} >
 
 
-								<h2 style={{ marginBottom: "50px" }}>Send message</h2>
+								<h2 style={{ marginBottom: "50px" }}>{t("sendMessage")}</h2>
 
 								<div className="form-group">
-									<textarea className="form-control" style={{ height: "200px" }} type="textarea" required name="message" placeholder="Insert text here..." value={message} onChange={(e) => setMessage(e.target.value)}></textarea>
+									<textarea className="form-control" style={{ height: "200px" }} type="textarea" required name="message" placeholder={t("insertText")} value={message} onChange={(e) => setMessage(e.target.value)}></textarea>
 								</div>
 								<div style={{ marginTop: "15px" }}>
 									<input type="file" name="file" onChange={onFileChange} />
@@ -135,7 +153,7 @@ const SupportForm = () => {
 								<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
 
 								<div className="form-group">
-									<input className="btn btn-primary btn-block" id="kayitol" type="submit" style={{ background: "#5e90f6" }} value="Send" />
+									<input className="btn btn-primary btn-block" id="kayitol" type="submit" style={{ background: "#5e90f6" }} value={t("send")} />
 								</div>
 
 

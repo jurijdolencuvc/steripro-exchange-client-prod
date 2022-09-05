@@ -1,7 +1,6 @@
 import { deviceConstants } from "../constants/DeviceConstants";
-
+import i18next from "i18next";
 var prodCpy = {};
-
 export const deviceReducer = (state, action) => {
 
 	switch (action.type) {
@@ -21,7 +20,7 @@ export const deviceReducer = (state, action) => {
 				...state,
 				listDevices: {
 					showError: true,
-					errorMessage: "Error",
+					errorMessage: i18next.t("error"),
 					devices: [],
 				},
 			};
@@ -81,8 +80,8 @@ export const deviceReducer = (state, action) => {
 				...state,
 				modal: {
 					showModal: true,
-					message: "You have successfully updated the device",
-					title: "Success"
+					message: i18next.t("successUpdateDevice"),
+					title: i18next.t("success")
 				},
 				
 		updateData: {
@@ -133,8 +132,8 @@ export const deviceReducer = (state, action) => {
 				...state,
 				modal: {
 					showModal: true,
-					message: "There has been an error while editing the device. Try again later.",
-					title: "Error"
+					message: i18next.t("editDeviceError"),
+					title: i18next.t("error")
 				},
 				
 		updateData: {

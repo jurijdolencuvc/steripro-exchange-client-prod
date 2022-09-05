@@ -4,17 +4,26 @@ import Paper from "@material-ui/core/Paper";
 import { documentService } from "../services/DocumentService";
 import { DocumentsContext } from "../contexts/DocumentsContext";
 
+
+import i18next from 'i18next';
+import { useTranslation } from 'react-i18next'
 const AddNewDocumentForm = (props) => {
 	const [documentTitle, setDocumentTitle] = useState("");
 	const [documentDescription, setDocumentDescription] = useState("");
-	const [category, setCategory] = useState("");
+	const [category, setCategory] = useState(props.categories[0].title);
+	const [distributor, setDistributor] = useState(props.distributors[0].name);
 	const [file, setFile] = useState(null);
 	const [errMessage, setErrMessage] = useState("");
 	const { documentState, dispatch } = useContext(DocumentsContext);
 
+	const { t } = useTranslation();
+	const [lang, setLang] = useState(`${localStorage.getItem("language")}`);
 
 	useEffect(() => {
-
+		i18next.changeLanguage(lang, (err, t) => {
+			if (err) return console.log('something went wrong loading', err);
+			t('key'); // -> same as i18next.t
+		  });
 		someFetchActionCreator()
 	}, [dispatch]);
 
@@ -37,11 +46,11 @@ const AddNewDocumentForm = (props) => {
 
 			return (
 				<div>
-					<h2 style={{ marginTop: "20px" }}>File Details:</h2>
-					<p>File Name: {file.name}</p>
-					<p>File Type: {file.type}</p>
+					<h2 style={{ marginTop: "20px" }}>{t("fileDetails")}</h2>
+					<p>{t("fileName")}: {file.name}</p>
+					<p>{t("fileType")}: {file.type}</p>
 					<p>
-						Last Modified:{" "}
+					{t("lastModified")}:{" "}
 						{file.lastModifiedDate.toDateString()}
 					</p>
 				</div>
@@ -49,20 +58,25 @@ const AddNewDocumentForm = (props) => {
 		}
 	};
 
+
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
-		console.log(category)
+		console.log(distributor)
 		if (file == null || documentDescription == "" || documentTitle == ""|| category=="") {
 
-			setErrMessage("Please fill all fields")
+			setErrMessage(t("fillAllFields"))
 		} else {
 			const formData = new FormData();
 
+			console.log(distributor)
 			formData.append('File', file);
 			formData.append("documentTitle", documentTitle);
 			formData.append("documentDescription", documentDescription);
 			formData.append("category", category);
+			
+			formData.append("distributor", distributor);
 			// Details of the uploaded file 
 
 			// Request made to the backend api 
@@ -96,13 +110,13 @@ const AddNewDocumentForm = (props) => {
 									<td width="600rem"  >
 										<div className="control-group">
 											<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
-												<label><b>Document Title</b></label>
+												<label><b>{t("documentTitle")}</b></label>
 												<div class="row" >
 													<div class="form-group col-lg-10">
 														<input
 
 															className={"form-control"}
-															placeholder="Document Title"
+															placeholder={t("documentTitle")}
 															aria-describedby="basic-addon1"
 															id="name"
 															type="text"
@@ -117,13 +131,13 @@ const AddNewDocumentForm = (props) => {
 										</div>
 										<div className="control-group">
 											<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
-												<label><b>Document Description</b></label>
+												<label><b>{t("documentDescription")}</b></label>
 												<div class="row" >
 													<div class="form-group col-lg-10">
 														<input
 
 															className={"form-control"}
-															placeholder="Document Description"
+															placeholder={t("documentDescription")}
 															aria-describedby="basic-addon1"
 															id="name"
 															type="text"
@@ -139,7 +153,7 @@ const AddNewDocumentForm = (props) => {
 
 										<div className="control-group">
 											<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
-												<label><b>Category</b></label>
+												<label><b>{t("category")}</b></label>
 												<div class="row" >
 													<div class="form-group col-lg-10">
 
@@ -147,6 +161,24 @@ const AddNewDocumentForm = (props) => {
 															{props.categories.map(item =>
 																<option key={item._id} value={item.title} >{item.title}</option>
 															)};
+														
+														</select>
+													</div>
+												</div>
+											</div>
+										</div>
+
+										<div className="control-group">
+											<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
+												<label><b>{t("distributor")}</b></label>
+												<div class="row" >
+													<div class="form-group col-lg-10">
+
+														<select onChange={(e)=>setDistributor(e.target.value)} name="distributor" class="custom-select" style={{width:"360px"}}>
+														{props.distributors.map(item =>
+																<option key={item._id} value={item.name} >{item.name}</option>
+															)};
+														
 														
 														</select>
 													</div>
@@ -173,7 +205,7 @@ const AddNewDocumentForm = (props) => {
 												id="sendMessageButton"
 												type="button"
 											>
-												Add document
+												{t("addDocument")}
 											</button>
 										</div>
 

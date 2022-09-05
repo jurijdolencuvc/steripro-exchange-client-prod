@@ -1,4 +1,4 @@
-import { React, useEffect } from "react";
+import React, { useContext, useEffect, useImperativeHandle, forwardRef, useState } from "react";
 import SupportForm from "../components/SupportForm";
 import UserContextProvider from "../contexts/UserContext";
 
@@ -12,7 +12,13 @@ var url = "https://api.exchange.uvcsolutions.com/"
 //var url = "http://localhost:3000/"
 
 const SupportPage = () => {
+
+	
+
 	useEffect(() => {
+
+		
+	
 		var token = authHeader()
 		if (token == "null") {
 			window.location = "#/unauthorized";

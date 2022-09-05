@@ -1,7 +1,8 @@
 import { useContext, useState, useEffect,useRef, React } from "react";
 import DeviceInfo from "./DeviceInfo";
 import { DeviceContext } from "../../contexts/DeviceContext";
-
+import i18next from 'i18next';
+import { useTranslation } from 'react-i18next'
 import { authHeader } from "../../helpers/auth-header";
 import Axios from "axios";
 
@@ -11,11 +12,21 @@ const Devices = () => {
 
     const { deviceState, dispatch } = useContext(DeviceContext);
 
+   
 	const [role, setRole] = useState(false);
+    const { t } = useTranslation(); 
+	const [lang, setLang] = useState(`${localStorage.getItem("language")}`);
+
 
     useEffect(() => {
     
-        var token = authHeader()
+        i18next.changeLanguage(lang, (err, t) => {
+            if (err) return console.log('something went wrong loading', err);
+            t('key'); // -> same as i18next.t
+          });
+          
+
+       var token = authHeader()
 		if (token == "null") {
 			window.location = "#/unauthorized";
 		} else {
@@ -43,7 +54,7 @@ const Devices = () => {
 
             <div >
 
-                <div style={{ display: "flex", flexDirection: "row", marginLeft: "300px", marginTop: "30px", marginBottom: "30px" }}><h1>Devices</h1></div>
+            <div style={{ display: "flex", flexDirection: "row", marginLeft: "300px", marginTop: "30px", marginBottom: "40px" }}><h1>Devices</h1></div>
                 <DeviceInfo
                     role = {role}
                   

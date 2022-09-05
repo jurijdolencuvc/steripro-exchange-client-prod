@@ -1,15 +1,18 @@
 
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useState, useEffect,useRef, React } from "react";
 import Paper from "@material-ui/core/Paper";
 import { documentService } from "../../services/DocumentService";
 import { DocumentsContext } from "../../contexts/DocumentsContext";
 import { documentsConstants } from "../../constants/DocumentsConstants";
 
+import i18next from 'i18next';
+import { useTranslation } from 'react-i18next'
 const RequestRemoveDocument = (props) => {
 	
 	const { documentsState, dispatch } = useContext(DocumentsContext);
 
-	
+	const { t } = useTranslation(); 
+	const [lang, setLang] = useState(`${localStorage.getItem("language")}`);
 
 	const handleSubmitNo = (e) => {
 		e.preventDefault();
@@ -39,7 +42,7 @@ const RequestRemoveDocument = (props) => {
 									<td width="500rem"  >
 										<div className="control-group">
 											<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
-												<label><b>Are you sure you want to delete this item?</b></label>
+												<label><b>{t('areYouSure')}</b></label>
 												
 											</div>
 										</div>
@@ -57,7 +60,7 @@ const RequestRemoveDocument = (props) => {
 												id="button1"
 												type="button"
 											>
-												Yes
+												{t('yes')}
 											</button>
 										</div>
 
@@ -71,7 +74,7 @@ const RequestRemoveDocument = (props) => {
 												id="button2"
 												type="button"
 											>
-												No
+												{t('no')}
 											</button>
 										</div>
 										</div>

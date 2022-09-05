@@ -9,7 +9,9 @@ export function authHeader() {
 
 export function setAuthInLocalStorage(data) {
 
+	console.log(data)
 		localStorage.setItem("accessToken", data.token);
+		localStorage.setItem("language", data.lang);
 
 
 }

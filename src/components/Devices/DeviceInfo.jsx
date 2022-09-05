@@ -1,6 +1,8 @@
 import React, { useEffect, useState,useImperativeHandle, forwardRef, useContext } from "react";
 import MaterialTable from "material-table";
 import { DeviceContext } from "../../contexts/DeviceContext";
+import i18next from 'i18next';
+import { useTranslation } from 'react-i18next'
 import DeviceContextProvider from "../../contexts/DeviceContext";
 import { deviceService } from "../../services/DeviceService";
 import { userService } from "../../services/UserService";
@@ -57,8 +59,9 @@ const tableIcons = {
 };
 const DeviceInfo = forwardRef((props, ref) => {
   const { deviceState, dispatch } = useContext(DeviceContext);
-  
+  const [lang, setLang] = useState(`${localStorage.getItem("language")}`);
 	const [role, setRole] = useState(false);
+  const { t } = useTranslation(); 
   const someFetchActionCreator = () => {
 
     const getDevicesInfoHandler = async () => {
@@ -70,6 +73,10 @@ const DeviceInfo = forwardRef((props, ref) => {
   useEffect(() => {
 
 
+    i18next.changeLanguage(lang, (err, t) => {
+      if (err) return console.log('something went wrong loading', err);
+      t('key'); // -> same as i18next.t
+    });
 
     var token = authHeader()
 		if (token == "null") {
@@ -115,13 +122,13 @@ const DeviceInfo = forwardRef((props, ref) => {
 		</div>
 
 		<nav class="">
-		  <div class="nav_list"> <a href="#" class="nav_link active"> <i class='bx bx-grid-alt nav_icon'> <MdOutlineDashboard /></i> <span class="nav_name">Devices</span> </a> 
-      <a href="/#/exchangeDocuments" class="nav_link"> <i class='bx bx-user nav_icon'><BiCollection/></i> <span class="nav_name">Exchange documents</span> </a>  </div>
-      <a href="/#/exchangeLibraries" style={{ marginTop: "20px" }} class="nav_link"> <i class='bx bx-log-out nav_icon'><VscLibrary /></i> <span class="nav_name ">Library</span> </a>
+		  <div class="nav_list"> <a href="#" class="nav_link active"> <i class='bx bx-grid-alt nav_icon'> <MdOutlineDashboard /></i> <span class="nav_name">{t('devices')}</span> </a> 
+      <a href="/#/exchangeDocuments" class="nav_link"> <i class='bx bx-user nav_icon'><BiCollection/></i> <span class="nav_name">{t('exchange_documents')}</span> </a>  </div>
+      <a href="/#/exchangeLibraries" style={{ marginTop: "20px" }} class="nav_link"> <i class='bx bx-log-out nav_icon'><VscLibrary /></i> <span class="nav_name ">{t('library')}</span> </a>
      
-      {!props.role && <a href="/#/contact" style={{ marginTop: "20px" }} class="nav_link"> <i class='bx bx-log-out nav_icon'><AiOutlineMail /></i> <span class="nav_name ">Support</span> </a>}
-      {props.role && <a href="/#/sendRegistrationMail" style={{marginTop : "20px"}} class="nav_link"> <i class='bx bx-log-out nav_icon'><AiOutlineUserAdd/></i> <span class="nav_name">Enroll</span> </a>}
-		  <a onClick={handleLogout} style={{marginTop : "20px"}} class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">SignOut</span> </a>
+      {!props.role && <a href="/#/contact" style={{ marginTop: "20px" }} class="nav_link"> <i class='bx bx-log-out nav_icon'><AiOutlineMail /></i> <span class="nav_name ">{t('support')}</span> </a>}
+      {props.role && <a href="/#/sendRegistrationMail" style={{marginTop : "20px"}} class="nav_link"> <i class='bx bx-log-out nav_icon'><AiOutlineUserAdd/></i> <span class="nav_name">{t('enroll')}</span> </a>}
+		  <a onClick={handleLogout} style={{marginTop : "20px"}} class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">{t('signout')}</span> </a>
 		</nav>
 
 	  </nav>
@@ -130,7 +137,7 @@ const DeviceInfo = forwardRef((props, ref) => {
 
           
        {role &&   <MaterialTable stickyHeader
-           style={{tableLayout: 'fixed', marginLeft: 38, marginRight: 38, width:"80%"}}
+           style={{tableLayout: 'fixed', marginLeft: 38, marginRight: 48, width:"80%"}}
             icons={tableIcons}
             actions={[
               {
@@ -142,14 +149,15 @@ const DeviceInfo = forwardRef((props, ref) => {
 
             ]}
             columns={[
-              { title: "Motherboard ID", field: "serialNumber" },
-              { title: "Device name", field: "name" },
-              { title: "Tablet IMEI", field: "tabletIdentifier" },
-              { title: "Customer", field: "customerName", type: 'string' },
-              { title: "Deploy date", field: "deployDate", type: 'date' },
-              { title: "Last regular service date", field: "lastRegularServiceDate", type: 'date' },
-              { title: "Next service", field: "countdown" },
-              { title: "Notification email", field: "notificationEmails", type: 'string' },
+              { title: t("motherboardId"), field: "serialNumber" },
+              { title: t("deviceName"), field: "name" },
+              { title: t("tabletIMEI"), field: "tabletIdentifier" },
+              { title: t("customer"), field: "customerName", type: 'string' },
+              { title: t("distributor"), field: "distributorName", type: 'string' },
+              { title: t("deployDate"), field: "deployDate", type: 'date' },
+              { title: t("lastLegularServiceData"), field: "lastRegularServiceDate", type: 'date' },
+              { title: t("nextService"), field: "countdown" },
+              { title: t("notificationEmail"), field: "notificationEmails", type: 'string' },
 
             ]}
            
@@ -162,7 +170,7 @@ const DeviceInfo = forwardRef((props, ref) => {
          
             localization={{
               header: {
-                actions: 'Edit',
+                actions:  t("edit"),
               },
 
             }}
@@ -181,20 +189,22 @@ const DeviceInfo = forwardRef((props, ref) => {
            style={{tableLayout: 'fixed', marginLeft: 38, marginRight: 38, width:"100%"}}
             icons={tableIcons}
             columns={[
-              { title: "Motherboard ID", field: "serialNumber" },
-              { title: "Device name", field: "name" },
-              { title: "Tablet IMEI", field: "tabletIdentifier" },
-              { title: "Customer", field: "customerName", type: 'string' },
-              { title: "Deploy date", field: "deployDate", type: 'date' },
-              { title: "Last regular service date", field: "lastRegularServiceDate", type: 'date' },
-              { title: "Notification email", field: "notificationEmails", type: 'string' },
+              { title: t("motherboardId"), field: "serialNumber" },
+              { title: t("deviceName"), field: "name" },
+              { title: t("tabletIMEI"), field: "tabletIdentifier" },
+              { title: t("customer"), field: "customerName", type: 'string' },
+              { title: t("distributor"), field: "distributorName", type: 'string' },
+              { title: t("deployDate"), field: "deployDate", type: 'date' },
+              { title: t("lastLegularServiceData"), field: "lastRegularServiceDate", type: 'date' },
+              { title: t("nextService"), field: "countdown" },
+              { title: t("notificationEmail"), field: "notificationEmails", type: 'string' },
 
             ]}
            
             options={{
               actionsColumnIndex: -1,
               headerStyle: { position: 'sticky', top: 0 },
-              maxBodyHeight: 500,
+              maxBodyHeight: 450,
             }}
          
             

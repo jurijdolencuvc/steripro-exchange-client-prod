@@ -4,17 +4,28 @@ import Paper from "@material-ui/core/Paper";
 import { libraryService } from "../services/LibraryService";
 import { LibraryContext } from "../contexts/LibraryContext";
 
+import i18next from 'i18next';
+import { useTranslation } from 'react-i18next'
 const AddNewLibraryForm = (props) => {
 	const [documentTitle, setDocumentTitle] = useState("");
 	const [documentDescription, setDocumentDescription] = useState("");
-	const [category, setCategory] = useState("");
+	const [category, setCategory] = useState(props.categories[0].title);
 	const [file, setFile] = useState(null);
+	const { t } = useTranslation();
+	
+	const [distributor, setDistributor] = useState(props.distributors[0].name);
+
+	const [lang, setLang] = useState(`${localStorage.getItem("language")}`);
 	const [errMessage, setErrMessage] = useState("");
 	const { libraryState, dispatch } = useContext(LibraryContext);
 
 
 	useEffect(() => {
 
+		i18next.changeLanguage(lang, (err, t) => {
+			if (err) return console.log('something went wrong loading', err);
+			t('key'); // -> same as i18next.t
+		  });
 		someFetchActionCreator()
 	}, [dispatch]);
 
@@ -37,14 +48,14 @@ const AddNewLibraryForm = (props) => {
 
 			return (
 				<div>
-					<h2 style={{ marginTop: "20px" }}>File Details:</h2>
-					<p>File Name: {file.name}</p>
-					<p>File Type: {file.type}</p>
-					<p>
-						Last Modified:{" "}
-						{file.lastModifiedDate.toDateString()}
-					</p>
-				</div>
+				<h2 style={{ marginTop: "20px" }}>{t("fileDetails")}</h2>
+				<p>{t("fileName")}: {file.name}</p>
+				<p>{t("fileType")}: {file.type}</p>
+				<p>
+				{t("lastModified")}:{" "}
+					{file.lastModifiedDate.toDateString()}
+				</p>
+			</div>
 			);
 		}
 	};
@@ -55,7 +66,7 @@ const AddNewLibraryForm = (props) => {
 		console.log(category)
 		if (file == null || documentDescription == "" || documentTitle == ""|| category=="") {
 
-			setErrMessage("Please fill all fields")
+			setErrMessage(t("fillAllFields"))
 		} else {
 			const formData = new FormData();
 
@@ -63,6 +74,7 @@ const AddNewLibraryForm = (props) => {
 			formData.append("documentTitle", documentTitle);
 			formData.append("documentDescription", documentDescription);
 			formData.append("category", category);
+			formData.append("distributor", distributor);
 			// Details of the uploaded file 
 
 			// Request made to the backend api 
@@ -96,13 +108,13 @@ const AddNewLibraryForm = (props) => {
 									<td width="600rem"  >
 										<div className="control-group">
 											<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
-												<label><b>Title</b></label>
+												<label><b>{t("title")}</b></label>
 												<div class="row" >
 													<div class="form-group col-lg-10">
 														<input
 
 															className={"form-control"}
-															placeholder="Title"
+															placeholder={t("title")}
 															aria-describedby="basic-addon1"
 															id="name"
 															type="text"
@@ -117,13 +129,13 @@ const AddNewLibraryForm = (props) => {
 										</div>
 										<div className="control-group">
 											<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
-												<label><b>Description</b></label>
+												<label><b>{t("decription")}</b></label>
 												<div class="row" >
 													<div class="form-group col-lg-10">
 														<input
 
 															className={"form-control"}
-															placeholder="Description"
+															placeholder={t("description")}
 															aria-describedby="basic-addon1"
 															id="name"
 															type="text"
@@ -139,7 +151,7 @@ const AddNewLibraryForm = (props) => {
 
 										<div className="control-group">
 											<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
-												<label><b>Category</b></label>
+												<label><b>{t("category")}</b></label>
 												<div class="row" >
 													<div class="form-group col-lg-10">
 
@@ -155,6 +167,23 @@ const AddNewLibraryForm = (props) => {
 										</div>
 
 
+										<div className="control-group">
+											<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
+												<label><b>{t("distributor")}</b></label>
+												<div class="row" >
+													<div class="form-group col-lg-10">
+
+														<select onChange={(e)=>setDistributor(e.target.value)} name="distributor" class="custom-select" style={{width:"360px"}}>
+														{props.distributors.map(item =>
+																<option key={item._id} value={item.name} >{item.name}</option>
+															)};
+														
+														
+														</select>
+													</div>
+												</div>
+											</div>
+										</div>
 										<div style={{ marginTop: "15px" }}>
 											<input type="file" name="file" onChange={onFileChange} />
 
@@ -173,7 +202,7 @@ const AddNewLibraryForm = (props) => {
 												id="sendMessageButton"
 												type="button"
 											>
-												Add
+											{t("addLibrary")}
 											</button>
 										</div>
 

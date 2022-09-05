@@ -27,6 +27,13 @@ const DocumentsContextProvider = (props) => {
 			showModal: false,
 		},
 
+		listDistributors: {
+			showError: false,
+			errorMessage: "",
+			distributors: [],
+			showModal: false,
+		},
+
 		modal: {
 			showModal: false,
 			message: "",

@@ -1,8 +1,10 @@
 
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useState, useEffect,useRef, React } from "react";
 import Paper from "@material-ui/core/Paper";
 import { documentService } from "../services/DocumentService";
 import DocumentsContextProvider from "../contexts/DocumentsContext";
+import i18next from 'i18next';
+import { useTranslation } from 'react-i18next'
 const EditDocumentForm = (props) => {
 	
 	//const { documentState, dispatch } = useContext(DocumentsContext);
@@ -11,6 +13,8 @@ const EditDocumentForm = (props) => {
 	const [documentTitle, setDocumentTitle] = useState(transferData.documentTitle);
 	const [documentDescription, setDocumentDescription] = useState(transferData.documentDescription);
 	const [id, setId] = useState(transferData.id);
+	const { t } = useTranslation(); 
+	const [lang, setLang] = useState(`${localStorage.getItem("language")}`);
 
 
 	const handleSubmit = (e) => {
@@ -24,17 +28,19 @@ const EditDocumentForm = (props) => {
 			documentDescription: documentDescription
 		}
 		
-		// Details of the uploaded file 
-
-		// Request made to the backend api 
-		// Send formData object 
-		//axios.post("api/uploadfile", formData); 
-
 
 	
 		documentService.editDocument(data, props.dispatch);
 	};
 
+	useEffect(() => {
+    
+        i18next.changeLanguage(lang, (err, t) => {
+            if (err) return console.log('something went wrong loading', err);
+            t('key'); // -> same as i18next.t
+          });
+        
+      }, [props.dispatch]);
 
 	return (
 		<React.Fragment>
@@ -56,13 +62,13 @@ const EditDocumentForm = (props) => {
 									<td width="600rem"  >
 										<div className="control-group">
 											<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
-												<label><b>Document Title</b></label>
+												<label><b>{t('documentTitle')}</b></label>
 												<div class="row" >
 													<div class="form-group col-lg-10">
 														<input
 
 															className={"form-control"}
-															placeholder="Document Title"
+															placeholder={t('documentTitle')}
 															aria-describedby="basic-addon1"
 															id="name"
 															type="text"
@@ -77,13 +83,13 @@ const EditDocumentForm = (props) => {
 										</div>
 										<div className="control-group">
 											<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
-												<label><b>Document Description</b></label>
+												<label><b>{t('documentDescription')}</b></label>
 												<div class="row" >
 													<div class="form-group col-lg-10">
 														<input
 
 															className={"form-control"}
-															placeholder="Document Description"
+															placeholder={t('documentDescription')}
 															aria-describedby="basic-addon1"
 															id="name"
 															type="text"
@@ -107,7 +113,7 @@ const EditDocumentForm = (props) => {
 												id="sendMessageButton"
 												type="button"
 											>
-												Update
+												{t('update')}
 											</button>
 										</div>
 

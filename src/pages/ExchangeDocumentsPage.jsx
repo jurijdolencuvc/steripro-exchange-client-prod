@@ -18,6 +18,8 @@ var url = "https://api.exchange.uvcsolutions.com/"
 //var url = "http://localhost:3000/"
 
 const HomePage = () => {
+
+	
 	useEffect(() => {
 		var token = authHeader()
 		if (token == "null") {

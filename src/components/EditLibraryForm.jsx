@@ -3,17 +3,28 @@ import React, { useContext, useEffect, useState } from "react";
 import Paper from "@material-ui/core/Paper";
 import { libraryService } from "../services/LibraryService";
 import LibraryContextProvider from "../contexts/LibraryContext";
+import i18next from 'i18next';
+import { useTranslation } from 'react-i18next'
 const EditLibraryForm = (props) => {
 	
 	//const { documentState, dispatch } = useContext(DocumentsContext);
 	
     let transferData = props.libraryState.updateData.data.library;
-
+	const { t } = useTranslation();
+	const [lang, setLang] = useState(`${localStorage.getItem("language")}`);
 	const [documentTitle, setDocumentTitle] = useState(transferData.documentTitle);
 	const [documentDescription, setDocumentDescription] = useState(transferData.documentDescription);
 	const [id, setId] = useState(transferData.id);
 
+	useEffect(() => {
 
+
+		i18next.changeLanguage(lang, (err, t) => {
+		  if (err) return console.log('something went wrong loading', err);
+		  t('key'); // -> same as i18next.t
+		});
+		
+	  }, [props.dispatch]);
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
@@ -57,13 +68,13 @@ const EditLibraryForm = (props) => {
 									<td width="600rem"  >
 										<div className="control-group">
 											<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
-												<label><b>Title</b></label>
+												<label><b>{t("title")}</b></label>
 												<div class="row" >
 													<div class="form-group col-lg-10">
 														<input
 
 															className={"form-control"}
-															placeholder="Title"
+															placeholder={t("title")}
 															aria-describedby="basic-addon1"
 															id="name"
 															type="text"
@@ -78,13 +89,13 @@ const EditLibraryForm = (props) => {
 										</div>
 										<div className="control-group">
 											<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
-												<label><b>Description</b></label>
+												<label><b>{t("description")}</b></label>
 												<div class="row" >
 													<div class="form-group col-lg-10">
 														<input
 
 															className={"form-control"}
-															placeholder="Description"
+															placeholder={t("decription")}
 															aria-describedby="basic-addon1"
 															id="name"
 															type="text"
@@ -108,7 +119,7 @@ const EditLibraryForm = (props) => {
 												id="sendMessageButton"
 												type="button"
 											>
-												Update
+												{t("update")}
 											</button>
 										</div>
 

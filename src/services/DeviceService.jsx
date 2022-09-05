@@ -2,7 +2,7 @@ import Axios from "axios";
 import { deviceConstants } from "../constants/DeviceConstants";
 import { deleteLocalStorage, setAuthInLocalStorage } from "../helpers/auth-header";
 import { deviceReducer } from "../reducers/DeviceReducer";
-
+import { constants } from "../consts/consts";
 import { authHeader } from "../helpers/auth-header";
 export const deviceService = {
 	getDevices,
@@ -26,12 +26,13 @@ async function getDevices(dispatch) {
 				window.location = "#/login";
 
 			}else{
-				dispatch(failure("Error while fetching data"));
+				var error = constants("Error while fetching data")
+				dispatch(failure(error));
 			}
 		})
 		.catch((err) => {
-			console.log(err);
-			dispatch(failure("Error"));
+			var error = constants("Unknown error, please try again later.")
+				dispatch(failure(error));
 		});
 
 	function request() {
@@ -41,6 +42,7 @@ async function getDevices(dispatch) {
 		return { type: deviceConstants.SET_DEVICES_SUCCESS, data: data.data };
 	}
 	function failure(message) {
+		var message = constants(message)
 		return { type: deviceConstants.SET_DEVICES_FAILURE, errorMessage: message };
 	}
 }
@@ -67,7 +69,8 @@ function editDevice(data, dispatch) {
 			}
 		})
 		.catch((err) => {
-			console.log(err)
+			var error = constants("Unknown error, please try again later.")
+				dispatch(failure(error));
 		})
 
 		function request() {
@@ -77,6 +80,7 @@ function editDevice(data, dispatch) {
 			return { type: deviceConstants.DEVICE_SET_SUCCESS };
 		}
 		function failure(message) {
+			var message = constants(message)
 			return { type: deviceConstants.DEVICE_SET_FAILURE, errorMessage: message };
 		}
 }

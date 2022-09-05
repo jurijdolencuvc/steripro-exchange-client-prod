@@ -15,7 +15,7 @@ const ResetPasswordPage = () => {
 
 	return (
 	
-			<div>
+		<div style={{ background: "#387499", backgroundSize:"cover", height:"100%"}}>
 				<section className="login-clean">
 					<UserContextProvider>
 						

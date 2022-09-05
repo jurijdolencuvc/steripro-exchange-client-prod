@@ -1,6 +1,6 @@
 import Axios from "axios";
 import { documentsConstants } from "../constants/DocumentsConstants";
-
+import { constants } from "../consts/consts";
 import { authHeader } from "../helpers/auth-header";
 export const documentService = {
 	addDocument,
@@ -9,6 +9,7 @@ export const documentService = {
 	deleteDocument,
 	editDocument,
 	getCategories,
+	getDistributors,
 	getCategoriesLibrary,
 	getDocumentsLibrary
 };
@@ -41,19 +42,19 @@ function addDocument( formData, dispatch) {
 			}
 		})
 		.catch((err) => {
-			dispatch(failure("error"));
-			console.log(err)
+			
+			var error = constants("Unknown error, please try again later.")
+				dispatch(failure(error));
 		})
 
 	function request() {
 		return { type: documentsConstants.DOCUMENTS_SUBMIT_REQUEST };
 	}
 	function success() {
-		console.log("ckkcuk")
 		return { type: documentsConstants.DOCUMENTS_SUBMIT_SUCCESS };
 	}
 	function failure(error) {
-		console.log(error)
+		var error = constants(error)
 		return { type: documentsConstants.DOCUMENTS_SUBMIT_FAILURE, error };
 	}
 }
@@ -85,7 +86,9 @@ function editDocument( data, dispatch) {
 			}
 		})
 		.catch((err) => {
-			console.log(err)
+		
+			var error = constants("Unknown error, please try again later.")
+				dispatch(failure(error));
 		})
 
 		function request() {
@@ -95,6 +98,7 @@ function editDocument( data, dispatch) {
 			return { type: documentsConstants.DOCUMENT_SET_SUCCESS, data: data };
 		}
 		function failure(message) {
+			var message = constants(message)
 			return { type: documentsConstants.DOCUMENT_SET_FAILURE, errorMessage: message };
 		}
 }
@@ -116,12 +120,14 @@ async function deleteDocument(documentId,dispatch) {
 			if (res.status === 200) {
 				dispatch(success(res.data));
 			}else {
-				dispatch(failure("Error while fetching data"));
+				var error = constants("Error while fetching data")
+				dispatch(failure(error));
 			}
 		})
 		.catch((err) => {
-			dispatch(failure("Error"));
-			console.log(err);
+			
+			var error = constants("Unknown error, please try again later.")
+				dispatch(failure(error));
 		});
 
 		function request() {
@@ -134,6 +140,7 @@ async function deleteDocument(documentId,dispatch) {
 		}
 		function failure(message) {
 		
+			var message = constants(message)
 			return { type: documentsConstants.DOCUMENT_REMOVE_FAILURE, errorMessage : message };
 		}
 };
@@ -150,12 +157,15 @@ async function getDocuments(dispatch) {
 				console.log(res.data)
 				dispatch(success(res.data));
 			} else {
-				dispatch(failure("Error while fetching data"));
+				
+				var error = constants("Error while fetching data")
+				dispatch(failure(error));
 			}
 		})
 		.catch((err) => {
-			console.log(err);
-			dispatch(failure("Error"));
+		
+			var error = constants("Unknown error, please try again later.")
+				dispatch(failure(error));
 		});
 
 	function request() {
@@ -165,6 +175,8 @@ async function getDocuments(dispatch) {
 		return { type: documentsConstants.DOCUMENTS_GET_SUCCESS, data: data };
 	}
 	function failure(message) {
+		
+		var message = constants(message)
 		return { type: documentsConstants.DOCUMENTS_GET_FAILURE, errorMessage: message };
 	}
 }
@@ -182,12 +194,15 @@ async function getDocumentsLibrary(dispatch) {
 				console.log(res.data)
 				dispatch(success(res.data));
 			} else {
-				dispatch(failure("Error while fetching data"));
+				
+				var error = constants("Error while fetching data")
+				dispatch(failure(error));
 			}
 		})
 		.catch((err) => {
-			console.log(err);
-			dispatch(failure("Error"));
+			
+			var error = constants("Unknown error, please try again later.")
+				dispatch(failure(error));
 		});
 
 	function request() {
@@ -197,6 +212,8 @@ async function getDocumentsLibrary(dispatch) {
 		return { type: documentsConstants.LIBRARY_GET_SUCCESS, data: data };
 	}
 	function failure(message) {
+		
+		var message = constants(message)
 		return { type: documentsConstants.LIBRARY_GET_FAILURE, errorMessage: message };
 	}
 }
@@ -214,12 +231,15 @@ async function getCategories(dispatch) {
 			if (res.status === 200) {
 				dispatch(success(res.data));
 			} else {
-				dispatch(failure("Error while getting categories"));
+				
+				var error = constants("Error while fetching data")
+				dispatch(failure(error));
 			}
 		})
 		.catch((err) => {
-			console.log(err);
-			dispatch(failure("Error"));
+			
+			var error = constants("Unknown error, please try again later.")
+				dispatch(failure(error));
 		});
 
 	function request() {
@@ -229,10 +249,48 @@ async function getCategories(dispatch) {
 		return { type: documentsConstants.CATEGORIES_GET_SUCCESS, data: data };
 	}
 	function failure(message) {
+		
+		var message = constants(message)
 		return { type: documentsConstants.CATEGORIES_GET_FAILURE, errorMessage: message };
 	}
 }
 
+
+
+async function getDistributors(dispatch) {
+	dispatch(request());
+
+	var token = authHeader()
+	
+	await Axios.get(`${url}api/getDistributors`, { headers: { Authorization: token }}, { validateStatus: () => true })
+		.then((res) => {
+			if (res.status === 200) {
+				console.log(res.data)
+				dispatch(success(res.data));
+			} else {
+				
+				var error = constants("Error while fetching data")
+				dispatch(failure(error));
+			}
+		})
+		.catch((err) => {
+			
+			var error = constants("Unknown error, please try again later.")
+				dispatch(failure(error));
+		});
+
+	function request() {
+		return { type: documentsConstants.DISTRIBUTORS_GET_REQUEST };
+	}
+	function success(data) {
+		return { type: documentsConstants.DISTRIBUTORS_GET_SUCCESS, data: data };
+	}
+	function failure(message) {
+		
+		var message = constants(message)
+		return { type: documentsConstants.DISTRIBUTORS_GET_FAILURE, errorMessage: message };
+	}
+}
 
 
 async function getCategoriesLibrary(dispatch) {
@@ -245,12 +303,15 @@ async function getCategoriesLibrary(dispatch) {
 			if (res.status === 200) {
 				dispatch(success(res.data));
 			} else {
-				dispatch(failure("Error while getting categories"));
+				
+				var error = constants("Error while fetching data")
+				dispatch(failure(error));
 			}
 		})
 		.catch((err) => {
-			console.log(err);
-			dispatch(failure("Error"));
+			
+			var error = constants("Unknown error, please try again later.")
+				dispatch(failure(error));
 		});
 
 	function request() {
@@ -260,6 +321,8 @@ async function getCategoriesLibrary(dispatch) {
 		return { type: documentsConstants.CATEGORIES_LIBRARY_GET_SUCCESS, data: data };
 	}
 	function failure(message) {
+		
+		var message = constants(message)
 		return { type: documentsConstants.CATEGORIES_LIBRARY_GET_FAILURE, errorMessage: message };
 	}
 }

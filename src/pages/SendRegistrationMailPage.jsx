@@ -1,4 +1,4 @@
-import { React, useEffect } from "react";
+import React, { useContext, useEffect, useImperativeHandle, forwardRef, useState } from "react";
 import SendRegistrationMailForm from "../components/SendRegistrationMailForm";
 import UserContextProvider from "../contexts/UserContext";
 
@@ -12,6 +12,7 @@ var url = "https://api.exchange.uvcsolutions.com/"
 
 
 const SendRegistrationMailPage = () => {
+
 
 	useEffect(() => {
 
@@ -46,9 +47,8 @@ const SendRegistrationMailPage = () => {
 			<div>
 				<section className="login-clean">
 					<UserContextProvider>
-						
 					<ModalReset/>
-						<SendRegistrationMailForm />
+					<SendRegistrationMailForm />
 					</UserContextProvider>
 				</section>
 			</div>

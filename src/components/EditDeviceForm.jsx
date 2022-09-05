@@ -3,25 +3,39 @@ import React, { useContext, useEffect, useState } from "react";
 import Paper from "@material-ui/core/Paper";
 import { deviceService } from "../services/DeviceService";
 import DocumentsContextProvider from "../contexts/DocumentsContext";
+import i18next from 'i18next';
+import { useTranslation } from 'react-i18next'
 const EditDeviceForm = (props) => {
 
 	//const { documentState, dispatch } = useContext(DocumentsContext);
 
 	let data = props.deviceState.updateData.data.device;
 	
+	const { t } = useTranslation(); 
+	const [lang, setLang] = useState(`${localStorage.getItem("language")}`);
 	const [errMessage, setErrMessage] = useState("");
 	const [deployDate, setDeployDate] = useState(data.deployDate);
 	const [lastRegularServiceDate, setLastRegularServiceDate] = useState(data.lastRegularServiceDate);
 	const [id, setId] = useState(data.id);
 
 
+    useEffect(() => {
+    
+        i18next.changeLanguage(lang, (err, t) => {
+            if (err) return console.log('something went wrong loading', err);
+            t('key'); // -> same as i18next.t
+          });
+        
+		
+       
+      }, [props.dispatch]);
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
 
 		if(deployDate == null){
 
-			setErrMessage("Please define deploy date.")
+			setErrMessage(t('defineDeployDate'))
 			return;
 		}
 		if(lastRegularServiceDate == null){
@@ -64,13 +78,13 @@ const EditDeviceForm = (props) => {
 										<td width="600rem"  >
 											<div className="control-group">
 												<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
-													<label><b>Deploy date</b></label>
+													<label><b>{t('deployDate')}</b></label>
 													<div class="row" >
 														<div class="form-group col-lg-10">
 															<input
 
 																className={"form-control"}
-																placeholder="Deploy date"
+																placeholder={t('deployDate')}
 																aria-describedby="basic-addon1"
 																id="name"
 																type="date"
@@ -85,13 +99,13 @@ const EditDeviceForm = (props) => {
 											</div>
 											<div className="control-group">
 												<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
-													<label><b>Last regular service date</b></label>
+													<label><b>{t('lastLegularServiceData')}</b></label>
 													<div class="row" >
 														<div class="form-group col-lg-10">
 															<input
 
 																className={"form-control"}
-																placeholder="Last regular service date"
+																placeholder={t('lastLegularServiceData')}
 																aria-describedby="basic-addon1"
 																id="name"
 																type="date"
@@ -117,7 +131,7 @@ const EditDeviceForm = (props) => {
 													id="sendMessageButton"
 													type="button"
 												>
-													Update
+													{t('update')}
 												</button>
 											</div>
 

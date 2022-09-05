@@ -1,4 +1,5 @@
 import React from "react";
+import i18next from "i18next";
 
 const PageNotFound = () => {
 	return (
@@ -13,7 +14,7 @@ const PageNotFound = () => {
 				</div>
 				<div className="text-center mt-5" style={{ fontSize: "3em" }}>
 					Oops... <br />
-					Page Not Found<br/>
+					{i18next.t("pageNotFound")} <br/>
 
 				</div>		
 			

@@ -1,13 +1,15 @@
+import { WifiTetheringErrorRoundedTwoTone } from "@mui/icons-material";
 import Axios from "axios";
 import { userConstants } from "../constants/UserConstants";
-import { deleteLocalStorage, setAuthInLocalStorage } from "../helpers/auth-header";
+import { constants } from "../consts/consts";
 
+import { deleteLocalStorage, setAuthInLocalStorage } from "../helpers/auth-header";
+import React, { useContext, useEffect, useImperativeHandle, forwardRef, useState } from "react";
 import { authHeader } from "../helpers/auth-header";
 var url = "https://api.exchange.uvcsolutions.com/"
 //var url = "http://localhost:3000/"
 export const userService = {
 	login,
-	//register,
 	logout,
 	changePassword,
 	resetPassword,
@@ -16,20 +18,28 @@ export const userService = {
 };
 
 function login(loginRequest, dispatch) {
+	
 	dispatch(request());
 	Axios.post(`${url}api/users/login`, loginRequest, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 200) {
 				setAuthInLocalStorage(res.data);
 				dispatch(success());
-				window.location = "#/";
+			
+				//dispatch(failure(res.data.error));
+				window.location.href="/#"
+							
 			} else if (res.status === 412) {
 				dispatch(failure(res.data.error));
 			} else {
 				dispatch({ type: userConstants.LOGIN_FAILURE });
 			}
 		})
-		.catch((err) => console.error(err));
+		.catch((err) =>{
+			
+			var error = constants("Unknown error, please try again later.")
+				dispatch(failure(error));
+			})
 
 	function request() {
 		return { type: userConstants.LOGIN_SUCCESS };
@@ -38,6 +48,8 @@ function login(loginRequest, dispatch) {
 		return { type: userConstants.LOGIN_SUCCESS };
 	}
 	function failure(error) {
+		
+		var error = constants(error)
 		return { type: userConstants.LOGIN_FAILURE, error };
 	}
 }
@@ -62,8 +74,8 @@ function changePassword(sendEmailRequest, dispatch) {
 		})
 		.catch((err) => {
 			
-			console.log(err)
-			dispatch(failure("Unknown error, please try again later."));
+		var error = constants("Unknown error, please try again later.")
+			dispatch(failure(error));
 		})
 
 
@@ -74,10 +86,11 @@ function changePassword(sendEmailRequest, dispatch) {
 			return { type: userConstants.PASSWORD_RESET_SUCCESS };
 		}
 		function failure(error) {
+			
+		var error = constants(error)
 			return { type: userConstants.PASSWORD_RESET_FAILURE, error };
 		}
 }
-
 
 function contact(formData, dispatch) {
 
@@ -102,12 +115,9 @@ function contact(formData, dispatch) {
 			}
 		})
 		.catch((err) => {
-			
-			console.log(err)
-			dispatch(failure("Unknown error, please try again later."));
+			var error = constants("Unknown error, please try again later.")
+			dispatch(failure(error));
 		})
-
-
 		function request() {
 			return { type: userConstants.CONTACT_REQUEST };
 		}
@@ -115,6 +125,8 @@ function contact(formData, dispatch) {
 			return { type: userConstants.CONTACT_SUCCESS };
 		}
 		function failure(error) {
+			
+		var error = constants(error)
 			return { type: userConstants.CONTACT_FAILURE, error };
 		}
 }
@@ -136,7 +148,8 @@ function resetPassword(sendRequest, dispatch) {
 			}
 		})
 		.catch((err) => {
-			dispatch(failure("Unknown error, try again later."));
+			var error = constants("Unknown error, try again later.")
+			dispatch(failure(error));
 		})
 
 	function request() {
@@ -146,6 +159,8 @@ function resetPassword(sendRequest, dispatch) {
 		return { type: userConstants.SEND_RESET_PASSWORD_MAIL_SUCCESS };
 	}
 	function failure(error) {
+
+		var error = constants(error)
 		return { type: userConstants.SEND_RESET_PASSWORD_MAIL_FAILURE, error };
 	}
 }
@@ -167,7 +182,8 @@ function setNewPassword(sendRequest, dispatch) {
 			}
 		})
 		.catch((err) => {
-			//alert(err)
+			var error = constants("Unknown error, please try again later.")
+			dispatch(failure(error));
 		})
 
 	function request() {
@@ -177,6 +193,7 @@ function setNewPassword(sendRequest, dispatch) {
 		return { type: userConstants.SEND_RESET_PASSWORD_MAIL_SUCCESS };
 	}
 	function failure(error) {
+		var error = constants(error)
 		return { type: userConstants.SEND_RESET_PASSWORD_MAIL_FAILURE, error };
 	}
 }

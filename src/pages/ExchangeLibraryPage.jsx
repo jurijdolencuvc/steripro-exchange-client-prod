@@ -4,6 +4,7 @@ import { React, useEffect } from "react";
 import ExchangeLibrary from "../components/ExchangeLibrary";
 import LibraryContextProvider from "../contexts/LibraryContext";
 
+import DocumentsContextProvider from "../contexts/DocumentsContext";
 import LibraryModal from "../components/modals/LibraryModal";
 import AddNewLibraryForm from "../components/AddNewLibraryForm";
 import EditLibraryModal from "../components/modals/EditLibraryModal";
@@ -51,7 +52,6 @@ const HomePage = () => {
 				<ModalLib/>
 				<RequestDeleteModal/>
 				<ExchangeLibrary/>
-				
 			</LibraryContextProvider>
 		</div>
 	);

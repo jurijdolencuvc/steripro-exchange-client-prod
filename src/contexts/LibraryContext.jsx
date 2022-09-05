@@ -13,6 +13,14 @@ const LibraryContextProvider = (props) => {
 			libraryInfo: [],
 		},
 
+		listDistributors: {
+			showError: false,
+			errorMessage: "",
+			distributors: [],
+			showModal: false,
+		},
+
+
 		listFiles: {
 			showError: false,
 			errorMessage: "",
