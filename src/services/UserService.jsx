@@ -19,6 +19,7 @@ export const userService = {
 function login(loginRequest, dispatch) {
 	
 	dispatch(request());
+	console.log("Halo halo");
 	console.log(url);
 	Axios.post(`api/users/login`, loginRequest, { validateStatus: () => true })
 		.then((res) => {
