@@ -4,28 +4,33 @@ import { libraryConstants } from "../../constants/LibraryConstants";
 import { LibraryContext } from "../../contexts/LibraryContext";
 import EditLibraryForm from "../EditLibraryForm";
 
-import i18next from 'i18next';
-import { useTranslation } from 'react-i18next'
-const EditLibraryModal = () => {
+import en from "../../locales/en.json";
+import sl from "../../locales/sl.json";
 
+
+const translations = {
+	"Choose language": "Choose language",
+	en,
+	sl
+};
+const EditLibraryModal = () => {
+	var t = (s) => {
+
+		let langCode = localStorage.getItem("language") || "en";
+		
+	return translations[langCode][s] || s;
+	
+	}
+	
+	t = t.bind(this);
 	const { libraryState, dispatch } = useContext(LibraryContext);
 
-	const { t } = useTranslation();
 	const [lang, setLang] = useState(`${localStorage.getItem("language")}`);
 	const handleModalClose = () => {
 		dispatch({ type: libraryConstants.HIDE_EDIT_LIBRARY_MODAL });
 	};
 
-	useEffect(() => {
 
-
-		i18next.changeLanguage(lang, (err, t) => {
-		  if (err) return console.log('something went wrong loading', err);
-		  t('key'); // -> same as i18next.t
-		});
-		
-	  }, [dispatch]);
-	
 	return (
 		<Modal 
 		show={libraryState.updateData.showModal} aria-labelledby="contained-modal-title-vcenter" class="modal-dialog modal-lg" centered onHide={handleModalClose}   size="lg">

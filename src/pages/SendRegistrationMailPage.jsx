@@ -6,9 +6,7 @@ import { authHeader } from "../helpers/auth-header";
 import Axios from "axios";
 
 import ModalReset from "../components/modals/ModalReset";
-
-var url = "https://api.exchange.uvcsolutions.com/"
-//var url = "http://localhost:3000/"
+var url = process.env.URL;
 
 
 const SendRegistrationMailPage = () => {
@@ -21,7 +19,7 @@ const SendRegistrationMailPage = () => {
 			window.location = "#/unauthorized";
 		} else {
 
-			Axios.get(`${url}api/getRole`, { headers: { Authorization: token } }, { validateStatus: () => true },
+			Axios.get(`api/getRole`, { headers: { Authorization: token } }, { validateStatus: () => true },
 			)
 				.then((res) => {
 					if (res.status === 201) {

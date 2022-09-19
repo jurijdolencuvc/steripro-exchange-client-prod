@@ -128,7 +128,6 @@ html, body, #root, .App {
 }
 body{
   background: #e0e0e1; /* fallback for old browsers */
-  overflow: hidden;
   font-family: "Roboto", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;  

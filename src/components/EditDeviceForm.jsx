@@ -3,15 +3,29 @@ import React, { useContext, useEffect, useState } from "react";
 import Paper from "@material-ui/core/Paper";
 import { deviceService } from "../services/DeviceService";
 import DocumentsContextProvider from "../contexts/DocumentsContext";
-import i18next from 'i18next';
-import { useTranslation } from 'react-i18next'
-const EditDeviceForm = (props) => {
+import en from "../locales/en.json";
+import sl from "../locales/sl.json";
 
+
+const translations = {
+	"Choose language": "Choose language",
+	en,
+	sl
+};
+const EditDeviceForm = (props) => {
+	var t = (s) => {
+
+		let langCode = localStorage.getItem("language") || "en";
+		
+	return translations[langCode][s] || s;
+	
+	}
+	
+	t = t.bind(this);
 	//const { documentState, dispatch } = useContext(DocumentsContext);
 
 	let data = props.deviceState.updateData.data.device;
 	
-	const { t } = useTranslation(); 
 	const [lang, setLang] = useState(`${localStorage.getItem("language")}`);
 	const [errMessage, setErrMessage] = useState("");
 	const [deployDate, setDeployDate] = useState(data.deployDate);
@@ -21,11 +35,7 @@ const EditDeviceForm = (props) => {
 
     useEffect(() => {
     
-        i18next.changeLanguage(lang, (err, t) => {
-            if (err) return console.log('something went wrong loading', err);
-            t('key'); // -> same as i18next.t
-          });
-        
+       
 		
        
       }, [props.dispatch]);

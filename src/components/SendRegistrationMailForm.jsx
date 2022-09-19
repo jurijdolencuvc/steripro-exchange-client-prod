@@ -4,25 +4,36 @@ import { userService } from "../services/UserService";
 import UserContextProvider from "../contexts/UserContext";
 import Select from "react-dropdown-select";
 
-import i18next from 'i18next';
-import { useTranslation } from 'react-i18next'
 import { VscLibrary } from 'react-icons/vsc';
 import { MdOutlineDashboard } from 'react-icons/md';
 import { BiCollection } from 'react-icons/bi';
 
 import { AiOutlineUserAdd, AiOutlineMail } from 'react-icons/ai';
+import en from "../locales/en.json";
+import sl from "../locales/sl.json";
+
+
+const translations = {
+	"Choose language": "Choose language",
+	en,
+	sl
+};
 //const Forn({prop1, prop2, ...rest}) => {} HOOKOVI
 const SendRegistrationMailForm = () => {
+	var t = (s) => {
+
+		let langCode = localStorage.getItem("language") || "en";
+		
+	return translations[langCode][s] || s;
+	
+	}
+	
+	t = t.bind(this);
+
 	const { userState, dispatch } = useContext(UserContext);
-
-
-
-	const { t } = useTranslation();
 	const [lang, setLang] = useState(`${localStorage.getItem("language")}`);
-
 	const [email2, setEmail2] = useState("");
-
-
+	
 	const handleLogout = (event) => { 
 
 		userService.logout();
@@ -46,10 +57,6 @@ const SendRegistrationMailForm = () => {
 	useEffect(() => {
 
 
-		i18next.changeLanguage(lang, (err, t) => {
-		  if (err) return console.log('something went wrong loading', err);
-		  t('key'); // -> same as i18next.t
-		});
 		
 	  }, [dispatch]);
 	

@@ -1,29 +1,42 @@
 import { useContext, useState, useEffect,useRef, React } from "react";
 import DeviceInfo from "./DeviceInfo";
 import { DeviceContext } from "../../contexts/DeviceContext";
-import i18next from 'i18next';
-import { useTranslation } from 'react-i18next'
 import { authHeader } from "../../helpers/auth-header";
 import Axios from "axios";
 
-var url = "https://api.exchange.uvcsolutions.com/"
-//var url = "http://localhost:3000/"
+import { LocaleContext } from "../../contexts/locale.context.js";
+import en from "../../locales/en.json";
+import sl from "../../locales/sl.json";
+
+
+const translations = {
+	"Choose language": "Choose language",
+	en,
+	sl
+};
+
+var url = process.env.URL;
 const Devices = () => {
+    var t = (s) => {
+
+        let langCode = localStorage.getItem("language") || "en";
+        
+		return translations[langCode][s] || s;
+	
+	}
+	
+
+	t = t.bind(this);
+
 
     const { deviceState, dispatch } = useContext(DeviceContext);
 
    
 	const [role, setRole] = useState(false);
-    const { t } = useTranslation(); 
 	const [lang, setLang] = useState(`${localStorage.getItem("language")}`);
 
 
     useEffect(() => {
-    
-        i18next.changeLanguage(lang, (err, t) => {
-            if (err) return console.log('something went wrong loading', err);
-            t('key'); // -> same as i18next.t
-          });
           
 
        var token = authHeader()
@@ -31,7 +44,7 @@ const Devices = () => {
 			window.location = "#/unauthorized";
 		} else {
 
-			Axios.get(`${url}api/getRole`, { headers: { Authorization: token } }, { validateStatus: () => true },
+			Axios.get(`api/getRole`, { headers: { Authorization: token } }, { validateStatus: () => true },
 			)
 				.then((res) => {
 					if (res.status === 201) {
@@ -54,7 +67,7 @@ const Devices = () => {
 
             <div >
 
-            <div style={{ display: "flex", flexDirection: "row", marginLeft: "300px", marginTop: "30px", marginBottom: "40px" }}><h1>Devices</h1></div>
+            <div style={{ display: "flex", flexDirection: "row", marginLeft: "300px", marginTop: "30px", marginBottom: "40px" }}><h1>{t('devices')}</h1></div>
                 <DeviceInfo
                     role = {role}
                   

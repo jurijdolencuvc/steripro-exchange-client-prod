@@ -1,10 +1,26 @@
 
 import { libraryConstants } from "../constants/LibraryConstants";
-import i18next from "i18next";
+import en from "../locales/en.json";
+import sl from "../locales/sl.json";
+
+
+const translations = {
+	"Choose language": "Choose language",
+	en,
+	sl
+};
 var prodCpy = {};
 
 export const libraryReducer = (state, action) => {
+	var t = (s) => {
 
+		let langCode = localStorage.getItem("language") || "en";
+		
+	return translations[langCode][s] || s;
+	
+	}
+	
+	t = t.bind(this);
 	switch (action.type) {
 
 		case libraryConstants.SHOW_ADD_LIBRARY_MODAL:
@@ -23,7 +39,6 @@ export const libraryReducer = (state, action) => {
 
 			case libraryConstants.DISTRIBUTORS_GET_SUCCESS:
 
-				console.log("aaaaaaa"+ action.data)
 				return {
 					...state,
 					listDistributors: {
@@ -129,8 +144,8 @@ export const libraryReducer = (state, action) => {
 				...state,
 				modal: {
 					showModal: true,
-					message: i18next.t("addLibrarySuccess"),
-					title: i18next.t("success")
+					message: t("addLibrarySuccess"),
+					title: t("success")
 				},
 				listFiles: {
 					showError: false,
@@ -156,7 +171,7 @@ export const libraryReducer = (state, action) => {
 				modal: {
 					showModal: true,
 					message: action.error,
-					title: i18next.t("success")
+					title: t("success")
 				},
 				listFiles: {
 					showError: false,
@@ -184,7 +199,7 @@ export const libraryReducer = (state, action) => {
 				...state,
 				listFiles: {
 					showError: true,
-					errorMessage: i18next.t("addDocumentError"),
+					errorMessage: t("addDocumentError"),
 					libraries: {
 
 						documentId: "",
@@ -235,8 +250,8 @@ export const libraryReducer = (state, action) => {
 				...state,
 				modal: {
 					showModal: true,
-					message:i18next.t("removeLibrarySuccess"),
-					title: i18next.t("success")
+					message:t("removeLibrarySuccess"),
+					title: t("success")
 				},
 
 			};
@@ -245,8 +260,8 @@ export const libraryReducer = (state, action) => {
 				...state,
 				modal: {
 					showModal: true,
-					message: i18next.t("removeLibraryError"),
-					title: i18next.t("error")
+					message: t("removeLibraryError"),
+					title: t("error")
 				},
 			};
 
@@ -257,8 +272,8 @@ export const libraryReducer = (state, action) => {
 				...state,
 				modal: {
 					showModal: true,
-					message: i18next.t("updateLibrarySuccess"),
-					title:  i18next.t("success")
+					message: t("updateLibrarySuccess"),
+					title:  t("success")
 				},
 				updateData: {
 					showModal: false,
@@ -288,8 +303,8 @@ export const libraryReducer = (state, action) => {
 				...state,
 				modal: {
 					showModal: true,
-					message:  i18next.t("updateLibraryError"),
-					title: i18next.t("error")
+					message:  t("updateLibraryError"),
+					title: t("error")
 				},
 				updateData: {
 					showModal: false,

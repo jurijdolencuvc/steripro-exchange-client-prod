@@ -3,29 +3,33 @@ import {  Modal } from "react-bootstrap";
 import { deviceConstants } from "../../constants/DeviceConstants";
 import { DeviceContext } from "../../contexts/DeviceContext";
 import EditDeviceForm from "../EditDeviceForm";
-import i18next from 'i18next';
-import { useTranslation } from 'react-i18next'
+import en from "../../locales/en.json";
+import sl from "../../locales/sl.json";
 
+
+const translations = {
+	"Choose language": "Choose language",
+	en,
+	sl
+};
 const EditDeviceModal = () => {
+	var t = (s) => {
 
+		let langCode = localStorage.getItem("language") || "en";
+		
+	return translations[langCode][s] || s;
+	
+	}
+	
+	t = t.bind(this);
 	const { deviceState, dispatch } = useContext(DeviceContext);
-	const { t } = useTranslation(); 
 	const [lang, setLang] = useState(`${localStorage.getItem("language")}`);
 	const handleModalClose = () => {
 		dispatch({ type: deviceConstants.HIDE_EDIT_DEVICE_MODAL });
 		window.location.reload(true)
 	};
 
-    useEffect(() => {
-    
-        i18next.changeLanguage(lang, (err, t) => {
-            if (err) return console.log('something went wrong loading', err);
-            t('key'); // -> same as i18next.t
-          });
-        
-		
-       
-      }, [dispatch]);
+  
 	return (
 		<Modal 
 		show={deviceState.updateData.showModal} aria-labelledby="contained-modal-title-vcenter" class="modal-dialog modal-lg" centered onHide={handleModalClose}   size="lg">

@@ -1,13 +1,30 @@
 import { userConstants } from "../constants/UserConstants";
-import i18next from "i18next";
+import en from "../locales/en.json";
+import sl from "../locales/sl.json";
+
+
+const translations = {
+	"Choose language": "Choose language",
+	en,
+	sl
+};
 export const userReducer = (state, action) => {
+	var t = (s) => {
+
+		let langCode = localStorage.getItem("language") || "en";
+		
+	return translations[langCode][s] || s;
+	
+	}
+	
+	t = t.bind(this);
 	switch (action.type) {
 
 		case userConstants.LOGIN_FAILURE:
 			return {
 				loginError: {
 					showError: true,
-					errorMessage:  i18next.t("incorrectEmailAndPass"),
+					errorMessage:  t("incorrectEmailAndPass"),
 				},
 			};
 		case userConstants.LOGIN_SUCCESS:
@@ -49,7 +66,7 @@ export const userReducer = (state, action) => {
 				...state,
 				sendRegistrationMailError: {
 					showError: false,
-					errorMessage: i18next.t("success"),
+					errorMessage: t("success"),
 				},
 			};
 
@@ -60,7 +77,7 @@ export const userReducer = (state, action) => {
 				sendResetPasswordError: {
 					showModal: true,
 					message: action.error,
-					title: i18next.t("error"),
+					title: t("error"),
 				},
 			};
 
@@ -82,8 +99,8 @@ export const userReducer = (state, action) => {
 				...state,
 				sendResetPasswordError: {
 					showModal: true,
-					message: i18next.t("linkSuccess"),
-					title: i18next.t("success"),
+					message: t("linkSuccess"),
+					title: t("success"),
 				},
 			};
 
@@ -95,7 +112,7 @@ export const userReducer = (state, action) => {
 				sendResetPasswordError: {
 					showModal: true,
 					message: action.error,
-					title: i18next.t("error"),
+					title: t("error"),
 				},
 			};
 
@@ -106,8 +123,8 @@ export const userReducer = (state, action) => {
 					...state,
 					sendResetPasswordError: {
 						showModal: true,
-						message: i18next.t("messageSuccess"),
-						title: i18next.t("success"),
+						message: t("messageSuccess"),
+						title: t("success"),
 					},
 				};
 	
@@ -118,8 +135,8 @@ export const userReducer = (state, action) => {
 					...state,
 					sendResetPasswordError: {
 						showModal: true,
-						message: i18next.t("messageError"),
-						title:  i18next.t("error"),
+						message: t("messageError"),
+						title:  t("error"),
 					},
 				};
 	
@@ -141,8 +158,8 @@ export const userReducer = (state, action) => {
 				...state,
 				sendResetPasswordError: {
 					showModal: true,
-					message: i18next.t("passChangeSuccess"),
-					title: i18next.t("success")
+					message: t("passChangeSuccess"),
+					title: t("success")
 				},
 			};
 

@@ -1,8 +1,25 @@
 import { deviceConstants } from "../constants/DeviceConstants";
-import i18next from "i18next";
+import en from "../locales/en.json";
+import sl from "../locales/sl.json";
+
+
+const translations = {
+	"Choose language": "Choose language",
+	en,
+	sl
+};
+
 var prodCpy = {};
 export const deviceReducer = (state, action) => {
+	var t = (s) => {
 
+		let langCode = localStorage.getItem("language") || "en";
+		
+	return translations[langCode][s] || s;
+	
+	}
+	
+	t = t.bind(this);
 	switch (action.type) {
 
 		case deviceConstants.SET_DEVICES_REQUEST:
@@ -20,7 +37,7 @@ export const deviceReducer = (state, action) => {
 				...state,
 				listDevices: {
 					showError: true,
-					errorMessage: i18next.t("error"),
+					errorMessage: t("error"),
 					devices: [],
 				},
 			};
@@ -80,8 +97,8 @@ export const deviceReducer = (state, action) => {
 				...state,
 				modal: {
 					showModal: true,
-					message: i18next.t("successUpdateDevice"),
-					title: i18next.t("success")
+					message: t("successUpdateDevice"),
+					title: t("success")
 				},
 				
 		updateData: {
@@ -132,8 +149,8 @@ export const deviceReducer = (state, action) => {
 				...state,
 				modal: {
 					showModal: true,
-					message: i18next.t("editDeviceError"),
-					title: i18next.t("error")
+					message: t("editDeviceError"),
+					title: t("error")
 				},
 				
 		updateData: {

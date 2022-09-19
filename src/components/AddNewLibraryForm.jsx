@@ -4,28 +4,46 @@ import Paper from "@material-ui/core/Paper";
 import { libraryService } from "../services/LibraryService";
 import { LibraryContext } from "../contexts/LibraryContext";
 
-import i18next from 'i18next';
-import { useTranslation } from 'react-i18next'
+
+import en from "../locales/en.json";
+import sl from "../locales/sl.json";
+
+
+const translations = {
+	"Choose language": "Choose language",
+	en,
+	sl
+};
+
+var url = process.env.URL;
+
 const AddNewLibraryForm = (props) => {
+	var t = (s) => {
+
+		let langCode = localStorage.getItem("language") || "en";
+		
+	return translations[langCode][s] || s;
+	
+	}
+	
+	t = t.bind(this);
+
 	const [documentTitle, setDocumentTitle] = useState("");
 	const [documentDescription, setDocumentDescription] = useState("");
 	const [category, setCategory] = useState(props.categories[0].title);
 	const [file, setFile] = useState(null);
-	const { t } = useTranslation();
 	
 	const [distributor, setDistributor] = useState(props.distributors[0].name);
-
+	const uploadRef = React.useRef();
+	const statusRef = React.useRef();
+	
+	const progressRef = React.useRef();
 	const [lang, setLang] = useState(`${localStorage.getItem("language")}`);
 	const [errMessage, setErrMessage] = useState("");
 	const { libraryState, dispatch } = useContext(LibraryContext);
 
-
 	useEffect(() => {
 
-		i18next.changeLanguage(lang, (err, t) => {
-			if (err) return console.log('something went wrong loading', err);
-			t('key'); // -> same as i18next.t
-		  });
 		someFetchActionCreator()
 	}, [dispatch]);
 
@@ -81,12 +99,48 @@ const AddNewLibraryForm = (props) => {
 			// Send formData object 
 			//axios.post("api/uploadfile", formData); 
 
+			var xhr = new XMLHttpRequest();
+			xhr.upload.addEventListener("progress", ProgressHandler, false);
+			xhr.addEventListener("load", SuccessHandler, false);
+			xhr.addEventListener("error", ErrorHandler, false);
+			xhr.addEventListener("abort", AbortHandler, false);
 
+			xhr.open('POST', `uploadfileLibrary`, true);
+			xhr.setRequestHeader("Authorization", props.token);
+			xhr.onload = function () {
+				// do something to response
+				console.log(this.responseText);
+			};
 
-			libraryService.addLibrary(formData, dispatch);
+			xhr.send(formData);
+
 		}
 	};
 
+	const ProgressHandler = (e) => {
+		//  loadTotalRef.current.innerHTML = `uploaded ${e.loaded} bytes of ${e.total}`;
+		var percent = (e.loaded / e.total) * 100;
+		progressRef.current.value = Math.round(percent);
+		statusRef.current.innerHTML = Math.round(percent) + "% uploaded...";
+		
+	};
+
+	const SuccessHandler = (e) => {
+		
+		statusRef.current.innerHTML = "Success";
+		progressRef.current.value = 100;
+		libraryService.addLibrary(true, dispatch);
+	};
+	const ErrorHandler = () => {
+		
+		statusRef.current.innerHTML = "Upload failed";
+		libraryService.addLibrary(false, dispatch);
+	};
+	const AbortHandler = () => {
+		
+		statusRef.current.innerHTML = "Upload aborted";
+		libraryService.addLibrary(false, dispatch);
+	};
 
 	return (
 		<React.Fragment>
@@ -129,7 +183,7 @@ const AddNewLibraryForm = (props) => {
 										</div>
 										<div className="control-group">
 											<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
-												<label><b>{t("decription")}</b></label>
+												<label><b>{t("description")}</b></label>
 												<div class="row" >
 													<div class="form-group col-lg-10">
 														<input
@@ -167,7 +221,7 @@ const AddNewLibraryForm = (props) => {
 										</div>
 
 
-										<div className="control-group">
+										{props.role && <div className="control-group">
 											<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
 												<label><b>{t("distributor")}</b></label>
 												<div class="row" >
@@ -183,7 +237,7 @@ const AddNewLibraryForm = (props) => {
 													</div>
 												</div>
 											</div>
-										</div>
+										</div>}
 										<div style={{ marginTop: "15px" }}>
 											<input type="file" name="file" onChange={onFileChange} />
 
@@ -206,12 +260,12 @@ const AddNewLibraryForm = (props) => {
 											</button>
 										</div>
 
-
+										<label>
+										{t("fileProgress")}: <progress ref={progressRef} value="0" max="100" />
+										</label>
+										<p ref={statusRef}></p>
 									</td>
 								</table>
-
-
-
 							</form>
 						</div>
 

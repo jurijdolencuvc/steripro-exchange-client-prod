@@ -1,10 +1,26 @@
 
 import { documentsConstants } from "../constants/DocumentsConstants";
-import i18next from "i18next";
+import en from "../locales/en.json";
+import sl from "../locales/sl.json";
+
+
+const translations = {
+	"Choose language": "Choose language",
+	en,
+	sl
+};
 var prodCpy = {};
 
 export const documentsReducer = (state, action) => {
+	var t = (s) => {
 
+		let langCode = localStorage.getItem("language") || "en";
+		
+	return translations[langCode][s] || s;
+	
+	}
+	
+	t = t.bind(this);
 	switch (action.type) {
 
 		case documentsConstants.SHOW_ADD_DOCUMENT_MODAL:
@@ -106,8 +122,8 @@ export const documentsReducer = (state, action) => {
 				...state,
 				modal: {
 					showModal: true,
-					message: i18next.t("addDocumentSuccess"),
-					title: i18next.t("success")
+					message: t("addDocumentSuccess"),
+					title:t("success")
 				},
 				listFiles: {
 					showError: false,
@@ -133,7 +149,7 @@ export const documentsReducer = (state, action) => {
 				modal: {
 					showModal: true,
 					message: action.error,
-					title: i18next.t("error")
+					title: t("error")
 				},
 				listFiles: {
 					showError: false,
@@ -161,7 +177,7 @@ export const documentsReducer = (state, action) => {
 					...state,
 					listFiles: {
 						showError: true,
-						errorMessage: i18next.t("addDocumentError") ,
+						errorMessage: t("addDocumentError") ,
 						documents: {
 	
 							documentId: "",
@@ -200,7 +216,6 @@ export const documentsReducer = (state, action) => {
 
 				case documentsConstants.DISTRIBUTORS_GET_SUCCESS:
 
-				console.log("aaaaaaa"+ action.data)
 				return {
 					...state,
 					listDistributors: {
@@ -235,8 +250,8 @@ export const documentsReducer = (state, action) => {
 						...state,
 						modal: {
 							showModal: true,
-							message: i18next.t("removeDocumentSuccess"),
-							title: i18next.t("success")
+							message: t("removeDocumentSuccess"),
+							title: t("success")
 						},
 						
 					};
@@ -245,8 +260,8 @@ export const documentsReducer = (state, action) => {
 						...state,
 						modal: {
 							showModal: true,
-							message: i18next.t("removeDocumentError"),
-							title: i18next.t("error")
+							message: t("removeDocumentError"),
+							title: t("error")
 						},
 					};	
 
@@ -257,8 +272,8 @@ export const documentsReducer = (state, action) => {
 				...state,
 				modal: {
 					showModal: true,
-					message: i18next.t("updateDocumentSuccess"),
-					title: i18next.t("success")
+					message: t("updateDocumentSuccess"),
+					title: t("success")
 				},
 				updateData: {
 					showModal: false,
@@ -288,8 +303,8 @@ export const documentsReducer = (state, action) => {
 				...state,
 				modal: {
 					showModal: true,
-					message: i18next.t("updateDocumentError"),
-					title:i18next.t("error") 
+					message: t("updateDocumentError"),
+					title:t("error") 
 				},
 				updateData: {
 					showModal: false,

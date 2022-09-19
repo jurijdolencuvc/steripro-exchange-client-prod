@@ -5,13 +5,28 @@ import { documentService } from "../../services/DocumentService";
 import { DocumentsContext } from "../../contexts/DocumentsContext";
 import { documentsConstants } from "../../constants/DocumentsConstants";
 
-import i18next from 'i18next';
-import { useTranslation } from 'react-i18next'
+
+import en from "../../locales/en.json";
+import sl from "../../locales/sl.json";
+
+
+const translations = {
+	"Choose language": "Choose language",
+	en,
+	sl
+};
 const RequestRemoveDocument = (props) => {
+	var t = (s) => {
+
+		let langCode = localStorage.getItem("language") || "en";
+		
+	return translations[langCode][s] || s;
 	
+	}
+	
+	t = t.bind(this);
 	const { documentState, dispatch } = useContext(DocumentsContext);
 
-	const { t } = useTranslation();
 	const [lang, setLang] = useState(`${localStorage.getItem("language")}`);
 
 	const handleSubmitNo = (e) => {
@@ -20,15 +35,7 @@ const RequestRemoveDocument = (props) => {
 		dispatch({ type: documentsConstants.HIDE_REQUEST_MODAL });
 	};
 
-	useEffect(() => {
-
-
-		i18next.changeLanguage(lang, (err, t) => {
-		  if (err) return console.log('something went wrong loading', err);
-		  t('key'); // -> same as i18next.t
-		});
-		
-	  }, [dispatch]);
+	
 	const handleSubmitYes = (e) => {
 		documentService.deleteDocument(props.documentsState.modalRequest.file, dispatch);
 		

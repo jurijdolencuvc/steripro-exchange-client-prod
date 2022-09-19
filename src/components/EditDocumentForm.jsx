@@ -3,14 +3,28 @@ import React, { useContext, useEffect, useState } from "react";
 import Paper from "@material-ui/core/Paper";
 import { documentService } from "../services/DocumentService";
 import DocumentContextProvider from "../contexts/DocumentsContext";
-import i18next from 'i18next';
-import { useTranslation } from 'react-i18next'
+import en from "../locales/en.json";
+import sl from "../locales/sl.json";
+
+
+const translations = {
+	"Choose language": "Choose language",
+	en,
+	sl
+};
 const EditDocumentForm = (props) => {
+	var t = (s) => {
+
+		let langCode = localStorage.getItem("language") || "en";
+		
+	return translations[langCode][s] || s;
 	
+	}
+	
+	t = t.bind(this);
 	//const { documentState, dispatch } = useContext(DocumentsContext);
 	
     let transferData = props.documentsState.updateData.data.document;
-	const { t } = useTranslation();
 	const [lang, setLang] = useState(`${localStorage.getItem("language")}`);
 	const [documentTitle, setDocumentTitle] = useState(transferData.documentTitle);
 	const [documentDescription, setDocumentDescription] = useState(transferData.documentDescription);
@@ -18,12 +32,6 @@ const EditDocumentForm = (props) => {
 
 	useEffect(() => {
 
-
-		i18next.changeLanguage(lang, (err, t) => {
-		  if (err) return console.log('something went wrong loading', err);
-		  t('key'); // -> same as i18next.t
-		});
-		
 	  }, [props.dispatch]);
 	const handleSubmit = (e) => {
 		e.preventDefault();

@@ -2,6 +2,8 @@ import Axios from "axios";
 import { libraryConstants } from "../constants/LibraryConstants";
 import { constants } from "../consts/consts";
 import { authHeader } from "../helpers/auth-header";
+
+var url = process.env.URL;
 export const libraryService = {
 	addLibrary,
 	getFileLibrary,
@@ -12,14 +14,12 @@ export const libraryService = {
 	getDistributors
 };
 
-
-
 async function getDistributors(dispatch) {
 	dispatch(request());
 
 	var token = authHeader()
 	
-	await Axios.get(`${url}api/getDistributors`, { headers: { Authorization: token }}, { validateStatus: () => true })
+	await Axios.get(`api/getDistributors`, { headers: { Authorization: token }}, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 200) {
 				console.log(res.data)
@@ -40,6 +40,7 @@ async function getDistributors(dispatch) {
 		return { type: libraryConstants.DISTRIBUTORS_GET_REQUEST };
 	}
 	function success(data) {
+		console.log("tuuu")
 		return { type: libraryConstants.DISTRIBUTORS_GET_SUCCESS, data: data };
 	}
 	function failure(message) {
@@ -50,42 +51,15 @@ async function getDistributors(dispatch) {
 }
 
 
-var url = "https://api.exchange.uvcsolutions.com/"
-//var url = "http://localhost:3000/"
-function addLibrary( formData, dispatch) {
+function addLibrary( tf, dispatch) {
 	
-	console.log(formData)
-	var token = authHeader()
-
-	
-	dispatch(request());
-	Axios.post(`${url}uploadfileLibrary`, formData, {
-		headers: {
-		  "Content-Type": "multipart/form-data",Authorization: token 
-		}})
-		.then((res) => {
-			if (res.status === 201) {
+	if(tf){
+		dispatch(success());
 			
-				//setAuthInLocalStorage(res.data);
-				dispatch(success());
-			
-			}  else if (res.status === 412) {
-				
-				dispatch(failure(res.data.error));
-			}else {
-				
-				dispatch(failure(res.data.error));
-			}
-		})
-		.catch((err) => {
-			
-			var error = constants("Unknown error, please try again later.")
-				dispatch(failure(error));
-			})
-
-	function request() {
-		return { type: libraryConstants.LIBRARY_SUBMIT_REQUEST };
+	}else{
+		dispatch(failure("Error while uploading library"));
 	}
+	
 	function success() {
 		
 		return { type: libraryConstants.LIBRARY_SUBMIT_SUCCESS };
@@ -104,7 +78,7 @@ function editLibrary( data, dispatch) {
 	var token = authHeader()
 	
 	dispatch(request());
-	Axios.post(`${url}editFileLibrary`, data, {
+	Axios.post(`editFileLibrary`, data, {
 		headers: {
 		  Authorization: token 
 		}})
@@ -145,7 +119,7 @@ async function deleteLibrary(documentId,dispatch) {
 	dispatch(request());
 
 	var token = authHeader()
-	await Axios.delete(`${url}api/deleteLibrary/${documentId}`, {
+	await Axios.delete(`api/deleteLibrary/${documentId}`, {
 		headers: {
 		  Authorization: token 
 		}}, { validateStatus: () => true })
@@ -182,7 +156,7 @@ async function getDocumentsLibrary(dispatch) {
 
 	var token = authHeader()
 	
-	await Axios.get(`${url}api/all_library`, { headers: { Authorization: token }}, { validateStatus: () => true })
+	await Axios.get(`api/all_library`, { headers: { Authorization: token }}, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 200) {
 				console.log(res.data)
@@ -216,7 +190,7 @@ async function getCategoriesLibrary(dispatch) {
 
 	var token = authHeader()
 	
-	await Axios.get(`${url}api/getCategoriesLibrary`, { headers: { Authorization: token }}, { validateStatus: () => true })
+	await Axios.get(`api/getCategoriesLibrary`, { headers: { Authorization: token }}, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 200) {
 				dispatch(success(res.data));
@@ -250,7 +224,7 @@ async function getFileLibrary(_id, fileName, dispatch) {
 	var list = fileName.split('/')
 	const FileDownload = require("js-file-download");
 
-	await Axios.get(`${url}api/getFileLibrary/ `+_id, { validateStatus: () => true,  responseType: 'blob'})
+	await Axios.get(`api/getFileLibrary/ `+_id, { validateStatus: () => true,  responseType: 'blob'})
 		.then((res) => {
 			if (res.status === 201) {
 				FileDownload(res.data, fileName);

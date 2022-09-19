@@ -1,8 +1,6 @@
 import React, { useEffect, useState,useImperativeHandle, forwardRef, useContext } from "react";
 import MaterialTable from "material-table";
 import { DeviceContext } from "../../contexts/DeviceContext";
-import i18next from 'i18next';
-import { useTranslation } from 'react-i18next'
 import DeviceContextProvider from "../../contexts/DeviceContext";
 import { deviceService } from "../../services/DeviceService";
 import { userService } from "../../services/UserService";
@@ -33,10 +31,17 @@ import { VscLibrary } from 'react-icons/vsc';
 
 import { MdEdit } from 'react-icons/md';
 import { authHeader } from "../../helpers/auth-header";
-import Axios from "axios";
+import Axios from "axios";import { LocaleContext } from "../../contexts/locale.context.js";
+import en from "../../locales/en.json";
+import sl from "../../locales/sl.json";
 
-var url = "https://api.exchange.uvcsolutions.com/"
-//var url = "http://localhost:3000/"
+
+const translations = {
+	"Choose language": "Choose language",
+	en,
+	sl
+};
+var url = process.env.URL;
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -58,10 +63,14 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
 const DeviceInfo = forwardRef((props, ref) => {
+  var t = (s) => {
+    let langCode = localStorage.getItem("language") || "en";
+return translations[langCode][s] || s;
+}
+t = t.bind(this);
   const { deviceState, dispatch } = useContext(DeviceContext);
   const [lang, setLang] = useState(`${localStorage.getItem("language")}`);
 	const [role, setRole] = useState(false);
-  const { t } = useTranslation(); 
   const someFetchActionCreator = () => {
 
     const getDevicesInfoHandler = async () => {
@@ -72,18 +81,12 @@ const DeviceInfo = forwardRef((props, ref) => {
 
   useEffect(() => {
 
-
-    i18next.changeLanguage(lang, (err, t) => {
-      if (err) return console.log('something went wrong loading', err);
-      t('key'); // -> same as i18next.t
-    });
-
     var token = authHeader()
 		if (token == "null") {
 			window.location = "#/unauthorized";
 		} else {
 
-			Axios.get(`${url}api/getRole`, { headers: { Authorization: token } }, { validateStatus: () => true },
+			Axios.get(`api/getRole`, { headers: { Authorization: token } }, { validateStatus: () => true },
 			)
 				.then((res) => {
 					if (res.status === 201) {
@@ -137,7 +140,7 @@ const DeviceInfo = forwardRef((props, ref) => {
 
           
        {role &&   <MaterialTable stickyHeader
-           style={{tableLayout: 'fixed', marginLeft: 38, marginRight: 48, width:"80%"}}
+           style={{tableLayout: 'fixed', marginLeft: 288, marginRight: 38}}
             icons={tableIcons}
             actions={[
               {
@@ -163,9 +166,9 @@ const DeviceInfo = forwardRef((props, ref) => {
            
             options={{
               
-              actionsColumnIndex: 0,
-              headerStyle: { position: 'sticky', top: 0 },
-              maxBodyHeight: 450,
+              //actionsColumnIndex: 0,
+              //headerStyle: { position: 'sticky', top: 0 },
+              //maxBodyHeight: 450,
             }}
          
             localization={{
@@ -186,7 +189,7 @@ const DeviceInfo = forwardRef((props, ref) => {
 
           
 {!role &&   <MaterialTable stickyHeader
-           style={{tableLayout: 'fixed', marginLeft: 38, marginRight: 38, width:"100%"}}
+           style={{tableLayout: 'fixed', marginLeft: 288, marginRight: 38}}
             icons={tableIcons}
             columns={[
               { title: t("motherboardId"), field: "serialNumber" },
@@ -202,9 +205,9 @@ const DeviceInfo = forwardRef((props, ref) => {
             ]}
            
             options={{
-              actionsColumnIndex: -1,
-              headerStyle: { position: 'sticky', top: 0 },
-              maxBodyHeight: 450,
+              //actionsColumnIndex: -1,
+              //headerStyle: { position: 'sticky', top: 0 },
+              //maxBodyHeight: 450,
             }}
          
             

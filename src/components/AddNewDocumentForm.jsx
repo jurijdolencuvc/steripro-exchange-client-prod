@@ -4,10 +4,26 @@ import Paper from "@material-ui/core/Paper";
 import { documentService } from "../services/DocumentService";
 import { DocumentsContext } from "../contexts/DocumentsContext";
 
+import en from "../locales/en.json";
+import sl from "../locales/sl.json";
+const translations = {
+	"Choose language": "Choose language",
+	en,
+	sl
+};
 
-import i18next from 'i18next';
-import { useTranslation } from 'react-i18next'
+var url = process.env.URL;
+
 const AddNewDocumentForm = (props) => {
+	var t = (s) => {
+
+		let langCode = localStorage.getItem("language") || "en";
+		
+	return translations[langCode][s] || s;
+	
+	}
+	
+	t = t.bind(this);
 	const [documentTitle, setDocumentTitle] = useState("");
 	const [documentDescription, setDocumentDescription] = useState("");
 	const [category, setCategory] = useState(props.categories[0].title);
@@ -15,22 +31,20 @@ const AddNewDocumentForm = (props) => {
 	const [file, setFile] = useState(null);
 	const [errMessage, setErrMessage] = useState("");
 	const { documentState, dispatch } = useContext(DocumentsContext);
-
-	const { t } = useTranslation();
+	const uploadRef = React.useRef();
+	const statusRef = React.useRef();
+	const progressRef = React.useRef();
 	const [lang, setLang] = useState(`${localStorage.getItem("language")}`);
 
 	useEffect(() => {
-		i18next.changeLanguage(lang, (err, t) => {
-			if (err) return console.log('something went wrong loading', err);
-			t('key'); // -> same as i18next.t
-		  });
+		
 		someFetchActionCreator()
 	}, [dispatch]);
 
 
 	const someFetchActionCreator = () => {
 
-	//	console.log("tu sam" + props.categories)
+		//	console.log("tu sam" + props.categories)
 		const getDocumentsInfoHandler = async () => {
 			//await documentService.getCategories(dispatch);
 		};
@@ -50,7 +64,7 @@ const AddNewDocumentForm = (props) => {
 					<p>{t("fileName")}: {file.name}</p>
 					<p>{t("fileType")}: {file.type}</p>
 					<p>
-					{t("lastModified")}:{" "}
+						{t("lastModified")}:{" "}
 						{file.lastModifiedDate.toDateString()}
 					</p>
 				</div>
@@ -64,7 +78,7 @@ const AddNewDocumentForm = (props) => {
 		e.preventDefault();
 
 		console.log(distributor)
-		if (file == null || documentDescription == "" || documentTitle == ""|| category=="") {
+		if (file == null || documentDescription == "" || documentTitle == "" || category == "") {
 
 			setErrMessage(t("fillAllFields"))
 		} else {
@@ -75,7 +89,7 @@ const AddNewDocumentForm = (props) => {
 			formData.append("documentTitle", documentTitle);
 			formData.append("documentDescription", documentDescription);
 			formData.append("category", category);
-			
+
 			formData.append("distributor", distributor);
 			// Details of the uploaded file 
 
@@ -84,11 +98,49 @@ const AddNewDocumentForm = (props) => {
 			//axios.post("api/uploadfile", formData); 
 
 
+			var xhr = new XMLHttpRequest();
+			xhr.upload.addEventListener("progress", ProgressHandler, false);
+			xhr.addEventListener("load", SuccessHandler, false);
+			xhr.addEventListener("error", ErrorHandler, false);
+			xhr.addEventListener("abort", AbortHandler, false);
 
-			documentService.addDocument(formData, dispatch);
+			xhr.open('POST', `uploadfile`, true);
+			xhr.setRequestHeader("Authorization", props.token);
+			xhr.onload = function () {
+				// do something to response
+				console.log(this.responseText);
+			};
+
+			xhr.send(formData);
+			
 		}
 	};
+	const ProgressHandler = (e) => {
+		//  loadTotalRef.current.innerHTML = `uploaded ${e.loaded} bytes of ${e.total}`;
+		var percent = (e.loaded / e.total) * 100;
+		progressRef.current.value = Math.round(percent);
+		statusRef.current.innerHTML = Math.round(percent) + "% uploaded...";
+		
+	};
 
+	const SuccessHandler = (e) => {
+		
+		statusRef.current.innerHTML = "Success";
+		progressRef.current.value = 100;
+		documentService.addDocument(true, dispatch);
+	};
+	const ErrorHandler = () => {
+		
+		statusRef.current.innerHTML = "Upload failed";
+		
+		documentService.addDocument(false, dispatch);
+	};
+	const AbortHandler = () => {
+		
+		statusRef.current.innerHTML = "Upload aborted";
+		
+		documentService.addDocument(false, dispatch);
+	};
 
 	return (
 		<React.Fragment>
@@ -157,40 +209,41 @@ const AddNewDocumentForm = (props) => {
 												<div class="row" >
 													<div class="form-group col-lg-10">
 
-														<select onChange={(e)=>setCategory(e.target.value)} name="category" class="custom-select" style={{width:"360px"}}>
+														<select onChange={(e) => setCategory(e.target.value)} name="category" class="custom-select" style={{ width: "360px" }}>
 															{props.categories.map(item =>
 																<option key={item._id} value={item.title} >{item.title}</option>
 															)};
-														
+
 														</select>
 													</div>
 												</div>
 											</div>
 										</div>
 
-										<div className="control-group">
+										{props.role && <div className="control-group">
 											<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
 												<label><b>{t("distributor")}</b></label>
 												<div class="row" >
 													<div class="form-group col-lg-10">
 
-														<select onChange={(e)=>setDistributor(e.target.value)} name="distributor" class="custom-select" style={{width:"360px"}}>
-														{props.distributors.map(item =>
+														<select onChange={(e) => setDistributor(e.target.value)} name="distributor" class="custom-select" style={{ width: "360px" }}>
+															{props.distributors.map(item =>
 																<option key={item._id} value={item.name} >{item.name}</option>
 															)};
-														
-														
+
+
 														</select>
 													</div>
 												</div>
 											</div>
-										</div>
+										</div>}
 
 
 										<div style={{ marginTop: "15px" }}>
 											<input type="file" name="file" onChange={onFileChange} />
 
 										</div>
+
 										{fileData()}
 
 										<div className="form-group text-center" style={{ color: "red", fontSize: "0.8em", marginTop: "30px", marginRight: "40px" }} hidden={!errMessage}>
@@ -209,7 +262,10 @@ const AddNewDocumentForm = (props) => {
 											</button>
 										</div>
 
-
+										<label>
+										{t("fileProgress")}: <progress ref={progressRef} value="0" max="100" />
+										</label>
+										<p ref={statusRef}></p>
 									</td>
 								</table>
 

@@ -6,15 +6,29 @@ import Select from "react-dropdown-select";
 import { MdOutlineDashboard } from 'react-icons/md';
 import { BiCollection } from 'react-icons/bi';
 
-import i18next from 'i18next';
-import { useTranslation } from 'react-i18next'
 import { VscLibrary } from 'react-icons/vsc';
 import { AiOutlineUserAdd, AiOutlineMail } from 'react-icons/ai';
+import en from "../locales/en.json";
+import sl from "../locales/sl.json";
+
+
+const translations = {
+	"Choose language": "Choose language",
+	en,
+	sl
+};
 //const Forn({prop1, prop2, ...rest}) => {} HOOKOVI
 const SupportForm = () => {
+	var t = (s) => {
 
+		let langCode = localStorage.getItem("language") || "en";
+		
+	return translations[langCode][s] || s;
 	
-	const { t } = useTranslation();
+	}
+	
+	t = t.bind(this);
+
 	const [lang, setLang] = useState(`${localStorage.getItem("language")}`);
 
 	const { userState, dispatch } = useContext(UserContext);
@@ -28,11 +42,6 @@ const SupportForm = () => {
 
 	useEffect(() => {
 
-
-		i18next.changeLanguage(lang, (err, t) => {
-		  if (err) return console.log('something went wrong loading', err);
-		  t('key'); // -> same as i18next.t
-		});
 		
 	  }, [dispatch]);
 	const handleLogout = (event) => {

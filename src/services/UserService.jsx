@@ -6,8 +6,7 @@ import { constants } from "../consts/consts";
 import { deleteLocalStorage, setAuthInLocalStorage } from "../helpers/auth-header";
 import React, { useContext, useEffect, useImperativeHandle, forwardRef, useState } from "react";
 import { authHeader } from "../helpers/auth-header";
-var url = "https://api.exchange.uvcsolutions.com/"
-//var url = "http://localhost:3000/"
+var url = process.env.URL;
 export const userService = {
 	login,
 	logout,
@@ -20,7 +19,7 @@ export const userService = {
 function login(loginRequest, dispatch) {
 	
 	dispatch(request());
-	Axios.post(`${url}api/users/login`, loginRequest, { validateStatus: () => true })
+	Axios.post(`api/users/login`, loginRequest, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 200) {
 				setAuthInLocalStorage(res.data);
@@ -57,7 +56,7 @@ function login(loginRequest, dispatch) {
 
 function changePassword(sendEmailRequest, dispatch) {
 	dispatch(request());
-	Axios.post(`${url}api/users/passwordreset`, sendEmailRequest, { validateStatus: () => true })
+	Axios.post(`api/users/passwordreset`, sendEmailRequest, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 201) {
 				//setAuthInLocalStorage(res.data);
@@ -97,7 +96,7 @@ function contact(formData, dispatch) {
 	console.log(formData)
 	var token = authHeader()
 	dispatch(request());
-	Axios.post(`${url}api/contact`, formData, {
+	Axios.post(`api/contact`, formData, {
 		headers: {
 		  "Content-Type": "multipart/form-data", Authorization: token 
 		}})
@@ -134,7 +133,7 @@ function contact(formData, dispatch) {
 
 function resetPassword(sendRequest, dispatch) {
 	dispatch(request());
-	Axios.post(`${url}api/users/reg`, sendRequest, { validateStatus: () => true })
+	Axios.post(`api/users/reg`, sendRequest, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 201) {
 				//setAuthInLocalStorage(res.data);
@@ -168,7 +167,7 @@ function resetPassword(sendRequest, dispatch) {
 
 function setNewPassword(sendRequest, dispatch) {
 	dispatch(request());
-	Axios.post(`${url}api/users/reg`, sendRequest, { validateStatus: () => true })
+	Axios.post(`api/users/reg`, sendRequest, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 201) {
 				//setAuthInLocalStorage(res.data);

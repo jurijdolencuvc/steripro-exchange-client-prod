@@ -1,6 +1,24 @@
 import React from "react";
-import i18next from "i18next";
+import en from "../locales/en.json";
+import sl from "../locales/sl.json";
+
+
+const translations = {
+	"Choose language": "Choose language",
+	en,
+	sl
+};
+
 const UnauthorizedPage = () => {
+	var t = (s) => {
+
+		let langCode = localStorage.getItem("language") || "en";
+		
+	return translations[langCode][s] || s;
+	
+	}
+	
+	t = t.bind(this);
 	return (
 		<React.Fragment>
 			<section className="login-clean">
@@ -13,10 +31,10 @@ const UnauthorizedPage = () => {
 				</div>
 				<div className="text-center mt-5" style={{ fontSize: "3em" }}>
 					Oops... <br />
-					{i18next.t("unauthorized")},
+					{t("unauthorized")}
 				</div>
 				<div className="text-center mt-5" style={{ fontSize: "1em" }}>
-				{i18next.t("tryLoggingIn")} <a href="#/login">{i18next.t("here")} </a> <br />
+				{t("tryLoggingIn")} <a href="#/login">{t("here")} </a> <br />
 					
 					
 				</div>

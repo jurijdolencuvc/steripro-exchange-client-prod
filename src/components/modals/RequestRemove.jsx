@@ -5,13 +5,29 @@ import { libraryService } from "../../services/LibraryService";
 import { LibraryContext } from "../../contexts/LibraryContext";
 import { libraryConstants } from "../../constants/LibraryConstants";
 
-import i18next from 'i18next';
-import { useTranslation } from 'react-i18next'
+
+import en from "../../locales/en.json";
+import sl from "../../locales/sl.json";
+
+
+const translations = {
+	"Choose language": "Choose language",
+	en,
+	sl
+};
 const RequestRemove = (props) => {
+	var t = (s) => {
+
+		let langCode = localStorage.getItem("language") || "en";
+		
+	return translations[langCode][s] || s;
 	
+	}
+	
+	t = t.bind(this);
 	const { libraryState, dispatch } = useContext(LibraryContext);
 
-	const { t } = useTranslation();
+	
 	const [lang, setLang] = useState(`${localStorage.getItem("language")}`);
 
 	const handleSubmitNo = (e) => {
@@ -20,15 +36,6 @@ const RequestRemove = (props) => {
 		dispatch({ type: libraryConstants.HIDE_REQUEST_MODAL });
 	};
 
-	useEffect(() => {
-
-
-		i18next.changeLanguage(lang, (err, t) => {
-		  if (err) return console.log('something went wrong loading', err);
-		  t('key'); // -> same as i18next.t
-		});
-		
-	  }, [dispatch]);
 	const handleSubmitYes = (e) => {
 		libraryService.deleteLibrary(props.libraryState.modalRequest.file, dispatch);
 		

@@ -9,14 +9,13 @@ export const deviceService = {
 	editDevice,
 };
 
-var url = "https://api.exchange.uvcsolutions.com/"
-//var url = "http://localhost:3000/"
+var url = process.env.URL;
 async function getDevices(dispatch) {
 	dispatch(request());
 
 	var token = authHeader()
 	
-	await Axios.get(`${url}getDevices` , { headers: { Authorization: token }}, { validateStatus: () => true })
+	await Axios.get(`getDevices` , { headers: { Authorization: token }}, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 200) {
 				console.log(res.data)
@@ -52,7 +51,7 @@ function editDevice(data, dispatch) {
 	
 	var token = authHeader()
 	dispatch(request());
-	Axios.post(`${url}editDevice`, data, {
+	Axios.post(`editDevice`, data, {
 		headers: {
 		  Authorization: token 
 	}})

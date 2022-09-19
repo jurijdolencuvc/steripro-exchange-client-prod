@@ -1,100 +1,116 @@
 
-import i18next from "i18next";
+
+import en from "../locales/en.json";
+import sl from "../locales/sl.json";
+
+
+const translations = {
+	"Choose language": "Choose language",
+	en,
+	sl
+};
+
 var prodCpy = {};
 export function constants(type) {
 
+    var t = (s) => {
 
-    console.log("ksjnksddnksnfjk")
+		let langCode = localStorage.getItem("language") || "en";
+		
+	return translations[langCode][s] || s;
+	
+	}
+	
+	t = t.bind(this);
+
     switch (type) {
 
         case "Email already exists.":
-            console.log("kjfdhfkjdhfkjjdsf")
-            return i18next.t("emailExists");
+            return t("emailExists");
 
         case "The passwords do not match.":
-            return i18next.t("passwordsDoNotMatch");
+            return t("passwordsDoNotMatch");
 
         case "Name already exists.":
-            return i18next.t("nameAlreadyExists");
+            return t("nameAlreadyExists");
 
         case "Invalid email form provided.":
-            return i18next.t("invalidEmailForm");
+            return t("invalidEmailForm");
 
         case "Password too short.":
-            return i18next.t("passwordTooShort");
+            return t("passwordTooShort");
 
         case "New password too short.":
-            return i18next.t("newPasswordTooShort");
+            return t("newPasswordTooShort");
 
         case "Unable to authenticate.":
-            return i18next.t("unableToAuth");
+            return t("unableToAuth");
 
         case "Invalid updates!":
-            return i18next.t("invalidUpdated");
+            return t("invalidUpdated");
 
         case "Incorrect current password.":
-            return i18next.t("incorrectCurrentPass");
+            return t("incorrectCurrentPass");
 
         case "No query/pagination result.":
-            return i18next.t("noQueryPaginationResult");
+            return t("noQueryPaginationResult");
 
         case "That Task does not exist on the server.":
-            return i18next.t("taskDoesNotExistOnServer");
+            return t("taskDoesNotExistOnServer");
 
         case "That User does not exist.":
-            return i18next.t("userDoesNotExist");
+            return t("userDoesNotExist");
 
         case "You are not able to register user.":
-            return i18next.t("notAbleToRegister");
+            return t("notAbleToRegister");
 
         case "Unable to make a new account. Admin already exists!":
-            return i18next.t("adminAlreadyExists");
+            return t("adminAlreadyExists");
 
         case "Unable to make changes. Logged in user is not admin.":
-            return i18next.t("notAdmin");
+            return t("notAdmin");
 
         case "You do not have the right to register.":
-            return i18next.t("noRightToRegister");
+            return t("noRightToRegister");
 
         case "You have already sent an email for registration.":
-            return i18next.t("alreadySentEmail");
+            return t("alreadySentEmail");
 
         case "Please fill all fields.":
-            return i18next.t("pleaseFillAllFields");
+            return t("pleaseFillAllFields");
 
         case "Please authenticate.":
-            return i18next.t("auth");
+            return t("auth");
 
         case "The link for registration has expired.":
-            return i18next.t("linkExpired");
+            return t("linkExpired");
 
         case "You do not have the right to change the password. Please contact administrator.":
-            return i18next.t("noRightToChangePassword");
+            return t("noRightToChangePassword");
 
         case "Internal server error. Please try again.":
-            return i18next.t("internalServerError");
+            return t("internalServerError");
 
         case "User information update success.":
-            return i18next.t("userUpdateSuccess");
+            return t("userUpdateSuccess");
 
         case "Document created successfully.":
-            return i18next.t("documentCreateSuccess");
+            return t("documentCreateSuccess");
 
         case "User password update success.":
-            return i18next.t("userPassUpdateSuccess");
+            return t("userPassUpdateSuccess");
 
 
         case "You are not able to register user.":
-            return i18next.t("notAbleToRegister");
+            return t("notAbleToRegister");
 
         case "Unknown error, please try again later.":
-            return i18next.t("unknownError");
+            return t("unknownError");
 
             case "Error while fetching data":
-                return i18next.t("errorWhileFetchingData");
+                return t("errorWhileFetchingData");
         default:
             
-            console.log("kjfdhfkjdhfkjjdsf")
-            return i18next.t("noTranslation");
+            return t("noTranslation");
     }
 };
