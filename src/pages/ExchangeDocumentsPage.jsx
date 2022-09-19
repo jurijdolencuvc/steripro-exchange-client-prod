@@ -24,7 +24,7 @@ const HomePage = () => {
 			window.location = "#/unauthorized";
 		} else {
 
-			Axios.get(`api/getRole`, { headers: { Authorization: token } }, { validateStatus: () => true },
+			Axios.get(`${url}api/getRole`, { headers: { Authorization: token } }, { validateStatus: () => true },
 			)
 				.then((res) => {
 					if (res.status === 201) {

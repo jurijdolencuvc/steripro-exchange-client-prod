@@ -58,7 +58,7 @@ function login(loginRequest, dispatch) {
 
 function changePassword(sendEmailRequest, dispatch) {
 	dispatch(request());
-	Axios.post(`api/users/passwordreset`, sendEmailRequest, { validateStatus: () => true })
+	Axios.post(`${url}api/users/passwordreset`, sendEmailRequest, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 201) {
 				//setAuthInLocalStorage(res.data);
@@ -98,7 +98,7 @@ function contact(formData, dispatch) {
 	console.log(formData)
 	var token = authHeader()
 	dispatch(request());
-	Axios.post(`api/contact`, formData, {
+	Axios.post(`${url}api/contact`, formData, {
 		headers: {
 		  "Content-Type": "multipart/form-data", Authorization: token 
 		}})
@@ -135,7 +135,7 @@ function contact(formData, dispatch) {
 
 function resetPassword(sendRequest, dispatch) {
 	dispatch(request());
-	Axios.post(`api/users/reg`, sendRequest, { validateStatus: () => true })
+	Axios.post(`${url}api/users/reg`, sendRequest, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 201) {
 				//setAuthInLocalStorage(res.data);
@@ -169,7 +169,7 @@ function resetPassword(sendRequest, dispatch) {
 
 function setNewPassword(sendRequest, dispatch) {
 	dispatch(request());
-	Axios.post(`api/users/reg`, sendRequest, { validateStatus: () => true })
+	Axios.post(`${url}api/users/reg`, sendRequest, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 201) {
 				//setAuthInLocalStorage(res.data);

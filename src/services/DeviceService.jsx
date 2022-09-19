@@ -15,7 +15,7 @@ async function getDevices(dispatch) {
 
 	var token = authHeader()
 	
-	await Axios.get(`getDevices` , { headers: { Authorization: token }}, { validateStatus: () => true })
+	await Axios.get(`${url}getDevices` , { headers: { Authorization: token }}, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 200) {
 				console.log(res.data)
@@ -51,7 +51,7 @@ function editDevice(data, dispatch) {
 	
 	var token = authHeader()
 	dispatch(request());
-	Axios.post(`editDevice`, data, {
+	Axios.post(`${url}editDevice`, data, {
 		headers: {
 		  Authorization: token 
 	}})
