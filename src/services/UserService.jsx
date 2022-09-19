@@ -19,7 +19,7 @@ export const userService = {
 function login(loginRequest, dispatch) {
 	
 	dispatch(request());
-	Axios.post(`api/users/login`, loginRequest, { validateStatus: () => true })
+	Axios.post(`${url}api/users/login`, loginRequest, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 200) {
 				setAuthInLocalStorage(res.data);
