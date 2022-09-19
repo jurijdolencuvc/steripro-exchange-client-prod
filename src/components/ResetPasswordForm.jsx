@@ -13,7 +13,7 @@ import en from "../locales/en.json";
 import sl from "../locales/sl.json";
 //const Forn({prop1, prop2, ...rest}) => {} HOOKOVI
 
-var url = process.env.URL;
+var url = process.env.REACT_APP_URL;
 
 
 const translations = {

@@ -12,7 +12,7 @@ const translations = {
 	sl
 };
 
-var url = process.env.URL;
+var url = process.env.REACT_APP_URL;
 
 const AddNewDocumentForm = (props) => {
 	var t = (s) => {

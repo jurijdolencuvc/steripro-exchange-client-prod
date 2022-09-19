@@ -9,7 +9,7 @@ import ModalDevice from "../components/modals/ModalDevice";
 import { authHeader } from "../helpers/auth-header";
 
 import Axios from "axios";
-var url = process.env.URL;
+var url = process.env.REACT_APP_URL;
 
 
 const HomePage = () => {

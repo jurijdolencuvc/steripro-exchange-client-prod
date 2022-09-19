@@ -6,7 +6,7 @@ import { constants } from "../consts/consts";
 import { deleteLocalStorage, setAuthInLocalStorage } from "../helpers/auth-header";
 import React, { useContext, useEffect, useImperativeHandle, forwardRef, useState } from "react";
 import { authHeader } from "../helpers/auth-header";
-var url = process.env.URL;
+var url = process.env.REACT_APP_URL;
 export const userService = {
 	login,
 	logout,
@@ -21,7 +21,7 @@ function login(loginRequest, dispatch) {
 	dispatch(request());
 	console.log("Halo halo");
 	console.log(url);
-	Axios.post(`api/users/login`, loginRequest, { validateStatus: () => true })
+	Axios.post(`${url}api/users/login`, loginRequest, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 200) {
 				setAuthInLocalStorage(res.data);

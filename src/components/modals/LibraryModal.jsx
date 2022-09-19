@@ -20,7 +20,7 @@ const translations = {
 	en,
 	sl
 };
-var url = process.env.URL;
+var url = process.env.REACT_APP_URL;
 const LibraryModal = () => {
 	var t = (s) => {
 

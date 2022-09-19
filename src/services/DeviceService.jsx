@@ -9,7 +9,7 @@ export const deviceService = {
 	editDevice,
 };
 
-var url = process.env.URL;
+var url = process.env.REACT_APP_URL;
 async function getDevices(dispatch) {
 	dispatch(request());
 

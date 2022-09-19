@@ -3,7 +3,7 @@ import { libraryConstants } from "../constants/LibraryConstants";
 import { constants } from "../consts/consts";
 import { authHeader } from "../helpers/auth-header";
 
-var url = process.env.URL;
+var url = process.env.REACT_APP_URL;
 export const libraryService = {
 	addLibrary,
 	getFileLibrary,
