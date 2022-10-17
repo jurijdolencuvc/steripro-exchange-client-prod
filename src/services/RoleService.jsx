@@ -16,7 +16,7 @@ export const roleService = {
 async function deleteRole(documentId,dispatch) {
 	dispatch(request());
 	var token = authHeader()
-	await Axios.get(`api/checkRoles/${documentId}`, {
+	await Axios.get(`${url}api/checkRoles/${documentId}`, {
 		headers: {
 		  Authorization: token 
 		}}, { validateStatus: () => true })
@@ -70,7 +70,7 @@ async function deleteRole(documentId,dispatch) {
 async function remove(documentId,dispatch) {
 	dispatch(request());
 	var token = authHeader()
-	await Axios.get(`api/deleteRole/${documentId}`, {
+	await Axios.get(`${url}api/deleteRole/${documentId}`, {
 		headers: {
 		  Authorization: token 
 		}}, { validateStatus: () => true })
@@ -114,7 +114,7 @@ async function remove(documentId,dispatch) {
 function add(roleTitle, dispatch) {
 	dispatch(request());
 	var token = authHeader()
-	Axios.get(`/api/role/${roleTitle}`, {
+	Axios.get(`${url}api/role/${roleTitle}`, {
 		headers: {
 		  Authorization: token 
 		}},{ validateStatus: () => true })
@@ -153,7 +153,7 @@ async function getRoles(dispatch) {
 
 	var token = authHeader()
 	
-	await Axios.get(`/api/roles`, { headers: { Authorization: token }}, { validateStatus: () => true })
+	await Axios.get(`${url}api/roles`, { headers: { Authorization: token }}, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 200) {
 				console.log(res.data)

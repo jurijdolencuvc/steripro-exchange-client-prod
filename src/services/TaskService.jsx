@@ -13,7 +13,7 @@ async function getTasks(dispatch) {
 	dispatch(request());
 
 	var token = authHeader()
-	await Axios.get(`api/all_tasks` , { headers: { Authorization: token }}, { validateStatus: () => true })
+	await Axios.get(`${url}api/all_tasks` , { headers: { Authorization: token }}, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 200) {
 				console.log(res.data)

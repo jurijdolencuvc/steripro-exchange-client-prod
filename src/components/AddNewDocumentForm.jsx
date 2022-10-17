@@ -95,7 +95,7 @@ const AddNewDocumentForm = (props) => {
 			xhr.addEventListener("error", ErrorHandler, false);
 			xhr.addEventListener("abort", AbortHandler, false);
 
-			xhr.open('POST', `api/uploadfile`, true);
+			xhr.open('POST', `${url}api/uploadfile`, true);
 			xhr.setRequestHeader("Authorization", props.token);
 			xhr.onload = function () {
 				// do something to response

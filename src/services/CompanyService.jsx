@@ -16,7 +16,7 @@ export const companyService = {
 async function deleteCompany(id,dispatch) {
 	dispatch(request());
 	var token = authHeader()
-	await Axios.get(`api/checkCompanies/${id}`, {
+	await Axios.get(`${url}api/checkCompanies/${id}`, {
 		headers: {
 		  Authorization: token 
 		}}, { validateStatus: () => true })
@@ -70,7 +70,7 @@ async function deleteCompany(id,dispatch) {
 async function remove(documentId,dispatch) {
 	dispatch(request());
 	var token = authHeader()
-	await Axios.get(`api/deleteCompany/${documentId}`, {
+	await Axios.get(`${url}api/deleteCompany/${documentId}`, {
 		headers: {
 		  Authorization: token 
 		}}, { validateStatus: () => true })
@@ -114,7 +114,7 @@ async function remove(documentId,dispatch) {
 function add(companyName, dispatch) {
 	dispatch(request());
 	var token = authHeader()
-	Axios.get(`/api/company/${companyName}`, {
+	Axios.get(`${url}api/company/${companyName}`, {
 		headers: {
 		  Authorization: token 
 		}},{ validateStatus: () => true })
@@ -154,7 +154,7 @@ async function getCompanies(dispatch) {
 
 	var token = authHeader()
 	
-	await Axios.get(`/api/getAllCompanies`, { headers: { Authorization: token }}, { validateStatus: () => true })
+	await Axios.get(`${url}api/getAllCompanies`, { headers: { Authorization: token }}, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 200) {
 				dispatch(success(res.data));

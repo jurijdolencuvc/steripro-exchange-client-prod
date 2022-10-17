@@ -21,7 +21,7 @@ export const userService = {
 function login(loginRequest, dispatch) {
 	console.log(url)
 	dispatch(request());
-	Axios.post(`api/users/login`, loginRequest, { validateStatus: () => true })
+	Axios.post(`${url}api/users/login`, loginRequest, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 200) {
 				setAuthInLocalStorage(res.data);
@@ -59,7 +59,7 @@ function login(loginRequest, dispatch) {
 
 function register(sendRequest, dispatch) {
 	dispatch(request());
-	Axios.post(`api/users/register`, sendRequest, { validateStatus: () => true })
+	Axios.post(`${url}api/users/register`, sendRequest, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 201) {
 				dispatch(success());
@@ -90,7 +90,7 @@ function register(sendRequest, dispatch) {
 
 function changePassword(sendEmailRequest, dispatch) {
 	dispatch(request());
-	Axios.post(`api/users/passwordresetExchange`, sendEmailRequest, { validateStatus: () => true })
+	Axios.post(`${url}api/users/passwordresetExchange`, sendEmailRequest, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 201) {
 				//setAuthInLocalStorage(res.data);
@@ -130,7 +130,7 @@ function contact(formData, dispatch) {
 	console.log(formData)
 	var token = authHeader()
 	dispatch(request());
-	Axios.post(`api/contact`, formData, {
+	Axios.post(`${url}api/contact`, formData, {
 		headers: {
 		  "Content-Type": "multipart/form-data", Authorization: token 
 		}})
@@ -168,7 +168,7 @@ function contact(formData, dispatch) {
 function resetPassword(sendRequest, dispatch) {
 	var token = authHeader()
 	dispatch(request());
-	Axios.post(`api/users`, sendRequest, { headers: { Authorization: token }}, { validateStatus: () => true })
+	Axios.post(`${url}api/users`, sendRequest, { headers: { Authorization: token }}, { validateStatus: () => true })
 		.then((res) => {
 			
 			console.log(res)
@@ -206,7 +206,7 @@ async function getRoles(dispatch) {
 
 	var token = authHeader()
 	
-	await Axios.get(`api/roles`, { validateStatus: () => true })
+	await Axios.get(`${url}api/roles`, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 200) {
 				dispatch(success(res.data));
@@ -241,7 +241,7 @@ async function getCompanies(dispatch) {
 
 	var token = authHeader()
 	
-	await Axios.get(`api/getAllCompanies`, { headers: { Authorization: token }}, { validateStatus: () => true })
+	await Axios.get(`${url}api/getAllCompanies`, { headers: { Authorization: token }}, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 200) {
 				dispatch(success(res.data));

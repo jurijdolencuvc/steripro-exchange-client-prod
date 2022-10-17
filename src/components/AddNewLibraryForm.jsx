@@ -104,7 +104,7 @@ const AddNewLibraryForm = (props) => {
 			xhr.addEventListener("error", ErrorHandler, false);
 			xhr.addEventListener("abort", AbortHandler, false);
 
-			xhr.open('POST', `api/uploadfileLibrary`, true);
+			xhr.open('POST', `${url}api/uploadfileLibrary`, true);
 			xhr.setRequestHeader("Authorization", props.token);
 			xhr.onload = function () {
 				// do something to response

@@ -46,7 +46,7 @@ const RolesModal = () => {
 		  } else {
   
 			setToken(token)
-			  Axios.get(`api/getRole`, { headers: { Authorization: token } }, { validateStatus: () => true },
+			  Axios.get(`${url}api/getRole`, { headers: { Authorization: token } }, { validateStatus: () => true },
 			  )
 				  .then((res) => {
 					  if (res.status === 201) {
