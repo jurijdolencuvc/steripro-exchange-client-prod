@@ -119,7 +119,7 @@ async function deleteLibrary(documentId,dispatch) {
 	dispatch(request());
 
 	var token = authHeader()
-	await Axios.delete(`api/deleteLibrary/${documentId}`, {
+	await Axios.delete(`${url}api/deleteLibrary/${documentId}`, {
 		headers: {
 		  Authorization: token 
 		}}, { validateStatus: () => true })
