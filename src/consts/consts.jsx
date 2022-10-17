@@ -5,9 +5,9 @@ import sl from "../locales/sl.json";
 
 
 const translations = {
-	"Choose language": "Choose language",
-	en,
-	sl
+    "Choose language": "Choose language",
+    en,
+    sl
 };
 
 var prodCpy = {};
@@ -15,13 +15,13 @@ export function constants(type) {
 
     var t = (s) => {
 
-		let langCode = localStorage.getItem("language") || "en";
-		
-	return translations[langCode][s] || s;
-	
-	}
-	
-	t = t.bind(this);
+        let langCode = localStorage.getItem("language") || "en";
+
+        return translations[langCode][s] || s;
+
+    }
+
+    t = t.bind(this);
 
     switch (type) {
 
@@ -107,10 +107,15 @@ export function constants(type) {
         case "Unknown error, please try again later.":
             return t("unknownError");
 
-            case "Error while fetching data":
-                return t("errorWhileFetchingData");
-        default:
+        case "Error while fetching data":
+            return t("errorWhileFetchingData");
+
             
+        case "You are not able to remove Admin or Guest role.":
+            return t("notAbleToRemoveThatRole");
+
+        default:
+
             return t("noTranslation");
     }
 };

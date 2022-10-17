@@ -162,6 +162,7 @@ export const documentsReducer = (state, action) => {
 
 			case documentsConstants.DOCUMENTS_GET_SUCCESS:
 
+		
 				return {
 					...state,
 					listFiles: {

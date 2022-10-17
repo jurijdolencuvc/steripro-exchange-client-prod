@@ -1,8 +1,8 @@
 import { useContext, useState, useEffect,useRef, React } from "react";
 import {  Modal } from "react-bootstrap";
-import { documentsConstants } from "../../constants/DocumentsConstants";
-import { DocumentsContext } from "../../contexts/DocumentsContext";
-import AddNewDocumentForm from "../AddNewDocumentForm";
+import { roleConstants } from "../../constants/RoleConstants";
+import { RoleContext } from "../../contexts/RoleContext";
+import AddNewRoleForm from "../AddNewRoleForm";
 
 import { authHeader } from "../../helpers/auth-header";
 import Axios from "axios";
@@ -17,7 +17,7 @@ const translations = {
 };
 var url = process.env.REACT_APP_URL;
 
-const DocumentsModal = () => {
+const RolesModal = () => {
 	var t = (s) => {
 
 		let langCode = localStorage.getItem("language") || "en";
@@ -28,13 +28,13 @@ const DocumentsModal = () => {
 	
 	
 	t = t.bind(this);
-	const { documentsState, dispatch } = useContext(DocumentsContext);
+	const { roleState, dispatch } = useContext(RoleContext);
 
 	const [role, setRole] = useState(false);
 	const [token, setToken] = useState("");
 	const [lang, setLang] = useState(`${localStorage.getItem("language")}`);
 	const handleModalClose = () => {
-		dispatch({ type: documentsConstants.HIDE_ADD_DOCUMENT_MODAL });
+		dispatch({ type: roleConstants.HIDE_ADD_ROLE_MODAL });
 		window.location.reload()
 	};
 
@@ -66,17 +66,15 @@ const DocumentsModal = () => {
       }, [dispatch]);
 	return (
 		<Modal 
-		show={documentsState.listFiles.showModal} aria-labelledby="contained-modal-title-vcenter" class="modal-dialog modal-lg" centered onHide={handleModalClose}   size="lg">
+		show={roleState.listRoles.showModal} aria-labelledby="contained-modal-title-vcenter" class="modal-dialog modal-lg" centered onHide={handleModalClose}   size="lg">
 			
 			<Modal.Header closeButton>
 				<Modal.Title id="contained-modal-title-vcenter">
-					<big>{t('addNewDocument')}</big>
+					<big>{t('addRole')}</big>
 				</Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
-				<AddNewDocumentForm
-				categories = {documentsState.listCategories.categories}
-				distributors = {documentsState.listDistributors.distributors}
+				<AddNewRoleForm
 				role = {role}
 				token = {token}/>
 			</Modal.Body>
@@ -87,4 +85,4 @@ const DocumentsModal = () => {
 	);
 };
 
-export default DocumentsModal;
+export default RolesModal;

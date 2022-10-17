@@ -33,7 +33,7 @@ const AddNewLibraryForm = (props) => {
 	const [category, setCategory] = useState(props.categories[0].title);
 	const [file, setFile] = useState(null);
 	
-	const [distributor, setDistributor] = useState(props.distributors[0].name);
+	//const [distributor, setDistributor] = useState(props.distributors[0].name);
 	const uploadRef = React.useRef();
 	const statusRef = React.useRef();
 	
@@ -81,7 +81,6 @@ const AddNewLibraryForm = (props) => {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
-		console.log(category)
 		if (file == null || documentDescription == "" || documentTitle == ""|| category=="") {
 
 			setErrMessage(t("fillAllFields"))
@@ -92,7 +91,7 @@ const AddNewLibraryForm = (props) => {
 			formData.append("documentTitle", documentTitle);
 			formData.append("documentDescription", documentDescription);
 			formData.append("category", category);
-			formData.append("distributor", distributor);
+			//formData.append("distributor", distributor);
 			// Details of the uploaded file 
 
 			// Request made to the backend api 
@@ -105,7 +104,7 @@ const AddNewLibraryForm = (props) => {
 			xhr.addEventListener("error", ErrorHandler, false);
 			xhr.addEventListener("abort", AbortHandler, false);
 
-			xhr.open('POST', `${url}uploadfileLibrary`, true);
+			xhr.open('POST', `api/uploadfileLibrary`, true);
 			xhr.setRequestHeader("Authorization", props.token);
 			xhr.onload = function () {
 				// do something to response
@@ -221,23 +220,7 @@ const AddNewLibraryForm = (props) => {
 										</div>
 
 
-										{props.role && <div className="control-group">
-											<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
-												<label><b>{t("distributor")}</b></label>
-												<div class="row" >
-													<div class="form-group col-lg-10">
-
-														<select onChange={(e)=>setDistributor(e.target.value)} name="distributor" class="custom-select" style={{width:"360px"}}>
-														{props.distributors.map(item =>
-																<option key={item._id} value={item.name} >{item.name}</option>
-															)};
-														
-														
-														</select>
-													</div>
-												</div>
-											</div>
-										</div>}
+										
 										<div style={{ marginTop: "15px" }}>
 											<input type="file" name="file" onChange={onFileChange} />
 

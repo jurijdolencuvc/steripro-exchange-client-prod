@@ -1,7 +1,9 @@
 import React, { useContext, useEffect, useImperativeHandle, forwardRef, useState } from "react";
 import SendRegistrationMailForm from "../components/SendRegistrationMailForm";
+import GetDataForReg from "../components/GetDataForReg";
 import UserContextProvider from "../contexts/UserContext";
-
+import { UserContext } from "../contexts/UserContext";
+import { userService } from "../services/UserService";
 import { authHeader } from "../helpers/auth-header";
 import Axios from "axios";
 
@@ -12,6 +14,8 @@ var url = process.env.REACT_APP_URL;
 const SendRegistrationMailPage = () => {
 
 
+	
+	
 	useEffect(() => {
 
 		var token = authHeader()
@@ -19,7 +23,7 @@ const SendRegistrationMailPage = () => {
 			window.location = "#/unauthorized";
 		} else {
 
-			Axios.get(`${url}api/getRole`, { headers: { Authorization: token } }, { validateStatus: () => true },
+			Axios.get(`api/getRole`, { headers: { Authorization: token } }, { validateStatus: () => true },
 			)
 				.then((res) => {
 					if (res.status === 201) {
@@ -36,7 +40,7 @@ const SendRegistrationMailPage = () => {
 					window.location = "#/unauthorized";
 				})
 		}
-
+		
 	});
 	
 
@@ -47,6 +51,7 @@ const SendRegistrationMailPage = () => {
 					<UserContextProvider>
 					<ModalReset/>
 					<SendRegistrationMailForm />
+					<GetDataForReg/>
 					</UserContextProvider>
 				</section>
 			</div>

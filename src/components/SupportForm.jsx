@@ -6,6 +6,7 @@ import Select from "react-dropdown-select";
 import { MdOutlineDashboard } from 'react-icons/md';
 import { BiCollection } from 'react-icons/bi';
 
+import { GiPerson } from "react-icons/gi";
 import { VscLibrary } from 'react-icons/vsc';
 import { AiOutlineUserAdd, AiOutlineMail } from 'react-icons/ai';
 import en from "../locales/en.json";
@@ -127,12 +128,12 @@ const SupportForm = () => {
 							</div>
 
 							<nav class="">
-              <div class="nav_list"> <a href="#" class="nav_link"> <i class='bx bx-grid-alt nav_icon'> <MdOutlineDashboard /></i> <span class="nav_name">{t('devices')}</span> </a>
+              <div class="nav_list"> <a href="#" class="nav_link"> <i class='bx bx-grid-alt nav_icon'> <MdOutlineDashboard /></i> <span class="nav_name">{t('tasks')}</span> </a>
                 <a href="/#/exchangeDocuments" class="nav_link "> <i class='bx bx-user nav_icon'><BiCollection /></i> <span class="nav_name">{t('exchange_documents')}</span> </a>  </div>
               <a href="/#/exchangeLibraries" style={{ marginTop: "20px" }} class="nav_link"> <i class='bx bx-log-out nav_icon'><VscLibrary /></i> <span class="nav_name ">{t('library')}</span> </a>
+	
 
-			  <a href="/#/contact" style={{ marginTop: "20px" }} class="nav_link active"> <i class='bx bx-log-out nav_icon'><AiOutlineMail /></i> <span class="nav_name ">{t('support')}</span> </a>
-             <a onClick={handleLogout} style={{ marginTop: "20px" }} class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">{t('signout')}</span> </a>
+			    <a onClick={handleLogout} style={{ marginTop: "20px" }} class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">{t('signout')}</span> </a>
             </nav>
 						
 

@@ -46,7 +46,7 @@ function editDocument( data, dispatch) {
 	var token = authHeader()
 	
 	dispatch(request());
-	Axios.post(`${url}editFile`, data, {
+	Axios.post(`api/editFile`, data, {
 		headers: {
 		  Authorization: token 
 		}})
@@ -93,7 +93,7 @@ async function deleteDocument(documentId,dispatch) {
 	dispatch(request());
 
 	var token = authHeader()
-	await Axios.delete(`${url}api/deleteDocument/${documentId}`, {
+	await Axios.delete(`api/deleteDocument/${documentId}`, {
 		headers: {
 		  Authorization: token 
 		}}, { validateStatus: () => true })
@@ -132,7 +132,7 @@ async function getDocuments(dispatch) {
 
 	var token = authHeader()
 	
-	await Axios.get(`${url}api/all_documents`, { headers: { Authorization: token }}, { validateStatus: () => true })
+	await Axios.get(`api/all_documents`, { headers: { Authorization: token }}, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 200) {
 				console.log(res.data)
@@ -153,10 +153,12 @@ async function getDocuments(dispatch) {
 		return { type: documentsConstants.DOCUMENTS_GET_REQUEST };
 	}
 	function success(data) {
+		console.log( data+"gkdjgkdfj")
 		return { type: documentsConstants.DOCUMENTS_GET_SUCCESS, data: data };
 	}
 	function failure(message) {
-		
+
+		console.log( "dddddd")
 		var message = constants(message)
 		return { type: documentsConstants.DOCUMENTS_GET_FAILURE, errorMessage: message };
 	}
@@ -169,7 +171,7 @@ async function getDocumentsLibrary(dispatch) {
 
 	var token = authHeader()
 	
-	await Axios.get(`${url}api/all_library`, { headers: { Authorization: token }}, { validateStatus: () => true })
+	await Axios.get(`api/all_library`, { headers: { Authorization: token }}, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 200) {
 				console.log(res.data)
@@ -205,9 +207,10 @@ async function getDocumentsLibrary(dispatch) {
 async function getCategories(dispatch) {
 	dispatch(request());
 
+	console.log("ksjvkjnks")
 	var token = authHeader()
 	
-	await Axios.get(`${url}api/getCategories`, { headers: { Authorization: token }}, { validateStatus: () => true })
+	await Axios.get(`api/getCategories`, { headers: { Authorization: token }}, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 200) {
 				dispatch(success(res.data));
@@ -243,7 +246,7 @@ async function getDistributors(dispatch) {
 
 	var token = authHeader()
 	
-	await Axios.get(`${url}api/getDistributors`, { headers: { Authorization: token }}, { validateStatus: () => true })
+	await Axios.get(`api/getDistributors`, { headers: { Authorization: token }}, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 200) {
 				console.log(res.data)
@@ -279,7 +282,7 @@ async function getCategoriesLibrary(dispatch) {
 
 	var token = authHeader()
 	
-	await Axios.get(`${url}api/getCategoriesLibrary`, { headers: { Authorization: token }}, { validateStatus: () => true })
+	await Axios.get(`api/getCategoriesLibrary`, { headers: { Authorization: token }}, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 200) {
 				dispatch(success(res.data));
@@ -318,7 +321,7 @@ async function getFile(_id, fileName, dispatch) {
 	var list = fileName.split('/')
 	const FileDownload = require("js-file-download");
 
-	await Axios.get(`${url}api/getFile/ `+_id, { validateStatus: () => true,  responseType: 'blob'})
+	await Axios.get(`api/getFile/ `+_id, { validateStatus: () => true,  responseType: 'blob'})
 		.then((res) => {
 			if (res.status === 201) {
 				FileDownload(res.data, fileName);

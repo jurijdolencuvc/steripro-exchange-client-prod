@@ -37,8 +37,10 @@ import Axios from "axios";
 
 import { MdOutlineDashboard } from "react-icons/md";
 import { BiCollection } from "react-icons/bi";
+import { GiPerson } from "react-icons/gi";
 import { AiOutlineUserAdd, AiOutlineMail } from "react-icons/ai";
 
+import { BsBuilding } from "react-icons/bs";
 import en from "../locales/en.json";
 import sl from "../locales/sl.json";
 
@@ -94,6 +96,7 @@ const ExchangeLibrary = forwardRef((props, ref) => {
       await libraryService.getCategoriesLibrary(dispatch);
       await libraryService.getDistributors(dispatch);
     };
+    
     getDocumentsInfoHandler();
   }
   const handleLogout = (event) => {
@@ -102,12 +105,13 @@ const ExchangeLibrary = forwardRef((props, ref) => {
   };
 
   useEffect(() => {
+  
     var token = authHeader()
 		if (token == "null") {
 			window.location = "#/unauthorized";
 		} else {
 
-			Axios.get(`${url}api/getRole`, { headers: { Authorization: token } }, { validateStatus: () => true },
+			Axios.get(`api/getRole`, { headers: { Authorization: token } }, { validateStatus: () => true },
 			)
 				.then((res) => {
 					if (res.status === 201) {
@@ -191,7 +195,7 @@ const ExchangeLibrary = forwardRef((props, ref) => {
                     {" "}
                     <MdOutlineDashboard />
                   </i>{" "}
-                  <span class="nav_name">{t("devices")}</span>{" "}
+                  <span class="nav_name">{t("tasks")}</span>{" "}
                 </a>
                 <a href="/#/exchangeDocuments" class="nav_link">
                   {" "}
@@ -213,19 +217,20 @@ const ExchangeLibrary = forwardRef((props, ref) => {
                 <span class="nav_name ">{t("library")}</span>{" "}
               </a>
 
-              {!role && (
-                <a
-                  href="/#/contact"
-                  style={{ marginTop: "20px" }}
-                  class="nav_link"
-                >
-                  {" "}
-                  <i class="bx bx-log-out nav_icon">
-                    <AiOutlineMail />
-                  </i>{" "}
-                  <span class="nav_name ">{t("support")}</span>{" "}
-                </a>
-              )}
+              {role && <a
+                href="/#/roles"
+                style={{ marginTop: "20px" }}
+                class="nav_link"
+              >
+                {" "}
+                <i class="bx bx-log-out nav_icon">
+                  <GiPerson />
+                </i>{" "}
+                <span class="nav_name ">{t("manageRoles")}</span>{" "}
+              </a>
+}
+{role&&<a href="/#/companies" style={{ marginTop: "20px" }} class="nav_link"> <i class='bx bx-log-out nav_icon'><BsBuilding /></i> <span class="nav_name ">{t('exchangeCompanies')}</span> </a>}
+            
               {role && (
                 <a
                   href="/#/sendRegistrationMail"

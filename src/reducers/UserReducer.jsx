@@ -12,11 +12,11 @@ export const userReducer = (state, action) => {
 	var t = (s) => {
 
 		let langCode = localStorage.getItem("language") || "en";
-		
-	return translations[langCode][s] || s;
-	
+
+		return translations[langCode][s] || s;
+
 	}
-	
+
 	t = t.bind(this);
 	switch (action.type) {
 
@@ -24,28 +24,12 @@ export const userReducer = (state, action) => {
 			return {
 				loginError: {
 					showError: true,
-					errorMessage:  t("incorrectEmailAndPass"),
+					errorMessage: t("incorrectEmailAndPass"),
 				},
 			};
 		case userConstants.LOGIN_SUCCESS:
 			return {
 				loginError: {
-					showError: false,
-					errorMessage: "",
-				},
-			};
-
-		case userConstants.REGISTER_FAILURE:
-			return {
-				registerError: {
-					showError: true,
-					errorMessage: action.error,
-				},
-			};
-
-		case userConstants.REGISTER_SUCCESS:
-			return {
-				registerError: {
 					showError: false,
 					errorMessage: "",
 				},
@@ -81,6 +65,29 @@ export const userReducer = (state, action) => {
 				},
 			};
 
+		case userConstants.REGISTER_SUCCESS:
+
+			return {
+				...state,
+				sendResetPasswordError: {
+					showModal: true,
+					message: t("registerSuccess"),
+					title: t("success"),
+				
+				},
+			};
+
+		case userConstants.REGISTER_FAILURE:
+
+			return {
+				...state,
+				sendResetPasswordError: {
+					showModal: true,
+					message: action.error,
+					title: t("error"),
+				},
+			};
+
 		case userConstants.HIDE_MODAL:
 
 			return {
@@ -105,7 +112,7 @@ export const userReducer = (state, action) => {
 			};
 
 
-			case userConstants.PASSWORD_RESET_FAILURE:
+		case userConstants.PASSWORD_RESET_FAILURE:
 
 			return {
 				...state,
@@ -117,29 +124,29 @@ export const userReducer = (state, action) => {
 			};
 
 
-			case userConstants.CONTACT_SUCCESS:
+		case userConstants.CONTACT_SUCCESS:
 
-				return {
-					...state,
-					sendResetPasswordError: {
-						showModal: true,
-						message: t("messageSuccess"),
-						title: t("success"),
-					},
-				};
-	
-	
-				case userConstants.CONTACT_FAILURE:
-	
-				return {
-					...state,
-					sendResetPasswordError: {
-						showModal: true,
-						message: t("messageError"),
-						title:  t("error"),
-					},
-				};
-	
+			return {
+				...state,
+				sendResetPasswordError: {
+					showModal: true,
+					message: t("messageSuccess"),
+					title: t("success"),
+				},
+			};
+
+
+		case userConstants.CONTACT_FAILURE:
+
+			return {
+				...state,
+				sendResetPasswordError: {
+					showModal: true,
+					message: t("messageError"),
+					title: t("error"),
+				},
+			};
+
 		case userConstants.HIDE_MODAL:
 
 			return {
@@ -194,6 +201,55 @@ export const userReducer = (state, action) => {
 				},
 
 			};
+
+
+
+
+		case userConstants.ROLES_GET_SUCCESS:
+
+			return {
+				...state,
+				listRoles: {
+					showError: false,
+					errorMessage: "",
+					roles: action.data.roles,
+					showModal: false,
+				},
+			};
+		case userConstants.ROLES_GET_FAILURE:
+			return {
+				...state,
+				listRoles: {
+					showError: false,
+					errorMessage: "",
+					roles: [],
+					showModal: false,
+				},
+			};
+
+
+		case userConstants.COMPANIES_GET_SUCCESS:
+
+			return {
+				...state,
+				listCompanies: {
+					showError: false,
+					errorMessage: "",
+					companies: action.data.companies,
+					showModal: false,
+				},
+			};
+		case userConstants.COMPANIES_GET_FAILURE:
+			return {
+				...state,
+				listCompanies: {
+					showError: false,
+					errorMessage: "",
+					companies: [],
+					showModal: false,
+				},
+			};
+
 		default:
 			return state;
 	}

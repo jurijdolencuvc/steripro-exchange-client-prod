@@ -1,21 +1,21 @@
 
 import { React, useEffect } from "react";
 
-import ExchangeLibrary from "../components/ExchangeLibrary";
-import LibraryContextProvider from "../contexts/LibraryContext";
+import ExchangeRoles from "../components/ExchangeRoles";
+import RoleContextProvider from "../contexts/RoleContext";
 
-import DocumentsContextProvider from "../contexts/DocumentsContext";
-import LibraryModal from "../components/modals/LibraryModal";
-import AddNewLibraryForm from "../components/AddNewLibraryForm";
-import EditLibraryModal from "../components/modals/EditLibraryModal";
-import ModalLib from "../components/modals/ModalLib";
-import RequestDeleteModal from "../components/modals/RequestDeleteModal";
+import RolesModal from "../components/modals/RolesModal";
+import ModalRoles from "../components/modals/ModalRoles";
+
+import RequestDeleteRoleModal from "../components/modals/RequestDeleteRoleModal";
 import { authHeader } from "../helpers/auth-header";
 import Axios from "axios";
 
 var url = process.env.REACT_APP_URL;
 
 const HomePage = () => {
+
+	
 	useEffect(() => {
 		var token = authHeader()
 		if (token == "null") {
@@ -44,13 +44,12 @@ const HomePage = () => {
 
 	return (
 		<div style={{ height:"100%"}}>
-			<LibraryContextProvider>
-				<LibraryModal/>
-				<EditLibraryModal/>
-				<ModalLib/>
-				<RequestDeleteModal/>
-				<ExchangeLibrary/>
-			</LibraryContextProvider>
+			<RoleContextProvider>
+				<RolesModal/>
+				<ModalRoles/>
+				<RequestDeleteRoleModal/>
+				<ExchangeRoles/>
+			</RoleContextProvider>
 		</div>
 	);
 };

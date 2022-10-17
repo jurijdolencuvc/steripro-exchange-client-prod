@@ -1,21 +1,21 @@
 
 import { React, useEffect } from "react";
 
-import ExchangeLibrary from "../components/ExchangeLibrary";
-import LibraryContextProvider from "../contexts/LibraryContext";
+import ExchangeCompanies from "../components/ExchangeCompanies";
+import CompanyContextProvider from "../contexts/CompanyContext";
 
-import DocumentsContextProvider from "../contexts/DocumentsContext";
-import LibraryModal from "../components/modals/LibraryModal";
-import AddNewLibraryForm from "../components/AddNewLibraryForm";
-import EditLibraryModal from "../components/modals/EditLibraryModal";
-import ModalLib from "../components/modals/ModalLib";
-import RequestDeleteModal from "../components/modals/RequestDeleteModal";
+import CompaniesModal from "../components/modals/CompaniesModal";
+import ModalCompanies from "../components/modals/ModalCompanies";
+
+import RequestDeleteCompanyModal from "../components/modals/RequestDeleteCompanyModal";
 import { authHeader } from "../helpers/auth-header";
 import Axios from "axios";
 
 var url = process.env.REACT_APP_URL;
 
-const HomePage = () => {
+const CompaniesPage = () => {
+
+	
 	useEffect(() => {
 		var token = authHeader()
 		if (token == "null") {
@@ -44,16 +44,15 @@ const HomePage = () => {
 
 	return (
 		<div style={{ height:"100%"}}>
-			<LibraryContextProvider>
-				<LibraryModal/>
-				<EditLibraryModal/>
-				<ModalLib/>
-				<RequestDeleteModal/>
-				<ExchangeLibrary/>
-			</LibraryContextProvider>
+			<CompanyContextProvider>
+				<CompaniesModal/>
+				<ModalCompanies/>
+				<RequestDeleteCompanyModal/>
+				<ExchangeCompanies/>
+			</CompanyContextProvider>
 		</div>
 	);
 };
 
-export default HomePage;
+export default CompaniesPage;
 

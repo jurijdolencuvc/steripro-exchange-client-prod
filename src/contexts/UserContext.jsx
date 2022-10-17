@@ -30,6 +30,15 @@ const UserContextProvider = (props) => {
 			showError: false,
 			errorMessage: "",
 			roles: [],
+			showModal: false,
+		},
+
+		
+		listCompanies: {
+			showError: false,
+			errorMessage: "",
+			companies: [],
+			showModal: false,
 		},
 		
 	});

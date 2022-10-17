@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect,useRef, React } from "react";
-import DeviceInfo from "./DeviceInfo";
-import { DeviceContext } from "../../contexts/DeviceContext";
+import TaskInfo from "./TaskInfo";
+import { TaskContext } from "../../contexts/TaskContext";
 import { authHeader } from "../../helpers/auth-header";
 import Axios from "axios";
 
@@ -16,7 +16,7 @@ const translations = {
 };
 
 var url = process.env.REACT_APP_URL;
-const Devices = () => {
+const Tasks = () => {
     var t = (s) => {
 
         let langCode = localStorage.getItem("language") || "en";
@@ -29,7 +29,7 @@ const Devices = () => {
 	t = t.bind(this);
 
 
-    const { deviceState, dispatch } = useContext(DeviceContext);
+    const { taskState, dispatch } = useContext(TaskContext);
 
    
 	const [role, setRole] = useState(false);
@@ -44,7 +44,7 @@ const Devices = () => {
 			window.location = "#/unauthorized";
 		} else {
 
-			Axios.get(`${url}api/getRole`, { headers: { Authorization: token } }, { validateStatus: () => true },
+			Axios.get(`api/getRole`, { headers: { Authorization: token } }, { validateStatus: () => true },
 			)
 				.then((res) => {
 					if (res.status === 201) {
@@ -67,8 +67,8 @@ const Devices = () => {
 
             <div >
 
-            <div style={{ display: "flex", flexDirection: "row", marginLeft: "300px", marginTop: "30px", marginBottom: "40px" }}><h1>{t('devices')}</h1></div>
-                <DeviceInfo
+            <div style={{ display: "flex", flexDirection: "row", marginLeft: "300px", marginTop: "30px", marginBottom: "40px" }}><h1>{t('tasks')}</h1></div>
+                <TaskInfo
                     role = {role}
                   
                     ref={childRef}
@@ -79,4 +79,4 @@ const Devices = () => {
     );
 };
 
-export default Devices;
+export default Tasks;

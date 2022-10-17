@@ -1,13 +1,10 @@
 import React, { useEffect, useState,useImperativeHandle, forwardRef, useContext } from "react";
 import MaterialTable from "material-table";
-import { DeviceContext } from "../../contexts/DeviceContext";
-import DeviceContextProvider from "../../contexts/DeviceContext";
-import { deviceService } from "../../services/DeviceService";
+import { TaskContext } from "../../contexts/TaskContext";
+import TaskContextProvider from "../../contexts/TaskContext";
+import { taskService } from "../../services/TaskService";
 import { userService } from "../../services/UserService";
-import GetAppIcon from '@material-ui/icons/GetApp';
-import BackupIcon from '@material-ui/icons/Backup';
-import IconButton from "@material-ui/core/IconButton";
-import { deviceConstants } from "../../constants/DeviceConstants";
+import { taskConstants } from "../../constants/TaskConstants";
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import Check from '@material-ui/icons/Check';
@@ -23,12 +20,14 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 
+import { GiPerson } from "react-icons/gi";
 import { MdOutlineDashboard } from 'react-icons/md';
 import { BiCollection } from 'react-icons/bi';
 import { AiOutlineUserAdd, AiOutlineMail } from 'react-icons/ai';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import { VscLibrary } from 'react-icons/vsc';
 
+import { BsBuilding } from "react-icons/bs";
 import { MdEdit } from 'react-icons/md';
 import { authHeader } from "../../helpers/auth-header";
 import Axios from "axios";import { LocaleContext } from "../../contexts/locale.context.js";
@@ -62,21 +61,21 @@ const tableIcons = {
   ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
-const DeviceInfo = forwardRef((props, ref) => {
+const TaskInfo = forwardRef((props, ref) => {
   var t = (s) => {
     let langCode = localStorage.getItem("language") || "en";
 return translations[langCode][s] || s;
 }
 t = t.bind(this);
-  const { deviceState, dispatch } = useContext(DeviceContext);
+  const { taskState, dispatch } = useContext(TaskContext);
   const [lang, setLang] = useState(`${localStorage.getItem("language")}`);
 	const [role, setRole] = useState(false);
   const someFetchActionCreator = () => {
 
-    const getDevicesInfoHandler = async () => {
-      await deviceService.getDevices( dispatch);
+    const getTaskInfoHandler = async () => {
+      await taskService.getTasks( dispatch);
     };
-    getDevicesInfoHandler();
+    getTaskInfoHandler();
   }
 
   useEffect(() => {
@@ -86,7 +85,7 @@ t = t.bind(this);
 			window.location = "#/unauthorized";
 		} else {
 
-			Axios.get(`${url}api/getRole`, { headers: { Authorization: token } }, { validateStatus: () => true },
+			Axios.get(`api/getRole`, { headers: { Authorization: token } }, { validateStatus: () => true },
 			)
 				.then((res) => {
 					if (res.status === 201) {
@@ -111,9 +110,7 @@ t = t.bind(this);
      userService.logout();
   }
 
-  const showEditDevice = (e, data) => {
-    dispatch({ type: deviceConstants.SHOW_EDIT_DEVICE_MODAL, data });
-  };
+  
 
   return (
       <div class="wrapper">
@@ -125,42 +122,38 @@ t = t.bind(this);
 		</div>
 
 		<nav class="">
-		  <div class="nav_list"> <a href="#" class="nav_link active"> <i class='bx bx-grid-alt nav_icon'> <MdOutlineDashboard /></i> <span class="nav_name">{t('devices')}</span> </a> 
+		  <div class="nav_list"> <a href="#" class="nav_link active"> <i class='bx bx-grid-alt nav_icon'> <MdOutlineDashboard /></i> <span class="nav_name">{t('tasks')}</span> </a> 
       <a href="/#/exchangeDocuments" class="nav_link"> <i class='bx bx-user nav_icon'><BiCollection/></i> <span class="nav_name">{t('exchange_documents')}</span> </a>  </div>
       <a href="/#/exchangeLibraries" style={{ marginTop: "20px" }} class="nav_link"> <i class='bx bx-log-out nav_icon'><VscLibrary /></i> <span class="nav_name ">{t('library')}</span> </a>
-     
-      {!props.role && <a href="/#/contact" style={{ marginTop: "20px" }} class="nav_link"> <i class='bx bx-log-out nav_icon'><AiOutlineMail /></i> <span class="nav_name ">{t('support')}</span> </a>}
-      {props.role && <a href="/#/sendRegistrationMail" style={{marginTop : "20px"}} class="nav_link"> <i class='bx bx-log-out nav_icon'><AiOutlineUserAdd/></i> <span class="nav_name">{t('enroll')}</span> </a>}
+      {role && <a
+                href="/#/roles"
+                style={{ marginTop: "20px" }}
+                class="nav_link"
+              >
+                <i class="bx bx-log-out nav_icon">
+                  <GiPerson />
+                </i>
+                <span class="nav_name ">{t("manageRoles")}</span>
+              </a>
+}
+{role&&<a href="/#/companies" style={{ marginTop: "20px" }} class="nav_link"> <i class='bx bx-log-out nav_icon'><BsBuilding /></i> <span class="nav_name ">{t('exchangeCompanies')}</span> </a>}
+ 
+     {props.role && <a href="/#/sendRegistrationMail" style={{marginTop : "20px"}} class="nav_link"> <i class='bx bx-log-out nav_icon'><AiOutlineUserAdd/></i> <span class="nav_name">{t('enroll')}</span> </a>}
 		  <a onClick={handleLogout} style={{marginTop : "20px"}} class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">{t('signout')}</span> </a>
 		</nav>
 
 	  </nav>
-        <DeviceContextProvider>
+        <TaskContextProvider>
           <div style={{ marginLeft: "250px" }}>  </div>      
 
           
-       {role &&   <MaterialTable stickyHeader
+      <MaterialTable stickyHeader
            style={{tableLayout: 'fixed', marginLeft: 288, marginRight: 38}}
             icons={tableIcons}
-            actions={[
-              {
-                icon: () => <MdEdit/>,
-                title: 'Edit',
-                onClick: (event, rowData) => showEditDevice(event, rowData)
-              },
-            
-
-            ]}
+           
             columns={[
-              { title: t("motherboardId"), field: "serialNumber" },
-              { title: t("deviceName"), field: "name" },
-              { title: t("tabletIMEI"), field: "tabletIdentifier" },
-              { title: t("customer"), field: "customerName", type: 'string' },
-              { title: t("distributor"), field: "distributorName", type: 'string' },
-              { title: t("deployDate"), field: "deployDate", type: 'date' },
-              { title: t("lastLegularServiceData"), field: "lastRegularServiceDate", type: 'date' },
-              { title: t("nextService"), field: "countdown" },
-              { title: t("notificationEmail"), field: "notificationEmails", type: 'string' },
+              { title: t("title"), field: "title" },
+              { title: t("description"), field: "description" },
 
             ]}
            
@@ -171,60 +164,18 @@ t = t.bind(this);
               //maxBodyHeight: 450,
             }}
          
-            localization={{
-              header: {
-                actions:  t("edit"),
-              },
-
-            }}
-
-            data={deviceState.listDevices.devices}
-
-            title=""
-            onRowClick={(event, rowData) => { props.handleShowModal(rowData) }}
-
-          />
-}
-
-
-          
-{!role &&   <MaterialTable stickyHeader
-           style={{tableLayout: 'fixed', marginLeft: 288, marginRight: 38}}
-            icons={tableIcons}
-            columns={[
-              { title: t("motherboardId"), field: "serialNumber" },
-              { title: t("deviceName"), field: "name" },
-              { title: t("tabletIMEI"), field: "tabletIdentifier" },
-              { title: t("customer"), field: "customerName", type: 'string' },
-              { title: t("distributor"), field: "distributorName", type: 'string' },
-              { title: t("deployDate"), field: "deployDate", type: 'date' },
-              { title: t("lastLegularServiceData"), field: "lastRegularServiceDate", type: 'date' },
-              { title: t("nextService"), field: "countdown" },
-              { title: t("notificationEmail"), field: "notificationEmails", type: 'string' },
-
-            ]}
            
-            options={{
-              //actionsColumnIndex: -1,
-              //headerStyle: { position: 'sticky', top: 0 },
-              //maxBodyHeight: 450,
-            }}
-         
-            
 
-
-            data={deviceState.listDevices.devices}
+            data={taskState.listTasks.tasks}
 
             title=""
-            onRowClick={(event, rowData) => { props.handleShowModal(rowData) }}
 
           />
-}
 
 
-        </DeviceContextProvider>
+        </TaskContextProvider>
       </div>
   );
 });
 
-export default DeviceInfo;
+export default TaskInfo;

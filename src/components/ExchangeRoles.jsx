@@ -6,14 +6,12 @@ import React, {
   useContext,
 } from "react";
 import MaterialTable from "material-table";
-import { DocumentsContext } from "../contexts/DocumentsContext";
+import { RoleContext } from "../contexts/RoleContext";
 import GetAppIcon from '@material-ui/icons/GetApp';
 import { userService } from "../services/UserService";
 import { MdEdit } from "react-icons/md";
-import { documentService, documentsService } from "../services/DocumentService";
-import BackupIcon from "@material-ui/icons/Backup";
-import IconButton from "@material-ui/core/IconButton";
-import { documentsConstants } from "../constants/DocumentsConstants";
+import { roleService, documentsService } from "../services/RoleService";
+import { roleConstants } from "../constants/RoleConstants";
 import AddBox from "@material-ui/icons/AddBox";
 import ArrowDownward from "@material-ui/icons/ArrowDownward";
 import Check from "@material-ui/icons/Check";
@@ -37,9 +35,9 @@ import { GiPerson } from "react-icons/gi";
 import { VscLibrary } from "react-icons/vsc";
 import { MdOutlineDashboard } from "react-icons/md";
 import { BiCollection } from "react-icons/bi";
-import { BsBuilding } from "react-icons/bs";
 import { AiOutlineUserAdd, AiOutlineMail } from "react-icons/ai";
 
+import { BsBuilding } from "react-icons/bs";
 import en from "../locales/en.json";
 import sl from "../locales/sl.json";
 
@@ -74,7 +72,7 @@ const tableIcons = {
   ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
-const ExchangeDocuments = forwardRef((props, ref) => {
+const ExchangeRoles = forwardRef((props, ref) => {
   var t = (s) => {
 
 		let langCode = localStorage.getItem("language") || "en";
@@ -84,18 +82,14 @@ const ExchangeDocuments = forwardRef((props, ref) => {
 	}
 	
 	t = t.bind(this);
-  const { documentsState, dispatch } = useContext(DocumentsContext);
+  const { roleState, dispatch } = useContext(RoleContext);
   const [lang, setLang] = useState(`${localStorage.getItem("language")}`);
   const [role, setRole] = useState(false);
   const someFetchActionCreator = () => {
-    const getDocumentsInfoHandler = async () => {
-      await documentService.getDocuments(dispatch);
-      
-      await documentService.getCategories(dispatch);
-      
-      await documentService.getDistributors(dispatch);
+    const getRoleInfoHandler = async () => {
+      await roleService.getRoles(dispatch);
     };
-    getDocumentsInfoHandler();
+    getRoleInfoHandler();
   };
 
   const handleLogout = (event) => {
@@ -126,23 +120,11 @@ const ExchangeDocuments = forwardRef((props, ref) => {
   }, [dispatch]);
 
   const handleShowModal = () => {
-    dispatch({ type: documentsConstants.SHOW_ADD_DOCUMENT_MODAL });
+    dispatch({ type: roleConstants.SHOW_ADD_ROLE_MODAL });
   };
 
-  const showEditDocument = (e, data) => {
-    dispatch({ type: documentsConstants.SHOW_EDIT_DOCUMENT_MODAL, data });
-  };
-
-  const fileClicked = (e, oneFile, name) => {
-    console.log(oneFile + " " + name);
-    documentService.getFile(oneFile, name, dispatch);
-  };
-
-  const deleteDocument = (e, oneFile) => {
-    dispatch({
-      type: documentsConstants.DOCUMENTS_REQUEST_REMOVE_REQUEST,
-      oneFile: oneFile,
-    });
+  const deleteRole = (e, oneFile) => {
+    roleService.deleteRole(oneFile,dispatch)
   };
 
   return (
@@ -157,14 +139,14 @@ const ExchangeDocuments = forwardRef((props, ref) => {
             marginLeft: "288px",
           }}
         >
-          <h1>{t("exchangeDocuments")}</h1>
+          <h1>{t("exchangeRoles")}</h1>
           <button
             style={{ float: "right", marginBottom: 30, marginRight: "38px" }}
             type="button"
             onClick={handleShowModal}
             class="btn btn-primary btn-lg"
           >
-            {t("add")}
+            {t("addNewRole")}
           </button>
         </div>{" "}
         <div class="wrapper">
@@ -190,7 +172,7 @@ const ExchangeDocuments = forwardRef((props, ref) => {
                   </i>{" "}
                   <span class="nav_name">{t("tasks")}</span>{" "}
                 </a>
-                <a href="/#/exchangeDocuments" class="nav_link active">
+                <a href="/#/exchangeDocuments" class="nav_link">
                   {" "}
                   <i class="bx bx-user nav_icon">
                     <BiCollection />
@@ -212,7 +194,7 @@ const ExchangeDocuments = forwardRef((props, ref) => {
               {role && <a
                 href="/#/roles"
                 style={{ marginTop: "20px" }}
-                class="nav_link"
+                class="nav_link active"
               >
                 {" "}
                 <i class="bx bx-log-out nav_icon">
@@ -221,8 +203,8 @@ const ExchangeDocuments = forwardRef((props, ref) => {
                 <span class="nav_name ">{t("manageRoles")}</span>{" "}
               </a>
 }
-            
-								{role&&<a href="/#/companies" style={{ marginTop: "20px" }} class="nav_link"> <i class='bx bx-log-out nav_icon'><BsBuilding /></i> <span class="nav_name ">{t('exchangeCompanies')}</span> </a>}
+{role&&<a href="/#/companies" style={{ marginTop: "20px" }} class="nav_link"> <i class='bx bx-log-out nav_icon'><BsBuilding /></i> <span class="nav_name ">{t('exchangeCompanies')}</span> </a>}
+   
               {role && (
                 <a
                   href="/#/sendRegistrationMail"
@@ -262,85 +244,29 @@ const ExchangeDocuments = forwardRef((props, ref) => {
               }}
               icons={tableIcons}
               columns={[
-                { title: t("documentTitle"), field: "documentTitle" },
-                {
-                  title: t("documentDescription"),
-                  field: "documentDescription",
-                },
-                { title: t("category"), field: "category.title" },
-                { title: t("read"), field: "read" },
+                { title: t("roleTitle"), field: "title" },
+               
               ]}
               actions={[
-                {
-                  icon: () => <GetAppIcon />,
-                  title: t("downloadDocument"),
-                  onClick: (event, rowData) =>
-                    fileClicked(event, rowData._id, rowData.document),
-                },
-                {
-                  icon: () => <MdEdit />,
-                  title: t("editDocument"),
-                  onClick: (event, rowData) => showEditDocument(event, rowData),
-                },
+    
                 {
                   icon: () => <DeleteOutline />,
-                  title: t("deleteDocument"),
+                  title: t("deleteRole"),
                   onClick: (event, rowData) =>
-                    deleteDocument(event, rowData._id),
+                    deleteRole(event, rowData._id),
                 },
               ]}
               options={{
-                //actionsColumnIndex: -1,
-                //headerStyle: {top:0, bottom:0},
-                //maxBodyHeight: "70vh",  
+                actionsColumnIndex: -1,
+                headerStyle: {top:0, bottom:0},
+                maxBodyHeight: "70vh",  
               }}
               localization={{
                 header: {
-                  actions: t("downloadEditDeleteDocument"),
+                  actions: t("deleteRole"),
                 },
               }}
-              data={documentsState.listFiles.documents}
-              title=""
-            />
-          )}
-          {!role && (
-            <MaterialTable
-              stickyHeader
-              style={{
-                tableLayout: "fixed",
-                marginLeft: 288,
-                marginRight: 38,
-                //width: "100%",
-              }}
-              icons={tableIcons}
-              columns={[
-                { title: t("documentTitle"), field: "documentTitle" },
-                {
-                  title: t("documentDescription"),
-                  field: "documentDescription",
-                },
-                { title: t("category"), field: "category.title" },
-                { title: t("read"), field: "read" },
-              ]}
-              actions={[
-                {
-                  icon: () => <GetAppIcon />,
-                  title: t("downloadDocument"),
-                  onClick: (event, rowData) =>
-                    fileClicked(event, rowData._id, rowData.document),
-                },
-              ]}
-              options={{
-                //actionsColumnIndex: -1,
-                //headerStyle: { position: "sticky", top: 0 },
-                //maxBodyHeight: 450,
-              }}
-              localization={{
-                header: {
-                  actions: t("downloadDocument"),
-                },
-              }}
-              data={documentsState.listFiles.documents}
+              data={roleState.listRoles.roles}
               title=""
             />
           )}
@@ -349,4 +275,4 @@ const ExchangeDocuments = forwardRef((props, ref) => {
   );
 });
 
-export default ExchangeDocuments;
+export default ExchangeRoles;

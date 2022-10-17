@@ -27,7 +27,7 @@ const AddNewDocumentForm = (props) => {
 	const [documentTitle, setDocumentTitle] = useState("");
 	const [documentDescription, setDocumentDescription] = useState("");
 	const [category, setCategory] = useState(props.categories[0].title);
-	const [distributor, setDistributor] = useState(props.distributors[0].name);
+	//const [distributor, setDistributor] = useState(props.distributors[0].name);
 	const [file, setFile] = useState(null);
 	const [errMessage, setErrMessage] = useState("");
 	const { documentState, dispatch } = useContext(DocumentsContext);
@@ -77,26 +77,17 @@ const AddNewDocumentForm = (props) => {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
-		console.log(distributor)
+		
 		if (file == null || documentDescription == "" || documentTitle == "" || category == "") {
 
 			setErrMessage(t("fillAllFields"))
 		} else {
 			const formData = new FormData();
 
-			console.log(distributor)
 			formData.append('File', file);
 			formData.append("documentTitle", documentTitle);
 			formData.append("documentDescription", documentDescription);
 			formData.append("category", category);
-
-			formData.append("distributor", distributor);
-			// Details of the uploaded file 
-
-			// Request made to the backend api 
-			// Send formData object 
-			//axios.post("api/uploadfile", formData); 
-
 
 			var xhr = new XMLHttpRequest();
 			xhr.upload.addEventListener("progress", ProgressHandler, false);
@@ -104,7 +95,7 @@ const AddNewDocumentForm = (props) => {
 			xhr.addEventListener("error", ErrorHandler, false);
 			xhr.addEventListener("abort", AbortHandler, false);
 
-			xhr.open('POST', `${url}uploadfile`, true);
+			xhr.open('POST', `api/uploadfile`, true);
 			xhr.setRequestHeader("Authorization", props.token);
 			xhr.onload = function () {
 				// do something to response
@@ -219,25 +210,6 @@ const AddNewDocumentForm = (props) => {
 												</div>
 											</div>
 										</div>
-
-										{props.role && <div className="control-group">
-											<div className="form-group controls mb-0 pb-2" style={{ color: "#6c757d", opacity: 1 }}>
-												<label><b>{t("distributor")}</b></label>
-												<div class="row" >
-													<div class="form-group col-lg-10">
-
-														<select onChange={(e) => setDistributor(e.target.value)} name="distributor" class="custom-select" style={{ width: "360px" }}>
-															{props.distributors.map(item =>
-																<option key={item._id} value={item.name} >{item.name}</option>
-															)};
-
-
-														</select>
-													</div>
-												</div>
-											</div>
-										</div>}
-
 
 										<div style={{ marginTop: "15px" }}>
 											<input type="file" name="file" onChange={onFileChange} />

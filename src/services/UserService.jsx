@@ -13,15 +13,15 @@ export const userService = {
 	changePassword,
 	resetPassword,
 	contact,
-	setNewPassword,
+	getRoles,
+	getCompanies,
+	register
 };
 
 function login(loginRequest, dispatch) {
-	
+	console.log(url)
 	dispatch(request());
-	console.log("Halo halo");
-	console.log(url);
-	Axios.post(`${url}api/users/login`, loginRequest, { validateStatus: () => true })
+	Axios.post(`api/users/login`, loginRequest, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 200) {
 				setAuthInLocalStorage(res.data);
@@ -56,9 +56,41 @@ function login(loginRequest, dispatch) {
 }
 
 
+
+function register(sendRequest, dispatch) {
+	dispatch(request());
+	Axios.post(`api/users/register`, sendRequest, { validateStatus: () => true })
+		.then((res) => {
+			if (res.status === 201) {
+				dispatch(success());
+			} else if (res.status === 412) {
+				dispatch(failure(res.data.error));
+			} 
+		})
+		.catch((err) =>{
+			
+			var error = constants("Unknown error, please try again later.")
+				dispatch(failure(error));
+			})
+
+	function request() {
+		return { type: userConstants.REGISTER_REQUEST };
+	}
+	function success() {
+		return { type: userConstants.REGISTER_SUCCESS };
+	}
+	function failure(error) {
+		
+		var error = constants(error)
+		return { type: userConstants.REGISTER_FAILURE, error };
+	}
+}
+
+
+
 function changePassword(sendEmailRequest, dispatch) {
 	dispatch(request());
-	Axios.post(`${url}api/users/passwordreset`, sendEmailRequest, { validateStatus: () => true })
+	Axios.post(`api/users/passwordresetExchange`, sendEmailRequest, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 201) {
 				//setAuthInLocalStorage(res.data);
@@ -98,7 +130,7 @@ function contact(formData, dispatch) {
 	console.log(formData)
 	var token = authHeader()
 	dispatch(request());
-	Axios.post(`${url}api/contact`, formData, {
+	Axios.post(`api/contact`, formData, {
 		headers: {
 		  "Content-Type": "multipart/form-data", Authorization: token 
 		}})
@@ -134,21 +166,24 @@ function contact(formData, dispatch) {
 
 
 function resetPassword(sendRequest, dispatch) {
+	var token = authHeader()
 	dispatch(request());
-	Axios.post(`${url}api/users/reg`, sendRequest, { validateStatus: () => true })
+	Axios.post(`api/users`, sendRequest, { headers: { Authorization: token }}, { validateStatus: () => true })
 		.then((res) => {
-			if (res.status === 201) {
-				//setAuthInLocalStorage(res.data);
-				dispatch(success());
-				//window.location = "#/";
 			
-			}  else if (res.status === 412) {
-				dispatch(failure(res.data.error));
+			console.log(res)
+			if (res.status === 201) {
+				dispatch(success());
+			
+			}  else if (res.status === 215) {
+				dispatch(failure(res.data.response));
 			}else {
+				
 				dispatch(failure(res.data.error));
 			}
 		})
 		.catch((err) => {
+			
 			var error = constants("Unknown error, try again later.")
 			dispatch(failure(error));
 		})
@@ -166,39 +201,74 @@ function resetPassword(sendRequest, dispatch) {
 	}
 }
 
-
-function setNewPassword(sendRequest, dispatch) {
+async function getRoles(dispatch) {
 	dispatch(request());
-	Axios.post(`${url}api/users/reg`, sendRequest, { validateStatus: () => true })
+
+	var token = authHeader()
+	
+	await Axios.get(`api/roles`, { validateStatus: () => true })
 		.then((res) => {
-			if (res.status === 201) {
-				//setAuthInLocalStorage(res.data);
-				//dispatch(success());
-				window.location = "#/";
-			
-			}  else if (res.status === 412) {
-				//dispatch(failure(res.data.error));
-			}else {
-				//dispatch(failure(res.data.error));
+			if (res.status === 200) {
+				dispatch(success(res.data));
+			} else {
+				
+				var error = constants("Error while fetching data")
+				dispatch(failure(error));
 			}
 		})
 		.catch((err) => {
+			
 			var error = constants("Unknown error, please try again later.")
-			dispatch(failure(error));
-		})
+				dispatch(failure(error));
+		});
 
 	function request() {
-		return { type: userConstants.SEND_RESET_PASSWORD_MAIL_REQUEST };
+		return { type: userConstants.ROLES_GET_REQUEST };
 	}
-	function success() {
-		return { type: userConstants.SEND_RESET_PASSWORD_MAIL_SUCCESS };
+	function success(data) {
+		return { type: userConstants.ROLES_GET_SUCCESS, data: data };
 	}
-	function failure(error) {
-		var error = constants(error)
-		return { type: userConstants.SEND_RESET_PASSWORD_MAIL_FAILURE, error };
+	function failure(message) {
+		
+		var message = constants(message)
+		return { type: userConstants.ROLES_GET_FAILURE, errorMessage: message };
 	}
 }
 
+
+async function getCompanies(dispatch) {
+	dispatch(request());
+
+	var token = authHeader()
+	
+	await Axios.get(`api/getAllCompanies`, { headers: { Authorization: token }}, { validateStatus: () => true })
+		.then((res) => {
+			if (res.status === 200) {
+				dispatch(success(res.data));
+			} else {
+				
+				var error = constants("Error while fetching data")
+				dispatch(failure(error));
+			}
+		})
+		.catch((err) => {
+			
+			var error = constants("Unknown error, please try again later.")
+				dispatch(failure(error));
+		});
+
+	function request() {
+		return { type: userConstants.COMPANIES_GET_REQUEST };
+	}
+	function success(data) {
+		return { type: userConstants.COMPANIES_GET_SUCCESS, data: data };
+	}
+	function failure(message) {
+		
+		var message = constants(message)
+		return { type: userConstants.COMPANIES_GET_FAILURE, errorMessage: message };
+	}
+}
 
 
 

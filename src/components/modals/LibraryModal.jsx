@@ -47,13 +47,15 @@ const LibraryModal = () => {
 	useEffect(() => {
 
 	
+		console.log("blaa")
+		console.log(libraryState.listCategories.categories)
 	
 		var token = authHeader()
 		if (token == "null") {
 			window.location = "#/unauthorized";
 		} else {
 			setToken(token)
-			Axios.get(`${url}api/getRole`, { headers: { Authorization: token } }, { validateStatus: () => true },
+			Axios.get(`api/getRole`, { headers: { Authorization: token } }, { validateStatus: () => true },
 			)
 				.then((res) => {
 					if (res.status === 201) {

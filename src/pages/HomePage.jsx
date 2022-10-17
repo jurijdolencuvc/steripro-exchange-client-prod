@@ -1,11 +1,8 @@
 
 import { React, useEffect } from "react";
 
-import Devices from "../components/Devices/Devices";
-import DeviceContextProvider from "../contexts/DeviceContext";
-
-import EditDeviceModal from "../components/modals/EditDeviceModal";
-import ModalDevice from "../components/modals/ModalDevice";
+import Tasks from "../components/Tasks/Tasks";
+import TaskContextProvider from "../contexts/TaskContext";
 import { authHeader } from "../helpers/auth-header";
 
 import Axios from "axios";
@@ -23,7 +20,7 @@ const HomePage = () => {
 			window.location = "#/login";
 		} else {
 
-			Axios.get(`${url}api/getRole`, { headers: { Authorization: token } }, { validateStatus: () => true },
+			Axios.get(`api/getRole`, { headers: { Authorization: token } }, { validateStatus: () => true },
 			)
 				.then((res) => {
 					if (res.status === 201) {
@@ -45,12 +42,9 @@ const HomePage = () => {
 
 	return (
 		<div>
-			<DeviceContextProvider>
-				<ModalDevice />
-				<Devices />
-
-				<EditDeviceModal />
-			</DeviceContextProvider>
+			<TaskContextProvider>
+				<Tasks />
+			</TaskContextProvider>
 		</div>
 	);
 };
