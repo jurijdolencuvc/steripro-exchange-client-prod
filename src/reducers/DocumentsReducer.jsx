@@ -81,9 +81,7 @@ export const documentsReducer = (state, action) => {
 					prodCpy.updateData.data.document.read = action.data.read;
 					prodCpy.updateData.data.document.companyId = action.data.companyId;
 					prodCpy.updateData.data.document.category = action.data.category;
-				
-				
-					console.log(prodCpy.updateData.data.document)
+
 	
 				prodCpy.updateData.showModal = true;
 				return prodCpy;

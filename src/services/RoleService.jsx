@@ -3,7 +3,7 @@ import { roleConstants } from "../constants/RoleConstants";
 import { constants } from "../consts/consts";
 import { authHeader } from "../helpers/auth-header";
 
-var url = process.env.REACT_APP_URL;
+var url = process.env.REACT_APP_URL || "http://localhost:3000/";
 
 export const roleService = {
 	getRoles,
@@ -16,7 +16,7 @@ export const roleService = {
 async function deleteRole(documentId,dispatch) {
 	dispatch(request());
 	var token = authHeader()
-	await Axios.get(`${url}api/checkRoles/${documentId}`, {
+	await Axios.get(`${url}api/checkUsersOfRole/${documentId}`, {
 		headers: {
 		  Authorization: token 
 		}}, { validateStatus: () => true })
@@ -47,9 +47,6 @@ async function deleteRole(documentId,dispatch) {
 				oneFile: documentId,
 				users: data
 			  };
-
-			//return { type: roleConstants.ROLES_REMOVE_SUCCESS, users: data };
-
 		}
 
 		function success(data) {
@@ -97,9 +94,6 @@ async function remove(documentId,dispatch) {
 			return{
 				type: roleConstants.ROLES_REMOVE_SUCCESS
 			  };
-
-			//return { type: roleConstants.ROLES_REMOVE_SUCCESS, users: data };
-
 		}
 
 	
@@ -156,7 +150,6 @@ async function getRoles(dispatch) {
 	await Axios.get(`${url}api/roles`, { headers: { Authorization: token }}, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 200) {
-				console.log(res.data)
 				dispatch(success(res.data));
 			} else {
 				

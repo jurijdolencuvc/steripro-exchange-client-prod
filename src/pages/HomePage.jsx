@@ -6,7 +6,7 @@ import TaskContextProvider from "../contexts/TaskContext";
 import { authHeader } from "../helpers/auth-header";
 
 import Axios from "axios";
-var url = process.env.REACT_APP_URL;
+var url = process.env.REACT_APP_URL || "http://localhost:3000/";
 
 
 const HomePage = () => {

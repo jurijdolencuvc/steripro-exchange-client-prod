@@ -78,8 +78,6 @@ const SendRegistrationMailForm = () => {
 	};
 
 
-	//useEffect- kao componentDidMount
-
 	return (
 		<body style={{ height: "750px" }}>
 			<div>

@@ -116,9 +116,6 @@ const RequestRemoveRole = (props) => {
 											]}
 
 											options={{
-												//actionsColumnIndex: -1,
-												//headerStyle: {top:0, bottom:0},
-												//maxBodyHeight: "70vh",  
 												search: false
 											}}
 											localization={{

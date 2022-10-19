@@ -38,9 +38,7 @@ export const roleReducer = (state, action) => {
 			};
 
 		case roleConstants.ROLE_REQUEST_REMOVE_REQUEST:
-			//if(action.users.users == null){
-				console.log(action.users)
-			//}
+			
 			return {
 				...state,
 				modalRequest: {
@@ -69,13 +67,9 @@ export const roleReducer = (state, action) => {
 					showError: false,
 					errorMessage: "",
 					roles: [],
-
-
 					showModal: false,
 				},
 			};
-
-
 
 			case roleConstants.ROLE_SUBMIT_REQUEST:
 
@@ -129,8 +123,6 @@ export const roleReducer = (state, action) => {
 
 
 		case roleConstants.ROLES_GET_SUCCESS:
-
-		console.log(action.data.roles)
 			return {
 				...state,
 				listRoles: {
@@ -149,8 +141,6 @@ export const roleReducer = (state, action) => {
 					roles: {
 
 					},
-
-
 					showModal: false,
 				},
 			};
@@ -188,7 +178,6 @@ export const roleReducer = (state, action) => {
 
 			
 			case roleConstants.ROLES_REMOVE_REQUEST_ARRAY:
-				console.log(action.users)
 				return {
 					...state,
 					modal: {

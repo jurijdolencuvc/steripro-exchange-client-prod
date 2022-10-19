@@ -18,7 +18,6 @@ const translations = {
 	en,
 	sl
 };
-//const Forn({prop1, prop2, ...rest}) => {} HOOKOVI
 const SupportForm = () => {
 	var t = (s) => {
 
@@ -48,23 +47,9 @@ const SupportForm = () => {
 	const handleLogout = (event) => {
 
 		userService.logout();
-		//dataService.getDecisionAsExel(travelReqID, dispatch);
 	}
 
-	/*	const handleSubmit = (e) => {
-			e.preventDefault();
 	
-	
-	
-			let messageSend = {
-				message: message,
-	
-			};
-	
-			userService.contact(messageSend, dispatch);
-		};*/
-
-
 
 	const onFileChange = (event) => {
 		setFile(event.target.files[0]);
@@ -98,21 +83,11 @@ const SupportForm = () => {
 
 			formData.append('File', file);
 			formData.append("message", message);
-			// Details of the uploaded file 
-
-			// Request made to the backend api 
-			// Send formData object 
-			//axios.post("api/uploadfile", formData); 
-
-
-
 			userService.contact(formData, dispatch);
 		}
 	};
 
 
-
-	//useEffect- kao componentDidMount
 
 	return (
 		<body style={{ height: "750px" }}>

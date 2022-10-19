@@ -8,7 +8,7 @@ import { authHeader } from "../helpers/auth-header";
 import Axios from "axios";
 
 import ModalReset from "../components/modals/ModalReset";
-var url = process.env.REACT_APP_URL;
+var url = process.env.REACT_APP_URL || "http://localhost:3000/";
 
 
 const SendRegistrationMailPage = () => {

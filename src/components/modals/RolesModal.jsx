@@ -15,8 +15,7 @@ const translations = {
 	en,
 	sl
 };
-var url = process.env.REACT_APP_URL;
-
+var url = process.env.REACT_APP_URL || "http://localhost:3000/";
 const RolesModal = () => {
 	var t = (s) => {
 
@@ -50,7 +49,6 @@ const RolesModal = () => {
 			  )
 				  .then((res) => {
 					  if (res.status === 201) {
-						console.log(res.data)
 						  if ("Admin" == res.data) {
   
 				setRole(true)

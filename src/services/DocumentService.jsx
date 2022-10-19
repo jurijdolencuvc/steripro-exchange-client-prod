@@ -4,7 +4,7 @@ import { constants } from "../consts/consts";
 import { authHeader } from "../helpers/auth-header";
 
 
-var url = process.env.REACT_APP_URL;
+var url = process.env.REACT_APP_URL || "http://localhost:3000/";
 
 export const documentService = {
 	addDocument,
@@ -52,8 +52,7 @@ function editDocument( data, dispatch) {
 		}})
 		.then((res) => {
 			if (res.status === 201) {
-			
-				//setAuthInLocalStorage(res.data);
+		
 				dispatch(success());
 			
 			}  else if (res.status === 412) {
@@ -88,8 +87,6 @@ function editDocument( data, dispatch) {
 
 async function deleteDocument(documentId,dispatch) {
 
-	console.log("del")
-	console.log(documentId)
 	dispatch(request());
 
 	var token = authHeader()
@@ -132,10 +129,9 @@ async function getDocuments(dispatch) {
 
 	var token = authHeader()
 	
-	await Axios.get(`${url}api/all_documents`, { headers: { Authorization: token }}, { validateStatus: () => true })
+	await Axios.get(`${url}api/allDocuments`, { headers: { Authorization: token }}, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 200) {
-				console.log(res.data)
 				dispatch(success(res.data));
 			} else {
 				
@@ -153,12 +149,10 @@ async function getDocuments(dispatch) {
 		return { type: documentsConstants.DOCUMENTS_GET_REQUEST };
 	}
 	function success(data) {
-		console.log( data+"gkdjgkdfj")
 		return { type: documentsConstants.DOCUMENTS_GET_SUCCESS, data: data };
 	}
 	function failure(message) {
 
-		console.log( "dddddd")
 		var message = constants(message)
 		return { type: documentsConstants.DOCUMENTS_GET_FAILURE, errorMessage: message };
 	}
@@ -171,10 +165,9 @@ async function getDocumentsLibrary(dispatch) {
 
 	var token = authHeader()
 	
-	await Axios.get(`${url}api/all_library`, { headers: { Authorization: token }}, { validateStatus: () => true })
+	await Axios.get(`${url}api/allLibrary`, { headers: { Authorization: token }}, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 200) {
-				console.log(res.data)
 				dispatch(success(res.data));
 			} else {
 				
@@ -207,7 +200,6 @@ async function getDocumentsLibrary(dispatch) {
 async function getCategories(dispatch) {
 	dispatch(request());
 
-	console.log("ksjvkjnks")
 	var token = authHeader()
 	
 	await Axios.get(`${url}api/getCategories`, { headers: { Authorization: token }}, { validateStatus: () => true })
@@ -249,7 +241,6 @@ async function getDistributors(dispatch) {
 	await Axios.get(`${url}api/getDistributors`, { headers: { Authorization: token }}, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 200) {
-				console.log(res.data)
 				dispatch(success(res.data));
 			} else {
 				
@@ -315,13 +306,13 @@ async function getCategoriesLibrary(dispatch) {
 
 
 async function getFile(_id, fileName, dispatch) {
+	
+	var token = authHeader()
 
-
-	console.log(fileName + " " + _id)
 	var list = fileName.split('/')
 	const FileDownload = require("js-file-download");
 
-	await Axios.get(`${url}api/getFile/ `+_id, { validateStatus: () => true,  responseType: 'blob'})
+	await Axios.get(`${url}api/getFile/ `+_id, { headers: { Authorization: token }},{ validateStatus: () => true,  responseType: 'blob'})
 		.then((res) => {
 			if (res.status === 201) {
 				FileDownload(res.data, fileName);
@@ -329,7 +320,6 @@ async function getFile(_id, fileName, dispatch) {
 			}
 		})
 		.catch((err) => {
-			console.log(err);
 
 		});
 

@@ -11,8 +11,7 @@ const translations = {
 	en,
 	sl
 };
-
-var url = process.env.REACT_APP_URL;
+var url = process.env.REACT_APP_URL || "http://localhost:3000/";
 
 const AddNewRoleForm = (props) => {
 	var t = (s) => {

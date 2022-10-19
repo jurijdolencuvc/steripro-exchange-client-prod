@@ -189,7 +189,6 @@ export const userReducer = (state, action) => {
 			action.roles.roles.forEach(element => {
 				role.push(element.title.toString())
 			});
-			console.log(role)
 
 			return {
 

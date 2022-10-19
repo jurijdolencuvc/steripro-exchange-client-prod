@@ -50,7 +50,7 @@ const translations = {
 	en,
 	sl
 };
-var url = process.env.REACT_APP_URL;
+var url = process.env.REACT_APP_URL || "http://localhost:3000/";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -101,7 +101,6 @@ const ExchangeLibrary = forwardRef((props, ref) => {
   }
   const handleLogout = (event) => {
     userService.logout();
-    //dataService.getDecisionAsExel(travelReqID, dispatch);
   };
 
   useEffect(() => {
@@ -137,7 +136,6 @@ const ExchangeLibrary = forwardRef((props, ref) => {
   };
 
   const fileClicked = (e, oneFile, name) => {
-    console.log(oneFile + " " + name);
     libraryService.getFileLibrary(oneFile, name, dispatch);
   };
 
@@ -290,9 +288,6 @@ const ExchangeLibrary = forwardRef((props, ref) => {
               ]}
               options={
                 {
-                  //actionsColumnIndex: -1,
-                  //headerStyle: { position: 'sticky', top: 0 },
-                  //maxBodyHeight: 450,
                 }
               }
               localization={{
@@ -325,9 +320,6 @@ const ExchangeLibrary = forwardRef((props, ref) => {
               ]}
               options={
                 {
-                  //actionsColumnIndex: -1,
-                  //headerStyle: { position: 'sticky', top: 0 },
-                  //maxBodyHeight: 500,
                 }
               }
               localization={{

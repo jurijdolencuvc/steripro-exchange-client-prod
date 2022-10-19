@@ -15,7 +15,7 @@ const translations = {
 	sl
 };
 
-var url = process.env.REACT_APP_URL;
+var url = process.env.REACT_APP_URL || "http://localhost:3000/";
 const Tasks = () => {
     var t = (s) => {
 

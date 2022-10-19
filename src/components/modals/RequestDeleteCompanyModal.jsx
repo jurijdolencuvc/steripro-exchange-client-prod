@@ -13,8 +13,6 @@ const RequestDeleteCompanyModal = () => {
 	};
 	useEffect(() => {
 		
-
-		console.log(companyState.modalRequest.companies)
 		if(companyState.modalRequest.companies!= null && companyState.modalRequest.companies.length>0){
 
 			setEmptyArray(false)

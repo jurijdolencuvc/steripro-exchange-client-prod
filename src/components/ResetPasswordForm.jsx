@@ -11,10 +11,8 @@ import { useTranslation } from 'react-i18next'
 import { LocaleContext } from "../contexts/locale.context.js";
 import en from "../locales/en.json";
 import sl from "../locales/sl.json";
-//const Forn({prop1, prop2, ...rest}) => {} HOOKOVI
 
-var url = process.env.REACT_APP_URL;
-
+var url = process.env.REACT_APP_URL || "http://localhost:3000/";
 
 const translations = {
 	"Choose language": "Choose language",
@@ -71,9 +69,6 @@ const ResetPasswordForm = () => {
 
 		userService.changePassword(sendRequest, dispatch);
 	};
-
-
-	//useEffect- kao componentDidMount
 
 	return (
 		<div  >  <LocaleContext.Provider

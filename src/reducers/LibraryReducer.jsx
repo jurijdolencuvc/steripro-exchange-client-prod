@@ -104,9 +104,6 @@ export const libraryReducer = (state, action) => {
 			prodCpy.updateData.data.library.companyId = action.data.companyId;
 			prodCpy.updateData.data.library.category = action.data.category;
 
-
-			console.log(prodCpy.updateData.data.library)
-
 			prodCpy.updateData.showModal = true;
 			return prodCpy;
 

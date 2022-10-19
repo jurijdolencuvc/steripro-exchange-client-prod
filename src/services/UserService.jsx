@@ -6,7 +6,7 @@ import { constants } from "../consts/consts";
 import { deleteLocalStorage, setAuthInLocalStorage } from "../helpers/auth-header";
 import React, { useContext, useEffect, useImperativeHandle, forwardRef, useState } from "react";
 import { authHeader } from "../helpers/auth-header";
-var url = process.env.REACT_APP_URL;
+var url = process.env.REACT_APP_URL || "http://localhost:3000/";
 export const userService = {
 	login,
 	logout,
@@ -26,8 +26,6 @@ function login(loginRequest, dispatch) {
 			if (res.status === 200) {
 				setAuthInLocalStorage(res.data);
 				dispatch(success());
-			
-				//dispatch(failure(res.data.error));
 				window.location.href="/#"
 							
 			} else if (res.status === 412) {
@@ -93,15 +91,11 @@ function changePassword(sendEmailRequest, dispatch) {
 	Axios.post(`${url}api/users/passwordresetExchange`, sendEmailRequest, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 201) {
-				//setAuthInLocalStorage(res.data);
 				dispatch(success());
-				//window.location = "#/";
 			
 			}  else if (res.status === 412) {
-				console.log(res.data.error)
 				dispatch(failure(res.data.error));
 			}else {
-				console.log(res.data)
 				dispatch(failure(res.data.error));
 			}
 		})
@@ -127,7 +121,6 @@ function changePassword(sendEmailRequest, dispatch) {
 
 function contact(formData, dispatch) {
 
-	console.log(formData)
 	var token = authHeader()
 	dispatch(request());
 	Axios.post(`${url}api/contact`, formData, {
@@ -136,14 +129,11 @@ function contact(formData, dispatch) {
 		}})
 		.then((res) => {
 			if (res.status === 201) {
-				//setAuthInLocalStorage(res.data);
 				dispatch(success());
-				//window.location = "#/";
 			
 			}  else if (res.status === 412) {
 				dispatch(failure(res.data.error));
 			}else {
-				console.log(res.data)
 				dispatch(failure(res.data.error));
 			}
 		})
@@ -171,7 +161,6 @@ function resetPassword(sendRequest, dispatch) {
 	Axios.post(`${url}api/users`, sendRequest, { headers: { Authorization: token }}, { validateStatus: () => true })
 		.then((res) => {
 			
-			console.log(res)
 			if (res.status === 201) {
 				dispatch(success());
 			

@@ -47,7 +47,7 @@ const translations = {
 	en,
 	sl
 };
-var url = process.env.REACT_APP_URL;
+var url = process.env.REACT_APP_URL || "http://localhost:3000/";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -94,7 +94,6 @@ const ExchangeCompanies = forwardRef((props, ref) => {
 
   const handleLogout = (event) => {
     userService.logout();
-    //dataService.getDecisionAsExel(travelReqID, dispatch);
   };
 
   useEffect(() => {
@@ -105,7 +104,7 @@ const ExchangeCompanies = forwardRef((props, ref) => {
     } else {
 
 
-      Axios.get(`${url}api/getRole`, { headers: { Authorization: token } }, { validateStatus: () => true },
+      Axios.get(`api/getRole`, { headers: { Authorization: token } }, { validateStatus: () => true },
       )
         .then((res) => {
           if (res.status === 201) {
@@ -239,8 +238,6 @@ const ExchangeCompanies = forwardRef((props, ref) => {
                 tableLayout: "fixed",
                 marginLeft: 288,
                 marginRight: 38,
-                //width: "100%",
-                //height:"100%",  
               }}
               icons={tableIcons}
               columns={[

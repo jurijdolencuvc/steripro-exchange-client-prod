@@ -47,7 +47,7 @@ const translations = {
 	en,
 	sl
 };
-var url = process.env.REACT_APP_URL;
+var url = process.env.REACT_APP_URL || "http://localhost:3000/";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -94,7 +94,6 @@ const ExchangeRoles = forwardRef((props, ref) => {
 
   const handleLogout = (event) => {
     userService.logout();
-    //dataService.getDecisionAsExel(travelReqID, dispatch);
   };
 
   useEffect(() => {
@@ -239,8 +238,6 @@ const ExchangeRoles = forwardRef((props, ref) => {
                 tableLayout: "fixed",
                 marginLeft: 288,
                 marginRight: 38,
-                //width: "100%",
-                //height:"100%",  
               }}
               icons={tableIcons}
               columns={[

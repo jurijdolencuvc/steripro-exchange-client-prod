@@ -15,7 +15,7 @@ const translations = {
 	sl
 };
 
-var url = process.env.REACT_APP_URL;
+var url = process.env.REACT_APP_URL || "http://localhost:3000/";
 
 const AddNewLibraryForm = (props) => {
 	var t = (s) => {
@@ -33,7 +33,6 @@ const AddNewLibraryForm = (props) => {
 	const [category, setCategory] = useState(props.categories[0].title);
 	const [file, setFile] = useState(null);
 	
-	//const [distributor, setDistributor] = useState(props.distributors[0].name);
 	const uploadRef = React.useRef();
 	const statusRef = React.useRef();
 	
@@ -41,21 +40,6 @@ const AddNewLibraryForm = (props) => {
 	const [lang, setLang] = useState(`${localStorage.getItem("language")}`);
 	const [errMessage, setErrMessage] = useState("");
 	const { libraryState, dispatch } = useContext(LibraryContext);
-
-	useEffect(() => {
-
-		someFetchActionCreator()
-	}, [dispatch]);
-
-
-	const someFetchActionCreator = () => {
-
-	//	console.log("tu sam" + props.categories)
-		const getDocumentsInfoHandler = async () => {
-			//await documentService.getCategories(dispatch);
-		};
-		getDocumentsInfoHandler();
-	}
 
 	const onFileChange = (event) => {
 		setFile(event.target.files[0]);
@@ -91,13 +75,6 @@ const AddNewLibraryForm = (props) => {
 			formData.append("documentTitle", documentTitle);
 			formData.append("documentDescription", documentDescription);
 			formData.append("category", category);
-			//formData.append("distributor", distributor);
-			// Details of the uploaded file 
-
-			// Request made to the backend api 
-			// Send formData object 
-			//axios.post("api/uploadfile", formData); 
-
 			var xhr = new XMLHttpRequest();
 			xhr.upload.addEventListener("progress", ProgressHandler, false);
 			xhr.addEventListener("load", SuccessHandler, false);
@@ -108,7 +85,6 @@ const AddNewLibraryForm = (props) => {
 			xhr.setRequestHeader("Authorization", props.token);
 			xhr.onload = function () {
 				// do something to response
-				console.log(this.responseText);
 			};
 
 			xhr.send(formData);
@@ -117,7 +93,6 @@ const AddNewLibraryForm = (props) => {
 	};
 
 	const ProgressHandler = (e) => {
-		//  loadTotalRef.current.innerHTML = `uploaded ${e.loaded} bytes of ${e.total}`;
 		var percent = (e.loaded / e.total) * 100;
 		progressRef.current.value = Math.round(percent);
 		statusRef.current.innerHTML = Math.round(percent) + "% uploaded...";

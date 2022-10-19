@@ -38,8 +38,7 @@ export const companyReducer = (state, action) => {
 			};
 
 		case companyConstants.COMPANY_REQUEST_REMOVE_REQUEST:
-			//if(action.users.users == null){
-			//}
+
 			return {
 				...state,
 				modalRequest: {
@@ -76,13 +75,13 @@ export const companyReducer = (state, action) => {
 
 
 
-			case companyConstants.COMPANY_SUBMIT_REQUEST:
+		case companyConstants.COMPANY_SUBMIT_REQUEST:
 
-				return {
-					...state,
-					
-				};
-	
+			return {
+				...state,
+
+			};
+
 		case companyConstants.COMPANY_SUBMIT_SUCCESS:
 
 			return {
@@ -129,7 +128,6 @@ export const companyReducer = (state, action) => {
 
 		case companyConstants.COMPANIES_GET_SUCCESS:
 
-		console.log(action.data.companies)
 			return {
 				...state,
 				listCompanies: {
@@ -185,19 +183,18 @@ export const companyReducer = (state, action) => {
 				},
 			};
 
-			
-			case companyConstants.COMPANIES_REMOVE_REQUEST_ARRAY:
-				console.log(action.users)
-				return {
-					...state,
-					modal: {
-						showModal: true,
-						message: t("requestUsers"),
-						title: "?",
-						users: action.users.users,
-						message2: t("areYouSureUsers")
-					},
-				};
+
+		case companyConstants.COMPANIES_REMOVE_REQUEST_ARRAY:
+			return {
+				...state,
+				modal: {
+					showModal: true,
+					message: t("requestUsers"),
+					title: "?",
+					users: action.users.users,
+					message2: t("areYouSureUsers")
+				},
+			};
 
 		default:
 			return state;

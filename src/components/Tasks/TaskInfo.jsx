@@ -40,7 +40,7 @@ const translations = {
 	en,
 	sl
 };
-var url = process.env.REACT_APP_URL;
+var url = process.env.REACT_APP_URL || "http://localhost:3000/";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -159,9 +159,6 @@ t = t.bind(this);
            
             options={{
               
-              //actionsColumnIndex: 0,
-              //headerStyle: { position: 'sticky', top: 0 },
-              //maxBodyHeight: 450,
             }}
          
            

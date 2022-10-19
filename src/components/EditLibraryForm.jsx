@@ -23,8 +23,6 @@ const EditLibraryForm = (props) => {
 	}
 	
 	t = t.bind(this);
-	//const { documentState, dispatch } = useContext(DocumentsContext);
-	
     let transferData = props.libraryState.updateData.data.library;
 	const [lang, setLang] = useState(`${localStorage.getItem("language")}`);
 	const [documentTitle, setDocumentTitle] = useState(transferData.documentTitle);
@@ -45,14 +43,6 @@ const EditLibraryForm = (props) => {
 			documentDescription: documentDescription
 		}
 		
-		// Details of the uploaded file 
-
-		// Request made to the backend api 
-		// Send formData object 
-		//axios.post("api/uploadfile", formData); 
-
-
-	
 		libraryService.editLibrary(data, props.dispatch);
 	};
 

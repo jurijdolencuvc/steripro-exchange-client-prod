@@ -5,8 +5,7 @@ import SendRegistrationMailForm from "./SendRegistrationMailForm";
 import { userService } from "../services/UserService";
 
 import UserContextProvider from "../contexts/UserContext";
-
-var url = process.env.REACT_APP_URL;
+var url = process.env.REACT_APP_URL || "http://localhost:3000/";
 const GetDataForReg = () => {
 	
 	const [token, setToken] = useState("");

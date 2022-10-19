@@ -12,7 +12,7 @@ const translations = {
 	sl
 };
 
-var url = process.env.REACT_APP_URL;
+var url = process.env.REACT_APP_URL || "http://localhost:3000/";
 
 const AddNewDocumentForm = (props) => {
 	var t = (s) => {
@@ -27,7 +27,6 @@ const AddNewDocumentForm = (props) => {
 	const [documentTitle, setDocumentTitle] = useState("");
 	const [documentDescription, setDocumentDescription] = useState("");
 	const [category, setCategory] = useState(props.categories[0].title);
-	//const [distributor, setDistributor] = useState(props.distributors[0].name);
 	const [file, setFile] = useState(null);
 	const [errMessage, setErrMessage] = useState("");
 	const { documentState, dispatch } = useContext(DocumentsContext);
@@ -36,20 +35,6 @@ const AddNewDocumentForm = (props) => {
 	const progressRef = React.useRef();
 	const [lang, setLang] = useState(`${localStorage.getItem("language")}`);
 
-	useEffect(() => {
-		
-		someFetchActionCreator()
-	}, [dispatch]);
-
-
-	const someFetchActionCreator = () => {
-
-		//	console.log("tu sam" + props.categories)
-		const getDocumentsInfoHandler = async () => {
-			//await documentService.getCategories(dispatch);
-		};
-		getDocumentsInfoHandler();
-	}
 
 	const onFileChange = (event) => {
 		setFile(event.target.files[0]);
@@ -94,12 +79,11 @@ const AddNewDocumentForm = (props) => {
 			xhr.addEventListener("load", SuccessHandler, false);
 			xhr.addEventListener("error", ErrorHandler, false);
 			xhr.addEventListener("abort", AbortHandler, false);
-			console.log(`${url}api/uploadfile`)
+
 			xhr.open('POST', `${url}api/uploadfile`, true);
 			xhr.setRequestHeader("Authorization", props.token);
 			xhr.onload = function () {
 				// do something to response
-				console.log(this.responseText);
 			};
 
 			xhr.send(formData);
@@ -107,7 +91,6 @@ const AddNewDocumentForm = (props) => {
 		}
 	};
 	const ProgressHandler = (e) => {
-		//  loadTotalRef.current.innerHTML = `uploaded ${e.loaded} bytes of ${e.total}`;
 		var percent = (e.loaded / e.total) * 100;
 		progressRef.current.value = Math.round(percent);
 		statusRef.current.innerHTML = Math.round(percent) + "% uploaded...";
@@ -146,8 +129,6 @@ const AddNewDocumentForm = (props) => {
 						<div className="row mt-5">
 
 							<form id="contactForm" >
-
-
 
 								<table style={{ marginLeft: "4rem", marginBottom: "4rem" }}>
 									<td width="600rem"  >

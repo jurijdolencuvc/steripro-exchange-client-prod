@@ -3,7 +3,7 @@ import { companyConstants } from "../constants/CompanyConstants";
 import { constants } from "../consts/consts";
 import { authHeader } from "../helpers/auth-header";
 
-var url = process.env.REACT_APP_URL;
+var url = process.env.REACT_APP_URL || "http://localhost:3000/";
 
 export const companyService = {
 	getCompanies,
@@ -16,7 +16,7 @@ export const companyService = {
 async function deleteCompany(id,dispatch) {
 	dispatch(request());
 	var token = authHeader()
-	await Axios.get(`${url}api/checkCompanies/${id}`, {
+	await Axios.get(`${url}api/checkUsersOfCompany/${id}`, {
 		headers: {
 		  Authorization: token 
 		}}, { validateStatus: () => true })
@@ -47,8 +47,6 @@ async function deleteCompany(id,dispatch) {
 				oneFile: id,
 				users: data
 			  };
-
-			//return { type: roleConstants.ROLES_REMOVE_SUCCESS, users: data };
 
 		}
 
@@ -98,8 +96,6 @@ async function remove(documentId,dispatch) {
 				type: companyConstants.COMPANIES_REMOVE_SUCCESS
 			  };
 
-			//return { type: roleConstants.ROLES_REMOVE_SUCCESS, users: data };
-
 		}
 
 	
@@ -122,7 +118,6 @@ function add(companyName, dispatch) {
 			if (res.status === 200) {
 				dispatch(success());
 			} else if (res.status === 215) {
-				console.log(res.data.response)
 				dispatch(failure(res.data.response));
 			}else{
 				

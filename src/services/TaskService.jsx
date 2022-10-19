@@ -8,15 +8,14 @@ export const taskService = {
 	getTasks,
 };
 
-var url = process.env.REACT_APP_URL;
+var url = process.env.REACT_APP_URL || "http://localhost:3000/";
 async function getTasks(dispatch) {
 	dispatch(request());
 
 	var token = authHeader()
-	await Axios.get(`${url}api/all_tasks` , { headers: { Authorization: token }}, { validateStatus: () => true })
+	await Axios.get(`${url}api/allTasks` , { headers: { Authorization: token }}, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 200) {
-				console.log(res.data)
 				dispatch(success(res.data));
 			} else if(res.status === 401) {
 

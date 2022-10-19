@@ -79,7 +79,6 @@ const RequestRemoveCompany = (props) => {
 
 
 	const handleSubmitYes = (e) => {
-		console.log(props.file)
 		companyService.remove(props.file, dispatch);
 
 	};
@@ -117,9 +116,7 @@ const RequestRemoveCompany = (props) => {
 											]}
 
 											options={{
-												//actionsColumnIndex: -1,
-												//headerStyle: {top:0, bottom:0},
-												//maxBodyHeight: "70vh",  
+											 
 												search: false
 											}}
 											localization={{

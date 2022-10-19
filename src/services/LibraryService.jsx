@@ -3,7 +3,7 @@ import { libraryConstants } from "../constants/LibraryConstants";
 import { constants } from "../consts/consts";
 import { authHeader } from "../helpers/auth-header";
 
-var url = process.env.REACT_APP_URL;
+var url = process.env.REACT_APP_URL || "http://localhost:3000/";
 export const libraryService = {
 	addLibrary,
 	getFileLibrary,
@@ -22,7 +22,6 @@ async function getDistributors(dispatch) {
 	await Axios.get(`${url}api/getDistributors`, { headers: { Authorization: token }}, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 200) {
-				console.log(res.data)
 				dispatch(success(res.data));
 			} else {
 				
@@ -40,7 +39,6 @@ async function getDistributors(dispatch) {
 		return { type: libraryConstants.DISTRIBUTORS_GET_REQUEST };
 	}
 	function success(data) {
-		console.log("tuuu")
 		return { type: libraryConstants.DISTRIBUTORS_GET_SUCCESS, data: data };
 	}
 	function failure(message) {
@@ -84,8 +82,7 @@ function editLibrary( data, dispatch) {
 		}})
 		.then((res) => {
 			if (res.status === 201) {
-			
-				//setAuthInLocalStorage(res.data);
+		
 				dispatch(success());
 			
 			}  else if (res.status === 412) {
@@ -156,10 +153,9 @@ async function getDocumentsLibrary(dispatch) {
 
 	var token = authHeader()
 	
-	await Axios.get(`${url}api/all_library`, { headers: { Authorization: token }}, { validateStatus: () => true })
+	await Axios.get(`${url}api/allLibrary`, { headers: { Authorization: token }}, { validateStatus: () => true })
 		.then((res) => {
 			if (res.status === 200) {
-				console.log(res.data)
 				dispatch(success(res.data));
 			} else {
 				dispatch(failure("Error while fetching data"));
@@ -220,11 +216,11 @@ async function getCategoriesLibrary(dispatch) {
 
 async function getFileLibrary(_id, fileName, dispatch) {
 
-	console.log(fileName + " " + _id)
+	var token = authHeader()
 	var list = fileName.split('/')
 	const FileDownload = require("js-file-download");
 
-	await Axios.get(`${url}api/getFileLibrary/ `+_id, { validateStatus: () => true,  responseType: 'blob'})
+	await Axios.get(`${url}api/getFileLibrary/ `+_id,  { headers: { Authorization: token }},{ validateStatus: () => true,  responseType: 'blob'})
 		.then((res) => {
 			if (res.status === 201) {
 				FileDownload(res.data, fileName);
