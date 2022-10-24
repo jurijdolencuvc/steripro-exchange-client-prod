@@ -11,8 +11,6 @@ import ResetPasswordPage from "./pages/ResetPasswordPage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
 import RolesPage from "./pages/RolesPage.jsx";
 import CompaniesPage from "./pages/CompaniesPage.jsx";
-
-
 import SendRegistrationMail from "./pages/SendRegistrationMailPage.jsx";
 
 function App() {

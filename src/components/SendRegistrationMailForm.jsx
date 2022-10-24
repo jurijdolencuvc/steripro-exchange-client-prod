@@ -47,9 +47,9 @@ const SendRegistrationMailForm = () => {
 		setRoles(userState.listRoles.roles)
 	});
 	const handleRoleChange = (e) => {
-		if(e=="Admin"){
+		if (e == "Admin") {
 			setTf(true)
-		}else{
+		} else {
 
 			setTf(false)
 		}
@@ -59,20 +59,20 @@ const SendRegistrationMailForm = () => {
 		e.preventDefault();
 
 		let sendEmailRequest = {}
-		if(role == null){
+		if (role == null) {
 			sendEmailRequest = {
 				email: email2,
 				role: userState.listRoles.roles[0].title,
 				company: company,
 			};
-		}else{
+		} else {
 			sendEmailRequest = {
 				email: email2,
 				role: role,
 				company: company,
 			};
 		}
-		
+
 
 		userService.resetPassword(sendEmailRequest, dispatch);
 	};
@@ -100,14 +100,14 @@ const SendRegistrationMailForm = () => {
 									style={{ marginTop: "20px" }}
 									class="nav_link "
 								>
-									
+
 									<i class="bx bx-log-out nav_icon">
 										<GiPerson />
 									</i>
 									<span class="nav_name ">{t("manageRoles")}</span>
 								</a>
 								<a href="/#/companies" style={{ marginTop: "20px" }} class="nav_link"> <i class='bx bx-log-out nav_icon'><BsBuilding /></i> <span class="nav_name ">{t('exchangeCompanies')}</span> </a>
-								
+
 								{<a href="/#/sendRegistrationMail" style={{ marginTop: "20px" }} class="nav_link active"> <i class='bx bx-log-out nav_icon'><AiOutlineUserAdd /></i> <span class="nav_name">{t('enroll')}</span> </a>}
 								<a onClick={handleLogout} style={{ marginTop: "20px" }} class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">{t('signout')}</span> </a>
 							</nav>
@@ -148,7 +148,7 @@ const SendRegistrationMailForm = () => {
 										<div class="row" >
 											<div class="form-group col-lg-10">
 
-												<select id="select"  disabled={tf} onChange={(e) => setCompany(e.target.value)} name="company" class="custom-select" style={{ height: "50px", width: "1300px" }}>
+												<select id="select" disabled={tf} onChange={(e) => setCompany(e.target.value)} name="company" class="custom-select" style={{ height: "50px", width: "1300px" }}>
 													{companies.map(item =>
 														<option key={item._id} value={item.title} >{item.title}</option>
 													)};

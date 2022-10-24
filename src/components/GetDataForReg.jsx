@@ -30,8 +30,7 @@ const GetDataForReg = () => {
 	
 	return (
 		<UserContextProvider>
-				<SendRegistrationMailForm/>
-				</UserContextProvider>
+		</UserContextProvider>
 			
 	);
 };
